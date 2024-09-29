@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    {%if 'Android' in request.headers.user_agent or 'iPhone' in request.headers.user_agent%}
+    <link rel="stylesheet" type="text/css" href="{% static 'device/css/style_phone.css' %}">
+    {%else%}
+    <link rel="stylesheet" type="text/css" href="{% static 'device/css/style.css' %}">
+    {%endif%}
+</head>
+<body>
+<div class="shadowbox">
+    {{user}}<br>
+    <hr>
+    {%if user.is_authenticated%}
+    <a class="a" href="{% url 'users:logout' %}">Выйти</a> |
+    <a href="{% url 'users:change_password'%}">Сменить пароль</a>
+    {%else%}
+    <a class="a" href="{% url 'users:login' %}">Войти</a>
+    {%endif%}
+</div>
+<br>
+{% if user.is_staff %}
+<div class="category-wrap">
+    <ul>
+        {% for i in menu %}
+        {% if i.title == "Поиск" %}
+        <hr>
+        {%endif%}
+        <li><a class="type" href="{% url i.url_name %}">{{i.title}}</a></li>
+        {% endfor %}
+        <hr>
+        <li><a class="type" href="{%url 'draft_list'%}">Черновик</a></li>
+        <hr>
+        <li><a class="type"  href="{% url 'equipment_add' %}">Добавить оборудование</a></li>
+        <li><a class="type" href="{% url 'device_add' %}">Добавить прибор</a></li>
+    </ul>
+</div>
+
+{% endif %}
+{% block content %}
+
+
+{% endblock %}
+
+</body>
+</html>

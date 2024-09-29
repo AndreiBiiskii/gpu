@@ -1,0 +1,56 @@
+{% extends 'device/base.html' %}
+
+{% block content %}
+
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <b>Серийный номер: </b><cite>{{equipment.serial_number}}</cite> <br/>
+    <b>Наименование:</b><cite>{{equipment.name}}</cite><br/>
+    <b>Модель: </b><cite>{{equipment.model}}</cite> <br/>
+
+    <h3 class="error">{{error}}</h3>
+
+
+    <b><cite>Позиция по ГП:</cite></b>
+    <select name="position" class="select">
+        {%for position in positions%}
+        <option>{{position}}</option>
+        {%endfor%}
+        <option selected>{{equipment.positions.last.name}}</option>
+    </select>
+
+    <cite>Место установки:</cite>
+    <input class="type" type="text" name="location" value="{{equipment.locations.last.name}}">
+
+
+    <cite><b>Тэг:</b></cite>
+    <input type="text" class="type" name="tag" value="{{equipment.tags.last.name}}">
+
+    <cite><b>Статус:</b></cite>
+    <select name="status" class="select">
+        {%for stat in status%}
+        <option>{{stat}}</option>
+        {%endfor%}
+        <option selected>{{equipment.status.last.name}}</option>
+    </select>
+
+    <br>
+    <b>Комментарий</b>
+    <textarea class="description" name="description">{{equipment.descriptions.last.name}}</textarea>
+    {%if si_or%}
+
+    <b>Дата предыдущей поверки:</b>
+    <input class="select" type="date" name="previous_verification" value='{{equipment.si.last.previous_verification|date:"Y-m-d"}}'>
+
+    <b>Сертификат:</b>
+    <input class="type" type="text" name="certificate" value="{{equipment.si.last.certificate}}">
+    <br><br>
+    {%endif%}
+    <button type="submit" class="search_btn"> Обновить данные</button>
+    <a href="{% url 'search' %}" class="button-style2">К поиску</a>
+
+</form>
+
+
+{% endblock %}
+
