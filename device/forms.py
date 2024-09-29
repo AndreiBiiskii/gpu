@@ -1,16 +1,12 @@
 import datetime
 import re
-
-
 from django.forms import Textarea
 from django.http import request
-
 from device.variables import *
 from dateutil.relativedelta import relativedelta
 from django import forms
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, render, redirect
-
 from .models import *
 
 
