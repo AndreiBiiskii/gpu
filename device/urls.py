@@ -20,14 +20,9 @@ urlpatterns = [
     path('equipment_delete/<int:pk>', EquipmentDelete, name='equipment_delete'),
     path('device_add/', device_add, name='device_add'),
     path('device_update/<int:pk>', DeviceUpdate, name='device_update'),
-    # path('equipments/search/', equipment_list, name='search'),
-    # path('fainder/', equipment_list),
     path('im/', IM, name='im'),
     path('si_loading/', si_loading, name='si_loading'),
     path('gp_loading/', gp_loading, name='gp_loading'),
-
-
-    # path('change_password/', change_password, name='change_password'),
     path('manufacturers/', ListCategory.as_view(model=Manufacturer, extra_context={
         'title': 'Список производителей',
         'menu': menu,
@@ -82,6 +77,18 @@ urlpatterns = [
     path('delete_status/<int:pk>', delete_category, {'Mod': StatusAdd}, name='delete_status'),
     path('add_status/', AddCategory.as_view(model=StatusAdd), name='add_status'),
     path('update_status/<int:pk>', UpdateCategory.as_view(model=StatusAdd), name='update_status'),
+
+    path('gps/', ListCategory.as_view(model=GP, extra_context={
+        'title': 'Позиция',
+        'menu': menu,
+        'url_delete': 'delete_gp',
+        'url_update': 'update_gp',
+        'url_add': 'add_gp'
+    }), name='gps'),
+    path('delete_gp/<int:pk>', delete_category, {'Mod': GP}, name='delete_gp'),
+    path('add_gp/', AddCategory.as_view(model=GP), name='add_gp'),
+    path('update_gp/<int:pk>', UpdateCategory.as_view(model=GP), name='update_gp'),
+
 
     path('years/', ListCategory.as_view(model=Year, extra_context={
         'title': 'Год выпуска.',

@@ -141,7 +141,7 @@ class Equipment(models.Model):
     model = models.ForeignKey(EquipmentModel, on_delete=models.CASCADE, related_name='model', blank=True, null=True)
     at_date = models.DateField(auto_now_add=True, verbose_name='Дата добавления')
     defect = models.BooleanField(default=False, blank=True, null=True)
-    si_or = models.BooleanField(default=True, verbose_name='Средство измерения или нет')
+    si_or = models.BooleanField(default=True, verbose_name='Средство измерения')
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE, related_name='manufacturer',
                                      verbose_name='Производитель')
     type = models.ForeignKey(EquipmentType, on_delete=models.CASCADE, related_name='type',

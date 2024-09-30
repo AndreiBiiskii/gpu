@@ -1,30 +1,10 @@
-
-
-
-
-
 import datetime
 import re
 from django.forms import Textarea
-from django.http import request
 from device.variables import *
 from dateutil.relativedelta import relativedelta
 from django import forms
-from django.core.exceptions import ValidationError
-from django.shortcuts import get_object_or_404, render, redirect
 from .models import *
-
-
-class ChangFields(forms.ModelForm):
-    tag = forms.CharField(max_length=200, initial=forms.Form.base_fields)
-
-    def clean(self):
-        cleaned_data = super().clean()
-        tag = cleaned_data.get('tag')
-        if tag:
-            if Tag.objects.filter(name=tag).exists():
-                raise ValidationError('Такой тег уже существует.')
-        return cleaned_data
 
 
 class AddEquipmentForm(forms.Form):
@@ -32,7 +12,7 @@ class AddEquipmentForm(forms.Form):
                                     widget=forms.TextInput(attrs={'class': 'type'}))
     model = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                    queryset=EquipmentModel.objects.all(),
-                                   label='Модель')
+                                   label='Модель',required=False)
     model_new = forms.CharField(label='Добавить модель:', widget=forms.TextInput(attrs={'class': 'type'}),
                                 required=False)
     type = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Тип оборудования:',
@@ -163,9 +143,11 @@ class AddDeviceForm(forms.Form):
                                  widget=forms.TextInput(attrs={'class': 'type'}), required=False)
     year = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Год выпуска:',
                                   queryset=Year.objects.all(), required=False)
-    reg_number = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),label='Регистрационный номер:', queryset=RegNumber.objects.all(),
+    reg_number = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Регистрационный номер:',
+                                        queryset=RegNumber.objects.all(),
                                         required=False)
-    reg_number_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type'}),label='Добавить регистрационный номер:', max_length=20, required=False)
+    reg_number_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type'}),
+                                     label='Добавить регистрационный номер:', max_length=20, required=False)
     previous_verification = forms.DateField(label='Дата предыдущей поверки:', widget=forms.TextInput(attrs=
     {
         'type': 'date',

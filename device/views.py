@@ -19,10 +19,11 @@ from django.views.generic import UpdateView, CreateView, ListView, DetailView, D
 from django_filters import filters
 from markdown_it.common.html_re import attr_name
 from rest_framework.permissions import IsAdminUser
-from device.forms import AddEquipmentForm, AddDeviceForm, ChangFields, DraftForm, DraftFormDevice, FormFilter
+from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, DraftFormDevice, FormFilter
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale
 from device.variables import year
+from equipment.settings import BASE_DIR, MEDIA_ROOT
 from users.forms import LoginUserForm
 
 menu = [
@@ -32,6 +33,7 @@ menu = [
     {'title': 'Названия', 'url_name': 'names'},
     {'title': 'Статусы', 'url_name': 'statuses'},
     {'title': 'Года выпуска', 'url_name': 'years'},
+    {'title': 'Позиция', 'url_name': 'gps'},
     {'title': 'Поиск', 'url_name': 'search'},
 ]
 
@@ -306,78 +308,25 @@ def EquipmentUpdate(request, pk):
     return render(request, 'device/equipment_update.html', context=data)
 
 
-# def search(request):
-#     if request.user.is_authenticated:
-#         if request.method == 'POST':
-#             si = request.POST.get('si')
-#             tag = request.POST.get('tag')
-#             date_next = request.POST.get('date_next')
-#             serial_number = request.POST.get('serial_number')
-#             equipment = None
-#             si_or = False
-#             if ((serial_number != '') &
-#                     (si is None) & (tag == '') &
-#                     (not date_next)):  # только по серийному номеру
-#                 si_or = False
-#                 equipment = Equipment.objects.filter(
-#                     serial_number__icontains=serial_number)
-#             if (serial_number != '') & (si is not None):  # по серийному номеру и средству измерения
-#                 si_or = True
-#                 equipment = Equipment.objects.filter(Q(
-#                     serial_number__icontains=serial_number) & Q(si_or=si_or))
-#             if ((tag != '') & (si is None) &
-#                     (serial_number == '') &
-#                     (not date_next)):  # только по тегу
-#                 si_or = False
-#                 equipment = Equipment.objects.filter(
-#                     tags__name__icontains=tag)
-#             if (si is not None) & (not date_next):  # только средства измерения
-#                 si_or = True
-#                 equipment = Equipment.objects.filter(si_or=True)
-#             if date_next:
-#                 equipment = Equipment.objects.filter(
-#                     si__next_verification__lte=date_next).order_by('-si__next_verification')
-#                 si_or = True
-#             if request.method == 'POST':
-#
-#                 form = FormFilter(request.POST)
-#
-#             else:
-#                 form = FormFilter()
-#
-#             data = {
-#                 'si': si_or,
-#                 'equipments': equipment,
-#                 'title': 'Результаты поиска',
-#                 'menu': menu,
-#                 'formfilter': form,
-#             }
-#             if not equipment:
-#                 data['error'] = 'Оборудование не найдено'
-#             return render(request, 'device/equipments.html', context=data)
-#         else:
-#             return render(request, 'device/equipments.html', {'menu': menu})
-#     else:
-#         return redirect('index')
-
-
 class MyFilter(django_filters.FilterSet):
     type = django_filters.CharFilter(field_name='type__name',
                                      lookup_expr='icontains',
                                      label='Тип:',
                                      widget=forms.TextInput(attrs={'class': 'type'}))
-    serial_number = django_filters.CharFilter(lookup_expr='icontains', widget=forms.TextInput(attrs={'class': 'type'}))
+    serial_number = django_filters.CharFilter(lookup_expr='icontains', widget=forms.TextInput(attrs={'class': 'type'}),
+                                              label='Серийный номер')
     position = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                                 queryset=GP.objects.all(),
                                                 field_name='positions__name',
                                                 lookup_expr='exact', label='Позиция:', )
     name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Название:',
                                      widget=forms.TextInput(attrs={'class': 'type'}))
-    model = django_filters.CharFilter(
-        field_name='model__name',
-        lookup_expr='icontains',
-        label='Модель:',
-        widget=forms.TextInput(attrs={'class': 'type'}))
+
+    # model = django_filters.CharFilter(
+    #     field_name='model__name',
+    #     lookup_expr='icontains',
+    #     label='Модель:',
+    #     widget=forms.TextInput(attrs={'class': 'type'}))
     year__lt = django_filters.DateFilter(
         widget=forms.TextInput(attrs=
         {
@@ -394,14 +343,14 @@ class MyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Equipment
-        fields = ['serial_number', 'si_or', 'status', 'position']
+        fields = ['serial_number', 'name', 'position', 'si_or', 'status', ]
 
         widget = {
             'type': forms.TextInput(attrs={'class': 'type'}),
             'position': forms.Select(attrs={'class': 'select'}),
             'year__lt': forms.TextInput(attrs={'class': 'type'}),
             'name': forms.TextInput(attrs={'class': 'type'}),
-            'model': forms.TextInput(attrs={'class': 'type'}),
+            # 'model': forms.TextInput(attrs={'class': 'type'}),
             'status': forms.Select(attrs={'class': 'select'})
         }
 
@@ -516,6 +465,7 @@ def equipment_detail(request, pk):
         'menu': menu,
         'data_eq': data_eq,
     }
+
     return render(request, 'device/equipment_detail.html', context=data)
 
 
@@ -590,7 +540,6 @@ class AddCategory(CreateView):
     template_name = 'device/add_category.html'
     fields = ['name']
     context_object_name = 'cats'
-    success_url = '/'
     extra_context = {
         'menu': menu
     }
@@ -605,7 +554,7 @@ class UpdateCategory(UpdateView):
     template_name = 'device/add_category.html'
     fields = ['name']
     context_object_name = 'cats'
-    success_url = '/index'
+    success_url = '/'
     extra_context = {
         'menu': menu
     }
@@ -728,7 +677,12 @@ def draft_equipment_add(request, pk):
 def draft_delete(request, pk):
     if request.user.is_staff:
         obj = get_object_or_404(Draft, pk=pk)
+        st = ('media/' + str(obj.images))
         obj.delete()
+        try:
+            os.remove(os.path.join(BASE_DIR, st))
+        except:
+            return redirect('draft_list')
         return redirect('draft_list')
     else:
         return redirect('draft_list')

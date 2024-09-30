@@ -1,7 +1,7 @@
 {% extends 'device/base.html' %}
 
 {% block content %}
-{% if user.is_staff %}
+{% if user.is_authenticated %}
 <hr>
 
 
@@ -21,20 +21,12 @@
     <tr>
         <th>Серийный номер</th>
         <th>Наименование</th>
-        <th>Тип</th>
-        <th>Модель</th>
         <th>Поз. по ГП</th>
         <th>Место установки</th>
         <th>Тэг</th>
-        <th>Дата изменения</th>
-        <th>Описание</th>
-        {%if user.is_staff%}
-        <th>Кто внес изменения</th>
-        {%if si%}
         <th>Дата предыдущей поверки</th>
         <th>Дата следующей поверки</th>
-        {%endif%}
-        {%endif%}
+
     </thead>
 
     {%for equipment in equipments.qs%}
@@ -50,20 +42,13 @@
         {%endif%}
         {%endif%}
         <td>{{equipment.name}}</td>
-        <td>{{equipment.type}}</td>
-        <td>{{equipment.model}}</td>
         <td>{{equipment.positions.last.name}}</td>
         <td>{{equipment.locations.last.name}}</td>
         <td>{{equipment.tags.last.name}}</td>
-        <td>{{equipment.descriptions.last.at_date|date:"d-m-Y"}}</td>
-        <td>{{equipment.descriptions.last.name}}</td>
-        {%if user.is_staff%}
-        <td>{{equipment.descriptions.last.user}}</td>
-        {%if si%}
         <td>{{equipment.si.last.previous_verification|date:"d-m-Y"}}</td>
         <td>{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
-        {%endif%}
-        {%endif%}
+
+
 
     </tr>
     {%endfor%}
