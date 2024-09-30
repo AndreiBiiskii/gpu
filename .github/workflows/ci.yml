@@ -42,17 +42,6 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Деплой
-        uses: appleboy/ssh-action@master
-
-
-
-#host: ${{ secrets.SSH_HOST }}
-#        username: ${{ secrets.SSH_USER }}
-#        key: ${{ secrets.SSH_PRIVATE_KEY }}
-#        port: ${{ secrets.SSH_PORT }}
-#
         env:
           SECRET_KEY: ${{env.SECRET_KEY}}
           DEBUG: ${{env.DEBUG}}
@@ -63,3 +52,18 @@ jobs:
           DB_PASSWORD: ${{env.DB_PASSWORD}}
           DB_HOST: ${{env.DB_HOST}}
           DB_PORT: ${{env.DB_PORT}}
+
+      - name: Деплой
+        uses: appleboy/ssh-action@master
+
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: expect /home/admin/gpu/equipment/deploy.exp
+
+#host: ${{ secrets.SSH_HOST }}
+#        username: ${{ secrets.SSH_USER }}
+#        key: ${{ secrets.SSH_PRIVATE_KEY }}
+#        port: ${{ secrets.SSH_PORT }}
+#
