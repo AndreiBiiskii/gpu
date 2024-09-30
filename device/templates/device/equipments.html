@@ -5,13 +5,12 @@
 <hr>
 
 
-        <form action="{% url 'search' %}" method="POST">
-            {% csrf_token %}
-            {{ equipments.form.as_p }}
-            <button type="submit" class="search_btn">Search</button>
-            <cite>Найдено:{{count}}</cite>
-        </form>
-
+<form action="{% url 'search' %}" method="POST">
+    {% csrf_token %}
+    {{ equipments.form.as_p }}
+    <button type="submit" class="search_btn">Search</button>
+    <cite>Найдено:{{count}}</cite>
+</form>
 
 
 <h1 class="error">{{error}}</h1>
@@ -47,9 +46,6 @@
         <td>{{equipment.tags.last.name}}</td>
         <td>{{equipment.si.last.previous_verification|date:"d-m-Y"}}</td>
         <td>{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
-
-
-
     </tr>
     {%endfor%}
 </table>
