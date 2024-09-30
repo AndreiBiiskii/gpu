@@ -60,7 +60,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
-          script:
+          script: |
             cd /home/andrei/pro
             git pull origin -u main
             source env/bin/activate
