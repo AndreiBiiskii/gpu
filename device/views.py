@@ -1,10 +1,7 @@
 import csv
 import datetime
 import os
-from email.policy import default
-
 import django_filters
-from IPython.core.magic_arguments import defaults
 from dateutil.relativedelta import relativedelta
 from django import forms
 from django.conf import settings
@@ -12,19 +9,15 @@ from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
-from django.db.models import Q, Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView, CreateView, ListView, DetailView, DeleteView, FormView
-from django_filters import filters
-from markdown_it.common.html_re import attr_name
+from django.views.generic import UpdateView, CreateView, ListView, DetailView
 from rest_framework.permissions import IsAdminUser
-from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, DraftFormDevice, FormFilter
+from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale
 from device.variables import year
-from equipment.settings import BASE_DIR, MEDIA_ROOT
-from users.forms import LoginUserForm
+from equipment.settings import BASE_DIR
 
 menu = [
     {'title': 'Модели', 'url_name': 'models'},
@@ -70,17 +63,14 @@ def si_loading(request):
                     months=+(int(row['mpi'])))
                 try:
                     m = EquipmentModel.objects.get(name=row['model'])
-
                 except:
                     EquipmentModel.objects.create(name=row['model'])
                     m = EquipmentModel.objects.get(name=row['model'])
-
                 try:
                     t = EquipmentType.objects.get(name=row['type'])
                 except:
                     EquipmentType.objects.create(name=row['type'])
                     t = EquipmentType.objects.get(name=row['type'])
-
                 try:
                     n = EquipmentName.objects.get(name=row['name'])
                 except:
@@ -93,7 +83,6 @@ def si_loading(request):
                 except:
                     Year.objects.create(name=row['year'])
                     y = Year.objects.get(name=row['year'])
-
                 try:
                     man = Manufacturer.objects.get(name='manufacturer')
                 except:
@@ -404,7 +393,8 @@ def equipment_list(request):
         return render(request, 'device/equipments.html', context=data)
 
     else:
-        eq_filter = MyFilter(request.POST, queryset=Equipment.objects.all()[0:0])
+        eq_filter = MyFilter(request.POST,
+                             queryset=Equipment.objects.all()[0:0])
         data = {
             'title': 'Поиск',
             'menu': menu,
@@ -412,7 +402,9 @@ def equipment_list(request):
             'equipments': eq_filter,
         }
 
-        return render(request, 'device/equipments.html', context=data)
+        return render(request,
+                      'device/equipments.html',
+                      context=data)
 
 
 def equipment_detail(request, pk):
@@ -522,7 +514,8 @@ def DeviceUpdate(request, pk):
 
 def EquipmentDelete(request, pk):
     if request.user.is_staff:
-        obj = get_object_or_404(Equipment, pk=pk)
+        obj = get_object_or_404(Equipment,
+                                pk=pk)
         obj.descriptions.all().delete()
         obj.positions.all().delete()
         obj.locations.all().delete()
