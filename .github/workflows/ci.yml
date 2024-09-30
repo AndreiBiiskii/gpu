@@ -48,7 +48,7 @@ jobs:
         with:
           host: ${{ secrets.ALLOWED_HOSTS }}
           username: ${{ secrets.DB_USER }}
-          password: ${{ secrets.SECRET_KEY }}
+          password: ${{ secrets.DB_PASSWORD }}
           script: expect /home/admin/gpu/equipment/deploy.exp
         env:
           SECRET_KEY: ${{env.SECRET_KEY}}
