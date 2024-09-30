@@ -68,6 +68,7 @@ border: 3px solid purple;
 }
 
 .category-wrap {
+
   padding: 15px;
   background: white;
   width: 100%;
@@ -201,8 +202,9 @@ a {
 .shadowbox {
   width: 97%;
   border: 1px solid #333;
-  box-shadow: 8px 8px 5px #444;
-  padding: 8px 12px;
+  box-shadow: 5px 5px 8px 8px #444;
+  text-align: center;
+  margin:25px 25px 0 10px;
   background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
   border-radius: 10px;
 }
@@ -238,9 +240,8 @@ grid-gap: 16px;
 
 .type{
 width: 90%;
-height:1em;
-font-size:0.8em;
-
+height:1.3em;
+font-size:1.2em;
 }
 
 
@@ -252,7 +253,7 @@ height:2em;
 
 .select {
 display: block;
-font-size: 20px;
+font-size: 35px;
 font-family: sans-serif;
 font-weight: 700;
 color: #444;

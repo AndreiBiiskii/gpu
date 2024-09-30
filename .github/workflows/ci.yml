@@ -42,6 +42,7 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+             python manage.py collectstatic
         env:
           SECRET_KEY: ${{env.SECRET_KEY}}
           DEBUG: ${{env.DEBUG}}
@@ -61,10 +62,3 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: expect /home/user/gpu/deploy.exp
-
-
-#host: ${{ secrets.SSH_HOST }}
-#        username: ${{ secrets.SSH_USER }}
-#        key: ${{ secrets.SSH_PRIVATE_KEY }}
-#        port: ${{ secrets.SSH_PORT }}
-#

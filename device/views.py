@@ -536,6 +536,7 @@ class AddCategory(CreateView):
     extra_context = {
         'menu': menu
     }
+    success_url = '/'
 
 
 class ListCategory(ListView):
