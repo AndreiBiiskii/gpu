@@ -270,10 +270,10 @@ class SearchForm(forms.Form):
 class DraftForm(forms.ModelForm):
     poz_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                        label='Поз. по ГП')
-    location_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Расположение')
+    location_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'select'}), label='Расположение')
     description_draft = forms.CharField(
         widget=forms.Textarea(attrs={"class": "textara"}), label='Комментарий:')
-    tag_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Тэг:')
+    tag_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'select'}), label='Тэг:')
     status_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                           queryset=StatusAdd.objects.all(),
                                           label='Статус')
