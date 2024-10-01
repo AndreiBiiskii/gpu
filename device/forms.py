@@ -2,7 +2,7 @@ import datetime
 import re
 from cProfile import label
 
-from django.forms import Textarea
+from django.forms import Textarea, FileInput
 from markdown_it.rules_inline import image
 
 from device.variables import *
@@ -13,34 +13,34 @@ from .models import *
 
 class AddEquipmentForm(forms.Form):
     serial_number = forms.CharField(label='Серийный номер', max_length=100,
-                                    widget=forms.TextInput(attrs={'class': 'type'}))
+                                    widget=forms.TextInput(attrs={'class': 'type2'}))
     model = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                    queryset=EquipmentModel.objects.all(),
                                    label='Модель', required=False)
-    model_new = forms.CharField(label='Добавить модель:', widget=forms.TextInput(attrs={'class': 'type'}),
+    model_new = forms.CharField(label='Добавить модель:', widget=forms.TextInput(attrs={'class': 'type2'}),
                                 required=False)
     type = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Тип оборудования:',
                                   queryset=EquipmentType.objects.all(), required=False)
-    type_new = forms.CharField(label='Добавить тип:', max_length=15, widget=forms.TextInput(attrs={'class': 'type'}),
+    type_new = forms.CharField(label='Добавить тип:', max_length=15, widget=forms.TextInput(attrs={'class': 'type2'}),
                                required=False)
     manufacturer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Производитель:',
                                           queryset=Manufacturer.objects.all(), required=False)
-    manufacturer_new = forms.CharField(label='Добавить производителя:', widget=forms.TextInput(attrs={'class': 'type'}),
+    manufacturer_new = forms.CharField(label='Добавить производителя:', widget=forms.TextInput(attrs={'class': 'type2'}),
                                        required=False)
     name = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=EquipmentName.objects.all(),
                                   required=False, label='Наименование:')
-    name_new = forms.CharField(label='Добавить наименование:', widget=forms.TextInput(attrs={'class': 'type'}),
+    name_new = forms.CharField(label='Добавить наименование:', widget=forms.TextInput(attrs={'class': 'type2'}),
                                required=False)
-    description = forms.CharField(widget=forms.Textarea(attrs={"cols": "100", 'rows': "10"}), label='Комментарий:')
+    description = forms.CharField(widget=forms.Textarea(attrs={'class':'type2'}), label='Комментарий:')
     position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                       label='Поз. по ГП')
-    location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type'}), max_length=50, required=False,
+    location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), max_length=50, required=False,
                                label='Место установки:')
-    tag = forms.CharField(label='Тег', widget=forms.TextInput(attrs={'class': 'type'}), max_length=100)
+    tag = forms.CharField(label='Тег', widget=forms.TextInput(attrs={'class': 'type2'}), max_length=100)
     status = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=StatusAdd.objects.all(),
                                     label='Статус')
     status_new = forms.CharField(label='Добавить статус', max_length=10,
-                                 widget=forms.TextInput(attrs={'class': 'type'}), required=False)
+                                 widget=forms.TextInput(attrs={'class': 'type2'}), required=False)
     year = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Год выпуска:',
                                   queryset=Year.objects.all(), required=False)
 
@@ -117,40 +117,40 @@ class AddEquipmentForm(forms.Form):
 
 class AddDeviceForm(forms.Form):
     serial_number = forms.CharField(label='Серийный номер', max_length=100,
-                                    widget=forms.TextInput(attrs={'class': 'type'}))
+                                    widget=forms.TextInput(attrs={'class': 'type2'}))
     model = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                    queryset=EquipmentModel.objects.all(),
                                    label='Модель')
-    model_new = forms.CharField(label='Добавить модель:', widget=forms.TextInput(attrs={'class': 'type'}),
+    model_new = forms.CharField(label='Добавить модель:', widget=forms.TextInput(attrs={'class': 'type2'}),
                                 required=False)
     type = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Тип оборудования:',
                                   queryset=EquipmentType.objects.all(), required=False)
-    type_new = forms.CharField(label='Добавить тип:', max_length=15, widget=forms.TextInput(attrs={'class': 'type'}),
+    type_new = forms.CharField(label='Добавить тип:', max_length=15, widget=forms.TextInput(attrs={'class': 'type2'}),
                                required=False)
     manufacturer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Производитель:',
                                           queryset=Manufacturer.objects.all(), required=False)
-    manufacturer_new = forms.CharField(label='Добавить производителя:', widget=forms.TextInput(attrs={'class': 'type'}),
+    manufacturer_new = forms.CharField(label='Добавить производителя:', widget=forms.TextInput(attrs={'class': 'type2'}),
                                        required=False)
     name = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=EquipmentName.objects.all(),
                                   required=False, label='Наименование:')
     name_new = forms.CharField(label='Добавить наименование:', widget=forms.TextInput(attrs={'class': 'type'}),
                                required=False)
-    description = forms.CharField(widget=forms.Textarea(attrs={"cols": "100", 'rows': "10"}), label='Комментарий:')
+    description = forms.CharField(widget=forms.Textarea(attrs={'class':'type2'}), label='Комментарий:')
     position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                       label='Поз. по ГП')
-    location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type'}), max_length=50, required=False,
+    location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), max_length=50, required=False,
                                label='Место установки:')
-    tag = forms.CharField(label='Тег', widget=forms.TextInput(attrs={'class': 'type'}), max_length=100)
+    tag = forms.CharField(label='Тег', widget=forms.TextInput(attrs={'class': 'type2'}), max_length=100)
     status = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=StatusAdd.objects.all(),
                                     label='Статус')
     status_new = forms.CharField(label='Добавить статус', max_length=10,
-                                 widget=forms.TextInput(attrs={'class': 'type'}), required=False)
+                                 widget=forms.TextInput(attrs={'class': 'type2'}), required=False)
     year = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Год выпуска:',
                                   queryset=Year.objects.all(), required=False)
     reg_number = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Регистрационный номер:',
                                         queryset=RegNumber.objects.all(),
                                         required=False)
-    reg_number_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type'}),
+    reg_number_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
                                      label='Добавить регистрационный номер:', max_length=20, required=False)
     previous_verification = forms.DateField(label='Дата предыдущей поверки:', widget=forms.TextInput(attrs=
     {
@@ -158,11 +158,11 @@ class AddDeviceForm(forms.Form):
         'value': datetime.date.today().strftime('%Y-%m-%d'),
         'class': 'type',
     }))
-    certificate = forms.CharField(widget=forms.TextInput(attrs={"class": "type"}), label='Сертификат:')
+    certificate = forms.CharField(widget=forms.TextInput(attrs={"class": "type2"}), label='Сертификат:')
     interval = forms.ChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Межповерочный интервал:',
                                  choices=CHOICES_INTERVAL)
-    min_scale = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type"}), label='Мин. шкалы:')
-    max_scale = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type"}), label='Макс. шкалы:')
+    min_scale = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type2"}), label='Мин. шкалы:')
+    max_scale = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type2"}), label='Макс. шкалы:')
     unit = forms.ChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                              label='Единицы измерения:', choices=CHOICES_UNIT)
 
@@ -270,14 +270,14 @@ class SearchForm(forms.Form):
 class DraftForm(forms.ModelForm):
     poz_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                        label='Поз. по ГП')
-    location_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'select'}), label='Расположение')
+    location_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Расположение')
     description_draft = forms.CharField(
-        widget=forms.Textarea(attrs={"class": "textara"}), label='Комментарий:')
-    tag_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'select'}), label='Тэг:')
+        widget=forms.Textarea(attrs={"class": "type2"}), label='Комментарий:')
+    tag_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Тэг:')
     status_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                           queryset=StatusAdd.objects.all(),
                                           label='Статус')
-
+    images = forms.ImageField(widget=forms.FileInput(attrs={'class': 'select'}))
 
     class Meta(object):
         model = Draft

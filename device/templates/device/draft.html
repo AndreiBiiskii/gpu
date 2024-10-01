@@ -1,7 +1,7 @@
 {% extends 'device/base.html' %}
 
 {% block content%}
-
+    <br>
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
