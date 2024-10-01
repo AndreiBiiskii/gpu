@@ -5,7 +5,7 @@
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="button-style2"> Сохранить </button>
+    <button type="submit" class="button-style1"> Сохранить </button>
     <a href="{% url 'search' %}" class="button-style2">К поиску</a>
 </form>
 {% endblock %}
