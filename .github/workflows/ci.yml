@@ -40,11 +40,6 @@ jobs:
       - name: Set up Python 3.10
         uses: actions/setup-python@v3
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          home/user/gpu/env/source env/bin/activate
-          python manage.py collectstatic --no-input
         env:
           SECRET_KEY: ${{env.SECRET_KEY}}
           DEBUG: ${{env.DEBUG}}
