@@ -3,6 +3,8 @@ import re
 from cProfile import label
 
 from django.forms import Textarea
+from markdown_it.rules_inline import image
+
 from device.variables import *
 from dateutil.relativedelta import relativedelta
 from django import forms
@@ -269,11 +271,12 @@ class DraftForm(forms.ModelForm):
     poz_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                        label='Поз. по ГП')
     location_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type'}))
-    description_draft = forms.CharField(widget=forms.Textarea(attrs={"cols": "20", 'rows': "5", 'class':'type2'}),
+    description_draft = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}),
                                         label='Комментарий:')
     tag_draft = forms.CharField(widget=forms.Textarea(attrs={'class': 'type'}), label='Тэг:')
-    status_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=StatusAdd.objects.all(),
-                                       label='Статус')
+    status_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
+                                          queryset=StatusAdd.objects.all(),
+                                          label='Статус')
 
     class Meta(object):
         model = Draft
