@@ -252,13 +252,13 @@ grid-gap: 16px;
 width: 90%;
 height:0.3em;
 font-size:0.2em;
-
+background-color: red;
 }
 .type2{
 font-size:50px;
 width: 98%;
 border: 5px solid;
-
+background-color: red;
 }
 
 .textara{
