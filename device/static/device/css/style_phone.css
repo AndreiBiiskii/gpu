@@ -123,7 +123,9 @@ border: 3px solid purple;
 .button-style1{
   height: 1.3em;
   font-size:1.2em;
-  width: 100000%;
+  width:100%;
+  margin-bottom:20px;
+
 }
 .button-style {
   display: inline-block;
@@ -145,7 +147,7 @@ border: 3px solid purple;
 }
 
 .button-style2 {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   height: 1.3em;
   font-size:1.2em;
   display: inline-block;
@@ -248,18 +250,21 @@ grid-gap: 16px;
 
 .type{
 width: 90%;
-height:1.3em;
-font-size:1.2em;
+height:0.3em;
+font-size:0.2em;
+
 }
 .type2{
-font-size:1.2em;
-width: 100%;
-background:red;
+font-size:50px;
+width: 98%;
+border: 5px solid;
+
 }
 
 .textara{
 font-size:50px;
 width: 100%;
+border: 5px solid;
 }
 .search_btn{
 font-size:0.8em;
