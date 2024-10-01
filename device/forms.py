@@ -1,5 +1,7 @@
 import datetime
 import re
+from cProfile import label
+
 from django.forms import Textarea
 from device.variables import *
 from dateutil.relativedelta import relativedelta
@@ -12,7 +14,7 @@ class AddEquipmentForm(forms.Form):
                                     widget=forms.TextInput(attrs={'class': 'type'}))
     model = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                    queryset=EquipmentModel.objects.all(),
-                                   label='Модель',required=False)
+                                   label='Модель', required=False)
     model_new = forms.CharField(label='Добавить модель:', widget=forms.TextInput(attrs={'class': 'type'}),
                                 required=False)
     type = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Тип оборудования:',
@@ -264,13 +266,18 @@ class SearchForm(forms.Form):
 
 
 class DraftForm(forms.ModelForm):
+    poz_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
+                                       label='Поз. по ГП')
+    location_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type'}))
+    description_draft = forms.CharField(widget=forms.Textarea(attrs={"cols": "20", 'rows': "5", 'class':'type2'}),
+                                        label='Комментарий:')
+    tag_draft = forms.CharField(widget=forms.Textarea(attrs={'class': 'type'}), label='Тэг:')
+    status_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=StatusAdd.objects.all(),
+                                       label='Статус')
+
     class Meta(object):
         model = Draft
         exclude = ('user_draft',)
-
-        widgets = {
-            'description_draft': Textarea(attrs={'rows': '4', 'cols': '80'}),
-        }
 
 
 class DraftFormDevice(forms.Form):

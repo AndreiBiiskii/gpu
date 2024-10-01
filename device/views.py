@@ -612,7 +612,8 @@ class DraftCreate(CreateView):
         img = ImageOps.exif_transpose(img)
         st = ('media/images/' + str(instance.images))
         dir_img = os.path.join(BASE_DIR, st)
-        img.save(dir_img, format='JPEG', quality=90, optimize=True)
+        img.save(dir_img, format='JPEG', quality=70, optimize=True)
+        instance.images = None
         instance.save()
         return redirect('/')
 

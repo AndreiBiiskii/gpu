@@ -243,7 +243,10 @@ width: 90%;
 height:1.3em;
 font-size:1.2em;
 }
-
+.type2{
+font-size:1.2em;
+width: 100%;
+}
 
 .search_btn{
 font-size:0.8em;
