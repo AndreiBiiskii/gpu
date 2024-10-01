@@ -271,8 +271,8 @@ class DraftForm(forms.ModelForm):
     poz_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                        label='Поз. по ГП')
     location_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type'}), label='Расположение')
-    description_draft = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}),
-                                        label='Комментарий:')
+    description_draft = forms.CharField(
+        widget=forms.Textarea(attrs={"cols": "100", 'rows': "20", "font-size": "1.2em"}), label='Комментарий:')
     tag_draft = forms.CharField(widget=forms.Textarea(attrs={'class': 'type'}), label='Тэг:')
     status_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                           queryset=StatusAdd.objects.all(),
