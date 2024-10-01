@@ -14,12 +14,12 @@
     <b><cite>Позиция по ГП:</cite></b>
     <select name="position" class="select">
         {%for position in positions%}
-        <option>{{position}}</option>
+        <option>{{position}}</option><br>
         {%endfor%}
         <option selected>{{equipment.positions.last.name}}</option>
     </select>
 
-    <cite>Место установки:</cite>
+    <b><cite>Место установки:</cite></b>
     <input class="type" type="text" name="location" value="{{equipment.locations.last.name}}">
 
 
@@ -33,7 +33,7 @@
         {%endfor%}
         <option selected>{{equipment.status.last.name}}</option>
     </select>
-
+    <br>
     <br>
     <b>Комментарий</b>
     <textarea class="description" name="description">{{equipment.descriptions.last.name}}</textarea>
@@ -46,7 +46,7 @@
     <input class="type" type="text" name="certificate" value="{{equipment.si.last.certificate}}">
     <br><br>
     {%endif%}
-    <button type="submit" class="search_btn"> Обновить данные</button>
+    <button type="submit" class="button-style2"> Обновить данные</button>
     <a href="{% url 'search' %}" class="button-style2">К поиску</a>
 
 </form>

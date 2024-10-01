@@ -1,7 +1,10 @@
 import csv
 import datetime
 import os
+from pickletools import optimize
+
 import django_filters
+from PIL import Image, ImageOps
 from dateutil.relativedelta import relativedelta
 from django import forms
 from django.conf import settings
@@ -598,6 +601,18 @@ class DraftCreate(CreateView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.user_draft = self.request.user
+        # st = ('media/' + str(instance.images))
+        img = Image.open(instance.images)
+        if img != 'RGB':
+            img = img.convert('RGB')
+            print('RGB')
+        if img.height > 500 or img.width > 500:
+            img.thumbnail = (500, 500)
+            print('Resize')
+        img = ImageOps.exif_transpose(img)
+        st = ('media/images/' + str(instance.images))
+        dir_img = os.path.join(BASE_DIR, st)
+        img.save(dir_img, format='JPEG', quality=90, optimize=True)
         instance.save()
         return redirect('/')
 

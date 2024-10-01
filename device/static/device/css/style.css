@@ -156,6 +156,7 @@ border: 3px solid purple;
   text-align: center;
   box-shadow: -2px -2px 2px 2px #00BFFF, 0 -2px #00BFFF, -2px 0 #00BFFF;
   color:#00BFFF;
+  width:auto;
 }
 
 .button-style2:hover, .button-style:focus {
