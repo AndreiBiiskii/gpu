@@ -164,6 +164,7 @@ def si_loading(request):
             return render(request, 'device/index.html')
 
 
+
 def gp_loading(request):
     with open('./SI.csv', encoding='utf-8') as gp:
         reader = csv.DictReader(gp, delimiter=';')
