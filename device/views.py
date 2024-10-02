@@ -113,7 +113,7 @@ def si_loading(request):
                     )
                     continue
 
-                Position.objects.create(name=row['position'], equipment=eq)
+                Position.objects.create(name=row['position'].strip, equipment=eq)
                 Location.objects.create(name=row['location'], equipment=eq)
                 Tag.objects.create(name=row['teg'], equipment=eq)
                 Description.objects.create(name='description', equipment=eq, user=u)
