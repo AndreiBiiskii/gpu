@@ -35,7 +35,6 @@ menu = [
 ]
 
 
-# position;location;teg;model;type ;name;reg_number;serial_number;year;min_scale;max_scale;unit;mpi;previous_verification;result;certificate
 def si_loading(request):
     u = User.objects.get(username='admin')
     with open('bag.csv', 'w', encoding='utf-8') as bag:
@@ -127,10 +126,10 @@ def si_loading(request):
                 Status.objects.create(name=status, equipment=eq)
 
                 try:
-                    interval = VerificationInterval.objects.get(name=row['mpi']).first()
+                    interval = VerificationInterval.objects.filter(name=row['mpi']).first()
                 except:
                     VerificationInterval.objects.create(name=row['mpi'])
-                    interval = VerificationInterval.objects.get(name=row['mpi']).first()
+                    interval = VerificationInterval.objects.filter(name=row['mpi']).first()
 
                 try:
                     scale = Scale.objects.get(min_scale=row['min_scale'], max_scale=row['max_scale'])
