@@ -177,6 +177,7 @@ def gp_loading(request):
     return render(request, 'device/index.html')
 
 
+
 # name;type;manufacturer;serial_number;model;poz;location;tag
 def IM(request):
     u = User.objects.get(username='admin')
