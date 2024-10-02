@@ -165,14 +165,14 @@ def si_loading(request):
 
 
 def gp_loading(request):
-    with open(os.path.join(settings.BASE_DIR, 'SIkgs.csv'), encoding='utf-8') as gp:
-        reader = csv.DictReader(gp, delimiter=';')
-        for row in reader:
-            GP.objects.get_or_create(name=row['position'].upper())
     with open(os.path.join(settings.BASE_DIR, 'SI.csv'), encoding='utf-8') as gp:
         reader = csv.DictReader(gp, delimiter=';')
         for row in reader:
             GP.objects.get_or_create(name=row['position'].upper())
+    with open(os.path.join(settings.BASE_DIR, 'im.csv'), encoding='utf-8') as gp:
+        reader = csv.DictReader(gp, delimiter=';')
+        for row in reader:
+            GP.objects.get_or_create(name=row['poz'].upper())
 
     return render(request, 'device/index.html')
 
