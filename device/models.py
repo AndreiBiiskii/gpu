@@ -148,7 +148,7 @@ class Equipment(models.Model):
                              verbose_name='Тип', default=None, null=True)
     name = models.ForeignKey(EquipmentName, on_delete=models.CASCADE, related_name='n',
                              verbose_name='Наименование оборудования')
-    year = models.ForeignKey('Year', on_delete=models.DO_NOTHING, related_name='years', verbose_name='Год выпуска')
+    year = models.ForeignKey('Year', on_delete=models.CASCADE, related_name='years', verbose_name='Год выпуска')
 
     def __str__(self):
         return self.serial_number
@@ -177,7 +177,8 @@ class Si(models.Model):
     #                                  verbose_name='Погрешность', default=1)
     reg_number = models.ForeignKey('RegNumber', on_delete=models.DO_NOTHING, related_name='reg_number',
                                    verbose_name='Регистрационный номер')
-    result = models.BooleanField(default=True)
+    result = models.BooleanField(default=True, )
+    com = models.TextField(verbose_name='Комментарий', default='none')
 
     # def __str__(self):
     #     return self.equipment.name

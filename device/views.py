@@ -5,6 +5,7 @@ from pickletools import optimize
 
 import django_filters
 from PIL import Image, ImageOps
+from PIL.ImImagePlugin import number
 from dateutil.relativedelta import relativedelta
 from django import forms
 from django.conf import settings
@@ -12,6 +13,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.context_processors import request
 from django.urls import reverse_lazy
@@ -35,146 +37,90 @@ menu = [
 ]
 
 
-def si_loading(request):
+def si_loading(request, i):
     u = User.objects.get(username='admin')
-    with open('bag.csv', 'w', encoding='utf-8') as bag:
-        fieldnames = ['id', 'serial_number']
-        writer = csv.DictWriter(bag, fieldnames=fieldnames, delimiter=';')
-        writer.writeheader()
-
-        with open(os.path.join(settings.BASE_DIR, 'SI.csv'), encoding='utf-8') as si:
-            reader = csv.DictReader(si, delimiter=';')
-            for i, row in enumerate(reader):
-                if Equipment.objects.filter(serial_number=row['serial_number']):
-                    continue
-                if row['mpi'] == '':
-                    row['mpi'] = '0'
-                if row['previous_verification'] == '':
-                    d = '{}-{}-{}'.format(1990, 1, 1)
-                else:
-                    rez = row['previous_verification'].split('.')
-                    year = rez[2]
-                    month = rez[1]
-                    day = rez[0]
-                    d = '{}-{}-{}'.format(year, month, day)
-                try:
-                    previous_verification = datetime.date.fromisoformat(d)
-                except:
-                    previous_verification = datetime.datetime.fromisoformat('1990-01-01')
-
-                next_verification = previous_verification + relativedelta(
-                    months=+(int(row['mpi'])))
-                try:
-                    m = EquipmentModel.objects.get(name=row['model'])
-                except:
-                    EquipmentModel.objects.create(name=row['model'])
-                    m = EquipmentModel.objects.get(name=row['model'])
-                try:
-                    t = EquipmentType.objects.get(name=row['type'])
-                except:
-                    EquipmentType.objects.create(name=row['type'])
-                    t = EquipmentType.objects.get(name=row['type'])
-                try:
-                    n = EquipmentName.objects.get(name=row['name'])
-                except:
-                    EquipmentName.objects.create(name=row['name'])
-                    n = EquipmentName.objects.get(name=row['name'])
-                if len(row['year']) < 4:
-                    row['year'] = '1999'
-                try:
-                    y = Year.objects.filter(name=row['year']).first()
-                except:
-                    Year.objects.create(name=row['year'])
-                    y = Year.objects.filter(name=row['year']).first()
-                try:
-                    man = Manufacturer.objects.get(name='manufacturer')
-                except:
-                    Manufacturer.objects.create(name='manufacturer')
-                    man = Manufacturer.objects.get(name='manufacturer')
-                try:
-                    eq = Equipment.objects.create(
-                        serial_number=row['serial_number'],
-                        model=m,
-                        si_or=True,
-                        manufacturer=man,
-                        type=t,
-                        name=n,
-                        year=y,
-                    )
-                except:
-                    writer.writerow(
-                        {
-
-                            'serial_number': row['serial_number'],
-                            'id': i,
-
-                        }
-                    )
-                    continue
-
-                Position.objects.create(name=row['position'].strip, equipment=eq)
-                Location.objects.create(name=row['location'], equipment=eq)
-                Tag.objects.create(name=row['teg'], equipment=eq)
-                Description.objects.create(name='description', equipment=eq, user=u)
-
-                try:
-                    status = StatusAdd.objects.get(name='Установлен')
-                except:
-                    StatusAdd.objects.create(name='Установлен')
-                    status = StatusAdd.objects.get(name='Установлен')
-
-                Status.objects.create(name=status, equipment=eq)
-
-                try:
-                    interval = VerificationInterval.objects.filter(name=row['mpi']).first()
-                except:
-                    VerificationInterval.objects.create(name=row['mpi'])
-                    interval = VerificationInterval.objects.filter(name=row['mpi']).first()
-
-                try:
-                    scale = Scale.objects.get(min_scale=row['min_scale'], max_scale=row['max_scale'])
-                except:
-                    Scale.objects.create(min_scale=row['min_scale'], max_scale=row['max_scale'])
-                    scale = Scale.objects.get(min_scale=row['min_scale'], max_scale=row['max_scale'])
-
-                try:
-                    unit = Unit.objects.get(name=row['unit'])
-                except:
-                    Unit.objects.create(name=row['unit'])
-                    unit = Unit.objects.get(name=row['unit'])
-                if len(row['reg_number']) < 2:
-                    row['reg_number'] = 'nothing'
-                try:
-                    reg_number = RegNumber.objects.get(name=row['reg_number'])
-                except:
-                    RegNumber.objects.create(name=row['reg_number'])
-                    reg_number = RegNumber.objects.get(name=row['reg_number'])
-
-                Si.objects.create(
-                    equipment=eq,
-                    previous_verification=previous_verification,
-                    next_verification=next_verification,
-                    certificate=row['certificate'],
-                    interval=interval,
-                    scale=scale,
-                    unit=unit,
-                    reg_number=reg_number,
-                    result=True
-                )
-            return render(request, 'device/index.html')
-
-
-def gp_loading(request):
-    with open('./SI.csv', encoding='utf-8') as gp:
-        reader = csv.DictReader(gp, delimiter=';')
+    StatusAdd.objects.get_or_create(name='Установлен')
+    status = StatusAdd.objects.get(name='Установлен')
+    Manufacturer.objects.get_or_create(name='manufacturer')
+    man = Manufacturer.objects.get(name='manufacturer')
+    with open(f'{BASE_DIR}/si{i}.csv', encoding='utf-8') as si:
+        reader = csv.DictReader(si, delimiter=';')
         for row in reader:
+            if Equipment.objects.filter(Q(serial_number=row['serial_number']) & Q(model__name=row['model'])):
+                continue
+            rez = row['previous_verification'].strip().split('.')
+            str_list = [i for i in rez if i]
+            d = '{}-{}-{}'.format(str_list[2], str_list[1], str_list[0])
+            previous_verification = datetime.date.fromisoformat(d)
+            next_verification = previous_verification + relativedelta(
+                months=+(int(row['interval'])))
+            EquipmentModel.objects.get_or_create(name=row['model'].strip().capitalize())
+            m = EquipmentModel.objects.get(name=row['model'].strip().capitalize())
+            EquipmentType.objects.get_or_create(name=row['type'].strip().capitalize())
+            t = EquipmentType.objects.get(name=row['type'].strip().capitalize())
+            EquipmentName.objects.get_or_create(name=row['name'].strip().capitalize())
+            n = EquipmentName.objects.get(name=row['name'].strip().capitalize())
+            Year.objects.get_or_create(name=row['year'])
+            y = Year.objects.get(name=row['year'])
             GP.objects.get_or_create(name=row['position'].upper())
-    with open('./im.csv', encoding='utf-8') as gp:
-        reader = csv.DictReader(gp, delimiter=';')
-        for row in reader:
-            GP.objects.get_or_create(name=row['poz'].upper())
+            try:
+                eq = Equipment.objects.create(
+                    serial_number=row['serial_number'],
+                    model=m,
+                    si_or=True,
+                    manufacturer=man,
+                    type=t,
+                    name=n,
+                    year=y,
+                )
+            except:
+                print(row['serial_number'],row['model'])
+                continue
 
-    return render(request, 'device/index.html')
+            Status.objects.create(name=status, equipment=eq)
+            Position.objects.create(name=row['position'].strip().upper(), equipment=eq)
+            Location.objects.create(name=row['location'].strip().capitalize(), equipment=eq)
+            Tag.objects.create(name=row['teg'].capitalize(), equipment=eq)
+            Description.objects.create(name='description'.capitalize(), equipment=eq, user=u)
+            VerificationInterval.objects.get_or_create(name=row['interval'])
+            interval = VerificationInterval.objects.get(name=row['interval'])
+            Scale.objects.get_or_create(min_scale=row['min_scale'], max_scale=row['max_scale'])
+            scale = Scale.objects.get(min_scale=row['min_scale'], max_scale=row['max_scale'])
+            Unit.objects.get_or_create(name=row['unit'])
+            unit = Unit.objects.get(name=row['unit'])
+            RegNumber.objects.get_or_create(name=row['reg_number'])
+            reg_number = RegNumber.objects.get(name=row['reg_number'])
+            if row['result'] == 'Годен':
+                rezult = True
+            else:
+                rezult = False
+            Si.objects.create(
+                equipment=eq,
+                previous_verification=previous_verification,
+                next_verification=next_verification,
+                certificate=row['certificate'],
+                interval=interval,
+                scale=scale,
+                unit=unit,
+                reg_number=reg_number,
+                result=rezult,
+                com=row['comment']
+            )
+
+        return render(request, 'device/index.html')
+
+
+# def gp_loading(request):
+#     with open('./SI.csv', encoding='utf-8') as gp:
+#         reader = csv.DictReader(gp, delimiter=';')
+#         for row in reader:
+#             GP.objects.get_or_create(name=row['position'].upper())
+#     with open('./im.csv', encoding='utf-8') as gp:
+#         reader = csv.DictReader(gp, delimiter=';')
+#         for row in reader:
+#             GP.objects.get_or_create(name=row['poz'].upper())
+#
+#     return render(request, 'device/index.html')
 
 
 def IM(request):
@@ -182,40 +128,20 @@ def IM(request):
     with open('./im.csv') as f:
         readers = csv.DictReader(f, delimiter=';')
         for i, row in enumerate(readers):
-            try:
-                m = EquipmentModel.objects.get(name=row['model'])
-            except:
-                EquipmentModel.objects.create(name=row['model'])
-                m = EquipmentModel.objects.get(name=row['model'])
-
-            try:
-                t = EquipmentType.objects.get(name=row['type'])
-            except:
-                EquipmentType.objects.create(name=row['type'])
-                t = EquipmentType.objects.get(name=row['type'])
-
-            try:
-                n = EquipmentName.objects.get(name=row['name'].lower().capitalize())
-            except:
-                EquipmentName.objects.create(name=row['name'].lower().capitalize())
-                n = EquipmentName.objects.get(name=row['name'])
-
+            EquipmentModel.objects.get_or_create(name=row['model'])
+            m = EquipmentModel.objects.get(name=row['model'])
+            EquipmentType.objects.get_or_create(name=row['type'])
+            t = EquipmentType.objects.get(name=row['type'])
+            EquipmentName.objects.get_or_create(name=row['name'].capitalize())
+            n = EquipmentName.objects.get(name=row['name'])
             if (row['type'] == 'РэмТэк') and (len(row['serial_number']) > 4):
                 year_eq = year[(row['serial_number'][0:2])]
             else:
                 year_eq = '1999'
-
-            try:
-                y = Year.objects.get(name=year_eq)
-            except:
-                Year.objects.create(name=year_eq)
-                y = Year.objects.get(name=year_eq)
-
-            try:
-                man = Manufacturer.objects.get(name='manufacturer')
-            except:
-                Manufacturer.objects.create(name='manufacturer')
-                man = Manufacturer.objects.get(name='manufacturer')
+            Year.objects.get_or_create(name=year_eq)
+            y = Year.objects.get(name=year_eq)
+            Manufacturer.objects.get_or_create(name='manufacturer')
+            man = Manufacturer.objects.get(name='manufacturer')
             try:
                 eq = Equipment.objects.create(
                     serial_number=row['serial_number'],
@@ -230,9 +156,9 @@ def IM(request):
                 continue
 
             Position.objects.create(name=row['poz'].upper(), equipment=eq)
-            Location.objects.create(name=row['location'], equipment=eq)
+            Location.objects.create(name=row['location'].capitalize(), equipment=eq)
             Tag.objects.create(name=row['tag'], equipment=eq)
-            Description.objects.create(name='description', equipment=eq, user=u)
+            Description.objects.create(name='description'.capitalize(), equipment=eq, user=u)
             status = StatusAdd.objects.get(name='Установлен')
             Status.objects.create(name=status, equipment=eq)
 
@@ -334,7 +260,7 @@ class MyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Equipment
-        fields = ['serial_number', 'name', 'position', 'si_or', 'status', ]
+        fields = ['serial_number', 'name', 'position', 'si_or', 'status']
 
 
 def equipment_list(request):
