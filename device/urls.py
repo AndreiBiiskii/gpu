@@ -42,7 +42,6 @@ urlpatterns = [
     path('delete_model/<int:pk>', delete_category, {'Mod': EquipmentModel}, name='delete_model'),
     path('add_model/', AddCategory.as_view(model=EquipmentModel), name='add_model'),
     path('update_model/<int:pk>', UpdateCategory.as_view(model=EquipmentModel), name='update_model'),
-
     path('types/', ListCategory.as_view(model=EquipmentType, extra_context={
         'title': 'Список типов',
         'menu': menu,
