@@ -164,7 +164,6 @@ def si_loading(request):
             return render(request, 'device/index.html')
 
 
-
 def gp_loading(request):
     with open('./SI.csv', encoding='utf-8') as gp:
         reader = csv.DictReader(gp, delimiter=';')
@@ -204,7 +203,7 @@ def IM(request):
             if (row['type'] == 'РэмТэк') and (len(row['serial_number']) > 4):
                 year_eq = year[(row['serial_number'][0:2])]
             else:
-                year_eq = '1990'
+                year_eq = '1999'
 
             try:
                 y = Year.objects.get(name=year_eq)
