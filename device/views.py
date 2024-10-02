@@ -13,9 +13,10 @@ from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DetailView
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale
@@ -252,6 +253,8 @@ def IM(request):
 #     return render(request, 'device/equipments.html', context=data)
 
 def equipment_add(request):
+    if not request.user.is_staff:
+        redirect('login')
     if request.method == 'POST':
         form = AddEquipmentForm(request.POST)
         if form.is_valid():
@@ -264,6 +267,8 @@ def equipment_add(request):
 
 
 def device_add(request):
+    if not request.user.is_staff:
+        redirect('login')
     if request.method == 'POST':
         form = AddDeviceForm(request.POST)
         if form.is_valid():
@@ -275,6 +280,8 @@ def device_add(request):
 
 
 def EquipmentUpdate(request, pk):
+    if not request.user.is_staff:
+        redirect('login')
     equipment = get_object_or_404(Equipment, pk=pk)
     status = StatusAdd.objects.all()
     positions = GP.objects.all()
@@ -304,26 +311,20 @@ class MyFilter(django_filters.FilterSet):
     type = django_filters.CharFilter(field_name='type__name',
                                      lookup_expr='icontains',
                                      label='Тип:',
-                                     widget=forms.TextInput(attrs={'class': 'type'}))
-    serial_number = django_filters.CharFilter(lookup_expr='icontains', widget=forms.TextInput(attrs={'class': 'type'}),
+                                     widget=forms.TextInput(attrs={'class': 'type2'}))
+    serial_number = django_filters.CharFilter(lookup_expr='icontains', widget=forms.TextInput(attrs={'class': 'type2'}),
                                               label='Серийный номер')
     position = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                                 queryset=GP.objects.all(),
                                                 field_name='positions__name',
                                                 lookup_expr='exact', label='Позиция:', )
     name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Название:',
-                                     widget=forms.TextInput(attrs={'class': 'type'}))
-
-    # model = django_filters.CharFilter(
-    #     field_name='model__name',
-    #     lookup_expr='icontains',
-    #     label='Модель:',
-    #     widget=forms.TextInput(attrs={'class': 'type'}))
+                                     widget=forms.TextInput(attrs={'class': 'type2'}))
     year__lt = django_filters.DateFilter(
         widget=forms.TextInput(attrs=
         {
             'type': 'date',
-            'class': 'type',
+            'class': 'type2',
         }), label='Дата следующей поверки:'
 
         , field_name='si__next_verification', lookup_expr='lt'
@@ -337,17 +338,10 @@ class MyFilter(django_filters.FilterSet):
         model = Equipment
         fields = ['serial_number', 'name', 'position', 'si_or', 'status', ]
 
-        widget = {
-            'type': forms.TextInput(attrs={'class': 'type'}),
-            'position': forms.Select(attrs={'class': 'select'}),
-            'year__lt': forms.TextInput(attrs={'class': 'type'}),
-            'name': forms.TextInput(attrs={'class': 'type'}),
-            # 'model': forms.TextInput(attrs={'class': 'type'}),
-            'status': forms.Select(attrs={'class': 'select'})
-        }
-
 
 def equipment_list(request):
+    if not request.user.is_authenticated:
+        redirect('/')
     if request.method == 'POST':
         eq_filter = MyFilter(request.POST,
                              queryset=Equipment.objects.prefetch_related('si', 'status').all().order_by(
@@ -360,42 +354,11 @@ def equipment_list(request):
             'count': eq_filter.qs.count(),
 
         }
-        if 'Android' in request.META.get('HTTP_USER_AGENT'):
-            print(request.META.get('HTTP_USER_AGENT'))
-
-        # with open(os.path.join(settings.BASE_DIR, 'SIkgs2.csv'), 'w', newline='', encoding='utf-8') as f2:
-        #     fieldnames = ['position', 'location', 'teg', 'model', 'type', 'name', 'reg_number', 'serial_number', 'year',
-        #                   'min_scale', 'max_scale', 'unit', 'mpi', 'previous_verification', 'result', 'certificate']
-        #     writer = csv.DictWriter(f2, fieldnames=fieldnames, delimiter=';')
-        #     writer.writeheader()
-        #     with open('SIkgs.csv', encoding='utf-8') as f:
-        #         reader = csv.DictReader(f, delimiter=';')
-        #         for row in reader:
-        #             writer.writerow(
-        #                 {
-        #                     'position': row['position'].replace('куст', 'КГС'),
-        #                     'location': row['location'].capitalize(),
-        #                     'teg': row['teg'],
-        #                     'model': row['model'],
-        #                     'type': row['type'],
-        #                     'name': row['name'].capitalize(),
-        #                     'reg_number': row['reg_number'],
-        #                     'serial_number': row['serial_number'],
-        #                     'year': row['year'],
-        #                     'min_scale': row['min_scale'],
-        #                     'max_scale': row['max_scale'],
-        #                     'unit': row['unit'],
-        #                     'mpi': row['mpi'],
-        #                     'previous_verification': row['previous_verification'],
-        #                     'result': row['result'],
-        #                     'certificate': row['certificate'],
-        #
-        #                 }
-        #             )
-
         return render(request, 'device/equipments.html', context=data)
 
     else:
+        if not request.user.is_authenticated:
+            redirect('/')
         eq_filter = MyFilter(request.POST,
                              queryset=Equipment.objects.all()[0:0])
         data = {
@@ -411,6 +374,8 @@ def equipment_list(request):
 
 
 def equipment_detail(request, pk):
+    if not request.user.is_staff:
+        redirect('/')
     equipment = get_object_or_404(Equipment, pk=pk)
     tag = equipment.tags.all()
     status = equipment.status.all()
@@ -465,6 +430,8 @@ def equipment_detail(request, pk):
 
 
 def DeviceUpdate(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('login')
     equipment = get_object_or_404(Equipment, pk=pk)
     si = equipment.si.last()
     status = StatusAdd.objects.all()
@@ -507,7 +474,10 @@ def DeviceUpdate(request, pk):
                                        datetime.datetime.strptime(request.POST['previous_verification'],
                                                                   '%Y-%m-%d').date()) + relativedelta(
                 months=+int(si.interval.name))
-            si.certificate = request.POST['certificate']
+            try:
+                si.certificate = request.POST['certificate']
+            except:
+                si.certificate = '999999999'
             si.save()
             return redirect('search')
         else:
@@ -516,7 +486,8 @@ def DeviceUpdate(request, pk):
 
 
 def EquipmentDelete(request, pk):
-    if request.user.is_staff:
+    if not request.user.is_staff:
+        redirect('login')
         obj = get_object_or_404(Equipment,
                                 pk=pk)
         obj.descriptions.all().delete()
@@ -526,8 +497,6 @@ def EquipmentDelete(request, pk):
         obj.status.all().delete()
         obj.si.all().delete()
         obj.delete()
-        return redirect('index')
-    else:
         return redirect('index')
 
 
@@ -543,11 +512,13 @@ class AddCategory(CreateView):
 
 
 class ListCategory(ListView):
+    permission_classes = [IsAdminUser, ]
     template_name = 'device/list_category.html'
     context_object_name = 'objects'
 
 
 class UpdateCategory(UpdateView):
+    permission_classes = [IsAdminUser, ]
     template_name = 'device/add_category.html'
     fields = ['name']
     context_object_name = 'cats'
@@ -558,6 +529,8 @@ class UpdateCategory(UpdateView):
 
 
 def delete_category(request, pk, Mod):
+    if not request.user.is_authenticated():
+        redirect('login')
     obj = get_object_or_404(Mod, pk=pk)
     obj.delete()
     return render(request,
@@ -595,6 +568,7 @@ def logout_user(request):
 
 
 class DraftCreate(CreateView):
+    permission_classes = [IsAuthenticated, ]
     form_class = DraftForm
     template_name = 'device/draft.html'
     extra_context = {
@@ -610,6 +584,7 @@ class DraftCreate(CreateView):
 
 
 class DraftList(ListView):
+    permission_classes = [IsAdminUser, ]
     model = Draft
     template_name = 'device/draft_list.html'
     context_object_name = 'drafts'
@@ -622,11 +597,14 @@ class DraftList(ListView):
 
 
 class DraftDetail(DetailView):
+    permission_classes = [IsAdminUser, ]
     model = Draft
     template_name = 'device/draft_detail.html'
 
 
 def draft_device_add(request, pk):
+    if not request.user.is_staff:
+        redirect('login')
     draft = Draft.objects.get(pk=pk)
     initial_dict = {
         'position': draft.poz_draft,
@@ -651,6 +629,8 @@ def draft_device_add(request, pk):
 
 
 def draft_equipment_add(request, pk):
+    if not request.user.is_staff:
+        redirect('login')
     draft = Draft.objects.get(pk=pk)
     initial_dict = {
         'position': draft.poz_draft,
@@ -676,7 +656,8 @@ def draft_equipment_add(request, pk):
 
 
 def draft_delete(request, pk):
-    if request.user.is_staff:
+    if not request.user.is_staff:
+        redirect('login')
         obj = get_object_or_404(Draft, pk=pk)
         st = ('media/' + str(obj.images))
         obj.delete()
@@ -684,6 +665,4 @@ def draft_delete(request, pk):
             os.remove(os.path.join(BASE_DIR, st))
         except:
             return redirect('draft_list')
-        return redirect('draft_list')
-    else:
         return redirect('draft_list')

@@ -8,13 +8,15 @@
 <form action="{% url 'search' %}" method="POST">
     {% csrf_token %}
     {{ equipments.form.as_p }}
-    <button type="submit" class="search_btn">Search</button>
+    <button type="submit" class="button-style2">Найти</button>
     <cite>Найдено:{{count}}</cite>
+    <hr>
 </form>
 
 
 <h1 class="error">{{error}}</h1>
-<a href="{% url 'draft' %}">Добавить информацию</a>
+<b><a href="{% url 'draft' %}" class="button-style1">Добавить информацию</a></b>
+<hr>
 <table>
     <thead>
     <tr>

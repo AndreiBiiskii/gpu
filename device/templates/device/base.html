@@ -28,13 +28,10 @@
     <ul>
         {% for i in menu %}
         {% if i.title == "Поиск" %}
-
         {%endif%}
         <li><a class="type" href="{% url i.url_name %}">{{i.title}}</a></li>
         {% endfor %}
-
         <li><a class="type" href="{%url 'draft_list'%}">Черновик</a></li>
-
         <li><a class="type"  href="{% url 'equipment_add' %}">Добавить оборудование</a></li>
         <li><a class="type" href="{% url 'device_add' %}">Добавить прибор</a></li>
     </ul>

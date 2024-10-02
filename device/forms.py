@@ -221,8 +221,6 @@ class AddDeviceForm(forms.Form):
             self.cleaned_data['model'] = self.cleaned_data['model_new']
         if self.cleaned_data['status_new']:
             self.cleaned_data['status'] = self.cleaned_data['status_new']
-        # if self.cleaned_data['error_new']:
-        #     self.cleaned_data['error'] = self.cleaned_data['error_new']
         if self.cleaned_data['reg_number_new']:
             self.cleaned_data['reg_number'] = self.cleaned_data['reg_number_new']
         EquipmentType.objects.get_or_create(name=self.cleaned_data['type'])
