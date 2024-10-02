@@ -32,7 +32,6 @@ urlpatterns = [
     path('delete_manufacturer/<int:pk>', delete_category, {'Mod': Manufacturer}, name='delete_manufacturer'),
     path('add_manufacturer/', AddCategory.as_view(model=Manufacturer), name='add_manufacturer'),
     path('update_manufacturer/<int:pk>', UpdateCategory.as_view(model=Manufacturer), name='update_manufacturer'),
-
     path('models/', ListCategory.as_view(model=EquipmentModel, extra_context={
         'title': 'Список моделей',
         'menu': menu,
