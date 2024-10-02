@@ -80,12 +80,12 @@ def si_loading(request):
                     EquipmentName.objects.create(name=row['name'])
                     n = EquipmentName.objects.get(name=row['name'])
                 if len(row['year']) < 4:
-                    row['year'] = '1990'
+                    row['year'] = '1999'
                 try:
-                    y = Year.objects.get(name=row['year'])
+                    y = Year.objects.filter(name=row['year']).first()
                 except:
                     Year.objects.create(name=row['year'])
-                    y = Year.objects.get(name=row['year'])
+                    y = Year.objects.filter(name=row['year']).first()
                 try:
                     man = Manufacturer.objects.get(name='manufacturer')
                 except:
