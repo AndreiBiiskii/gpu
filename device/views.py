@@ -154,7 +154,6 @@ def IM(request):
                 )
             except:
                 continue
-
             Position.objects.create(name=row['poz'].upper(), equipment=eq)
             Location.objects.create(name=row['location'].capitalize(), equipment=eq)
             Tag.objects.create(name=row['tag'], equipment=eq)

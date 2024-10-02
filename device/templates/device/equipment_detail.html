@@ -10,50 +10,50 @@
     </cite>
 </div>
 <div>
-<table>
-    <thead class="td_position">
-    <tr>
-        <th>Позиция по ГП</th>
-        <th>Место установки</th>
-        <th>Тэг</th>
-        <th>Статус</th>
-        <th>Комментарий</th>
-        {%if user.is_staff%}
-        <th>Кто внес изменения</th>
-        <th>Дата внесения</th>
-        {%if equipment.si_or%}
-        <th>Шкала</th>
-        <th>Единицы измерения</th>
-        <th>МПИ</th>
-        <th>Дата предыдущей поверки</th>
-        <th>Дата следующей поверки</th>
-        {%endif%}
-        {%endif%}
-    </tr>
-    </thead>
-    <tbody>
-    {%for i in data_eq%}
-    <tr>
-        <td>{{i.position}}</td>
-        <td>{{i.location}}</td>
-        <td>{{i.tag}}</td>
-        <td>{{i.status}}</td>
-        <td>{{i.description}}</td>
-        {%if user.is_staff%}
-        <td>{{i.user}}</td>
-        <td>{{i.at_date|date:"d-m-Y"}}</td>
-        {%if equipment.si_or%}
-        <td>{{equipment.si.last.scale.min_scale}}..{{equipment.si.last.scale.max_scale}}</td>
-        <td>{{equipment.si.last.unit}}</td>
-        <td>{{equipment.si.last.interval}}</td>
-        <td>{{equipment.si.last.previous_verification|date:"d-m-Y"}}</td>
-        <td>{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
-        {%endif%}
-        {%endif%}
-    </tr>
-    {%endfor%}
-    </tbody>
-</table>
+    <table>
+        <thead class="td_position">
+        <tr>
+            <th>Позиция по ГП</th>
+            <th>Место установки</th>
+            <th>Тэг</th>
+            <th>Статус</th>
+            <th>Комментарий</th>
+            {%if user.is_staff%}
+            <th>Кто внес изменения</th>
+            <th>Дата внесения</th>
+            {%if equipment.si_or%}
+            <th>Шкала</th>
+            <th>Единицы измерения</th>
+            <th>МПИ</th>
+            <th>Дата предыдущей поверки</th>
+            <th>Дата следующей поверки</th>
+            {%endif%}
+            {%endif%}
+        </tr>
+        </thead>
+        <tbody>
+        {%for i in data_eq%}
+        <tr>
+            <td>{{i.position}}</td>
+            <td>{{i.location}}</td>
+            <td>{{i.tag}}</td>
+            <td>{{i.status}}</td>
+            <td>{{i.description}}</td>
+            {%if user.is_staff%}
+            <td>{{i.user}}</td>
+            <td>{{i.at_date|date:"d-m-Y"}}</td>
+            {%if equipment.si_or%}
+            <td>{{equipment.si.last.scale.min_scale}}..{{equipment.si.last.scale.max_scale}}</td>
+            <td>{{equipment.si.last.unit}}</td>
+            <td>{{equipment.si.last.interval}}</td>
+            <td>{{equipment.si.last.previous_verification|date:"d-m-Y"}}</td>
+            <td>{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
+            {%endif%}
+            {%endif%}
+        </tr>
+        {%endfor%}
+        </tbody>
+    </table>
 </div>
 <br>
 {% if equipment.si_or %}
