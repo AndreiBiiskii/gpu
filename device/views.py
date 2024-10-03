@@ -438,7 +438,10 @@ class LoginUser(LoginView):
         'title': 'Авторизация',
         'menu': menu,
     }
+
     form_class = AuthenticationForm
+    success_url = '/'
+
 
 
 class ChangePassword(PasswordChangeView):

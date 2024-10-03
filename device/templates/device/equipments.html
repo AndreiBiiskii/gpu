@@ -6,7 +6,7 @@
 <form action="{% url 'search' %}" method="POST">
     {% csrf_token %}
     {{ equipments.form.as_p }}
-    <button type="submit" class="button-style2">Найти</button>
+    <button type="submit" class="type2">Найти</button>
     <cite>Найдено:{{count}}</cite>
     <hr>
 </form>
@@ -40,7 +40,16 @@
         <td><a href="{% url 'equipment_update' equipment.pk %}">{{equipment.serial_number}}</a></td>
         {%endif%}
         {%endif%}
-        <td>{{equipment.name}}</td>
+        {%if user.is_staff%}
+        <td><a href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
+        {%endif%}
+        {%if not user.is_staff%}
+        {% if equipment.si_or %}
+        <td><a href="{% url 'device_update' equipment.pk %}">{{equipment.name}}</a></td>
+        {% else %}
+        <td><a href="{% url 'equipment_update' equipment.pk %}">{{equipment.name}}</a></td>
+        {%endif%}
+        {%endif%}
         <td>{{equipment.positions.last.name}}</td>
         <td>{{equipment.locations.last.name}}</td>
         <td>{{equipment.tags.last.name}}</td>
