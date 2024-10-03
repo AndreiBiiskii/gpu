@@ -286,5 +286,6 @@ class DraftFormDevice(forms.Form):
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': '4', 'cols': '80'}))
 
 
+
 class FormFilter(forms.Form):
     search = forms.ModelChoiceField(queryset=EquipmentType.objects.all())

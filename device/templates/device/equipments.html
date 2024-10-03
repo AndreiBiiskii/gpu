@@ -3,8 +3,6 @@
 {% block content %}
 {% if user.is_authenticated %}
 <hr>
-
-
 <form action="{% url 'search' %}" method="POST">
     {% csrf_token %}
     {{ equipments.form.as_p }}

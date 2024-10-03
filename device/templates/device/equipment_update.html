@@ -18,11 +18,14 @@
         <br>
         {%endfor%}
         <option selected>{{equipment.positions.last.name}}</option>
-    </select><hr>
+    </select>
+    <hr>
     <b><cite>Место установки:</cite></b>
-    <input class="type2" type="text" name="location" value="{{equipment.locations.last.name}}"><hr>
+    <input class="type2" type="text" name="location" value="{{equipment.locations.last.name}}">
+    <hr>
     <cite><b>Тэг:</b></cite>
-    <input type="text" class="type2" name="tag" value="{{equipment.tags.last.name}}"><hr>
+    <input type="text" class="type2" name="tag" value="{{equipment.tags.last.name}}">
+    <hr>
     <cite><b>Статус:</b></cite>
     <select name="status" class="select">
         {%for stat in status%}
