@@ -7,7 +7,7 @@ from .views import *
 urlpatterns = [
     path('', equipment_list, name='search'),
     path('users/', include(('users.urls', 'users'), namespace='users')),
-    path('index', index, name='index'),
+    # path('index', index, name='index'),
     path('draft', DraftCreate.as_view(), name='draft'),
     path('draft_list/', DraftList.as_view(), name='draft_list'),
     path('draft_detail/<int:pk>', DraftDetail.as_view(), name='draft_detail'),
@@ -20,8 +20,8 @@ urlpatterns = [
     path('equipment_delete/<int:pk>', EquipmentDelete, name='equipment_delete'),
     path('device_add/', device_add, name='device_add'),
     path('device_update/<int:pk>', DeviceUpdate, name='device_update'),
-    path('im/', IM, name='im'),
-    path('si_loading/<int:i>', si_loading, name='si_loading'),
+    # path('im/', IM, name='im'),
+    # path('si_loading/<int:i>', si_loading, name='si_loading'),
     path('manufacturers/', ListCategory.as_view(model=Manufacturer, extra_context={
         'title': 'Список производителей',
         'menu': menu,

@@ -1,21 +1,15 @@
 import csv
 import datetime
 import os
-from pickletools import optimize
-
 import django_filters
-from PIL import Image, ImageOps
-from PIL.ImImagePlugin import number
 from dateutil.relativedelta import relativedelta
 from django import forms
-from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
-from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DetailView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -74,7 +68,7 @@ def si_loading(request, i):
                     year=y,
                 )
             except:
-                print(row['serial_number'],row['model'])
+                print(row['serial_number'], row['model'])
                 continue
 
             Status.objects.create(name=status, equipment=eq)
@@ -107,20 +101,7 @@ def si_loading(request, i):
                 com=row['comment']
             )
 
-        return render(request, 'device/index.html')
-
-
-# def gp_loading(request):
-#     with open('./SI.csv', encoding='utf-8') as gp:
-#         reader = csv.DictReader(gp, delimiter=';')
-#         for row in reader:
-#             GP.objects.get_or_create(name=row['position'].upper())
-#     with open('./im.csv', encoding='utf-8') as gp:
-#         reader = csv.DictReader(gp, delimiter=';')
-#         for row in reader:
-#             GP.objects.get_or_create(name=row['poz'].upper())
-#
-#     return render(request, 'device/index.html')
+        return render(request, 'device/equipments.html')
 
 
 def IM(request):
@@ -161,19 +142,8 @@ def IM(request):
             status = StatusAdd.objects.get(name='Установлен')
             Status.objects.create(name=status, equipment=eq)
 
-        return render(request, 'device/index.html')
+        return render(request, 'device/equipments.html')
 
-
-# def equipmentsL_lst(request):
-#     model = Equipment
-#     template_name = 'device/equipments.html'
-#     fields = '__all__'
-#     context_object_name = 'objects'
-#     if not request.user.is_staff:
-#         data = {
-#             'objects': Equipment.objects.all()
-#     }
-#     return render(request, 'device/equipments.html', context=data)
 
 def equipment_add(request):
     if not request.user.is_staff:
@@ -182,7 +152,7 @@ def equipment_add(request):
         form = AddEquipmentForm(request.POST)
         if form.is_valid():
             form.save(request.user)
-            return redirect('index')
+            return redirect('/')
     else:
         form = AddEquipmentForm()
 
@@ -196,7 +166,7 @@ def device_add(request):
         form = AddDeviceForm(request.POST)
         if form.is_valid():
             form.save(request.user)
-            return redirect('index')
+            return redirect('/')
     else:
         form = AddDeviceForm()
     return render(request, 'device/equipment_add.html', {'form': form, 'menu': menu})
@@ -420,7 +390,7 @@ def EquipmentDelete(request, pk):
         obj.status.all().delete()
         obj.si.all().delete()
         obj.delete()
-        return redirect('index')
+        return redirect('/')
 
 
 class AddCategory(CreateView):
@@ -452,18 +422,14 @@ class UpdateCategory(UpdateView):
 
 
 def delete_category(request, pk, Mod):
-    if not request.user.is_authenticated():
+    if not request.user.is_authenticated:
         redirect('login')
     obj = get_object_or_404(Mod, pk=pk)
-    obj.delete()
-    return render(request,
-                  'device/index.html',
-                  context={'error': 'Ошибка удаления, '
-                                    'есть связи с оборудованием'})
-
-
-def index(request):
-    return render(request, 'device/index.html', {'menu': menu})
+    try:
+        obj.delete()
+    except:
+        pass
+    return redirect(reverse_lazy('search'))
 
 
 class LoginUser(LoginView):
