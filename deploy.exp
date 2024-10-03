@@ -1,0 +1,6 @@
+#!/bin/bash/expect
+
+spawn /home/user/gpu/deploy.sh
+expect "password"
+send "hargivfm"
+expect eof
