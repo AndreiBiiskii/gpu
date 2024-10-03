@@ -546,10 +546,7 @@ def draft_equipment_add(request, pk):
                    'title': 'Изменение черновика'})
 
 
-
 def draft_delete(request, pk):
-    if not request.user.is_staff:
-        return redirect('login')
     obj = get_object_or_404(Draft, pk=pk)
     st = ('media/' + str(obj.images))
     obj.delete()
@@ -557,4 +554,4 @@ def draft_delete(request, pk):
         os.remove(os.path.join(BASE_DIR, st))
     except:
         return redirect('draft_list')
-    return redirect('draft_list')
+    return redirect(reverse_lazy('draft_list'))
