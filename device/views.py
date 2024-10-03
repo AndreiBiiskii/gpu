@@ -557,4 +557,4 @@ def draft_delete(request, pk):
             os.remove(os.path.join(BASE_DIR, st))
         except:
             return redirect('draft_list')
-        return redirect('draft_list')
+    return redirect('draft_list')
