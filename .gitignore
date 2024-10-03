@@ -19,3 +19,6 @@ settings_local.py
 ### OS specific ###
 .DS_Store
 bag.csv
+
+migretions/
+media/
