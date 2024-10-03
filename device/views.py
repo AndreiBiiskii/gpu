@@ -546,6 +546,7 @@ def draft_equipment_add(request, pk):
                    'title': 'Изменение черновика'})
 
 
+
 def draft_delete(request, pk):
     if not request.user.is_staff:
         return redirect('login')
