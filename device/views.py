@@ -546,6 +546,7 @@ def draft_equipment_add(request, pk):
                    'title': 'Изменение черновика'})
 
 
+
 def draft_delete(request, pk):
     obj = get_object_or_404(Draft, pk=pk)
     st = ('media/' + str(obj.images))
