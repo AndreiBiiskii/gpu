@@ -16,6 +16,7 @@ venv/
 settings_local.py
 .env
 
+
 ### OS specific ###
 .DS_Store
 bag.csv
