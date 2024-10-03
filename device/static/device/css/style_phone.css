@@ -9,19 +9,15 @@ body{  font-size: 50px;
   resize: none;
 
 }
-
 .error{
 color:red;
 }
-
-
 .text{
 width:90%
 }
 table {
   width: 100%;
   border-collapse: collapse;
-
 }
 tr, td, th {
   border: 1.5px solid black;
