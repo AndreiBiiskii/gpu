@@ -443,7 +443,6 @@ class LoginUser(LoginView):
     success_url = '/'
 
 
-
 class ChangePassword(PasswordChangeView):
     template_name = 'users/change_password.html'
     extra_context = {
@@ -549,12 +548,12 @@ def draft_equipment_add(request, pk):
 
 def draft_delete(request, pk):
     if not request.user.is_staff:
-        redirect('login')
-        obj = get_object_or_404(Draft, pk=pk)
-        st = ('media/' + str(obj.images))
-        obj.delete()
-        try:
-            os.remove(os.path.join(BASE_DIR, st))
-        except:
-            return redirect('draft_list')
+        return redirect('login')
+    obj = get_object_or_404(Draft, pk=pk)
+    st = ('media/' + str(obj.images))
+    obj.delete()
+    try:
+        os.remove(os.path.join(BASE_DIR, st))
+    except:
+        return redirect('draft_list')
     return redirect('draft_list')
