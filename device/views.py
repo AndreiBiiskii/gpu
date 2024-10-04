@@ -28,8 +28,6 @@ menu = [
     {'title': 'Позиция', 'url_name': 'gps'},
     {'title': 'Поиск', 'url_name': 'search'},
 ]
-
-
 def si_loading(request, i):
     u = User.objects.get(username='admin')
     StatusAdd.objects.get_or_create(name='Установлен')
