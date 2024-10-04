@@ -70,6 +70,7 @@ def si_loading(request, i):
             except:
                 print(row['serial_number'], row['model'])
                 continue
+
             Status.objects.create(name=status, equipment=eq)
             Position.objects.create(name=row['position'].strip().upper(), equipment=eq)
             Location.objects.create(name=row['location'].strip().capitalize(), equipment=eq)
