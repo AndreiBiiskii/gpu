@@ -24,3 +24,5 @@ bag.csv
 migretions/
 media/
 static/
+deploy.sh
+deploy.exp
