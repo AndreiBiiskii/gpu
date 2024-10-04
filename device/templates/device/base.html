@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'device/css/style_phone.css' %}">
     {%else%}
     {%if 'iPhone' in request.headers.user_agent%}
+    <h1> Iphone......</h1>
     <link rel="stylesheet" type="text/css" href="{% static 'device/css/style_phone.css' %}">
     {%else%}
     <link rel="stylesheet" type="text/css" href="{% static 'device/css/style.css' %}">
