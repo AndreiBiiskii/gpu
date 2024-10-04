@@ -18,6 +18,7 @@ from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manu
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale
 from device.variables import year
 from equipment.settings import BASE_DIR
+
 menu = [
     {'title': 'Модели', 'url_name': 'models'},
     {'title': 'Производители', 'url_name': 'manufacturers'},
@@ -28,6 +29,8 @@ menu = [
     {'title': 'Позиция', 'url_name': 'gps'},
     {'title': 'Поиск', 'url_name': 'search'},
 ]
+
+
 def si_loading(request, i):
     u = User.objects.get(username='admin')
     StatusAdd.objects.get_or_create(name='Установлен')
