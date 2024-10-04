@@ -2,5 +2,5 @@
 
 spawn /home/user/gpu/deploy.sh
 expect "password"
-send "hargivfm"
+send "be098140a513"
 expect eof
