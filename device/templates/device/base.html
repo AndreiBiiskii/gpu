@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>{{ title }}</title>
     {{request.headers.user_agent}}
-    {%if 'Android' in request.headers.user_agent or 'hone' in request.headers.user_agent%}
+    {%if 'Android' in request.headers.user_agent or 'iPhone' in request.headers.user_agent%}
     <link rel="stylesheet" type="text/css" href="{% static 'device/css/style_phone.css' %}">
     {%else%}
     <link rel="stylesheet" type="text/css" href="{% static 'device/css/style.css' %}">
