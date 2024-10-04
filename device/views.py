@@ -458,9 +458,8 @@ def logout_user(request):
     return redirect('users:login')
 
 
-
 class DraftCreate(CreateView):
-    # permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated, ]
     form_class = DraftForm
     template_name = 'device/draft.html'
     extra_context = {
