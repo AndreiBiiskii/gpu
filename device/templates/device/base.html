@@ -12,14 +12,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'device/css/style.css' %}">
     {%endif%}
     {%if 'iPhone' in request.headers.user_agent%}
-    <h1> Iphone......</h1>
     <link rel="stylesheet" type="text/css" href="{% static 'device/css/style_phone.css' %}">
     {%else%}
     <link rel="stylesheet" type="text/css" href="{% static 'device/css/style.css' %}">
     {%endif%}
 </head>
 <body>
-<h1> Iphone......</h1>
 <div class="shadowbox">
     {{user}}<br>
     <hr>
