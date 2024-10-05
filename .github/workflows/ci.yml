@@ -40,24 +40,30 @@ jobs:
       - name: Set up Python 3.10
         uses: actions/setup-python@v3
 
-        env:
-          SECRET_KEY: ${{env.SECRET_KEY}}
-          DEBUG: ${{env.DEBUG}}
-          ALLOWED_HOSTS: ${{env.ALLOWED_HOSTS}}
-          DB_ENGINE: ${{env.DB_ENGINE}}
-          DB_NAME: ${{env.DB_NAME}}
-          DB_USER: ${{env.DB_USER}}
-          DB_PASSWORD: ${{env.DB_PASSWORD}}
-          DB_HOST: ${{env.DB_HOST}}
-          DB_PORT: ${{env.DB_PORT}}
+#        env:
+#          SECRET_KEY: ${{env.SECRET_KEY}}
+#          DEBUG: ${{env.DEBUG}}
+#          ALLOWED_HOSTS: ${{env.ALLOWED_HOSTS}}
+#          DB_ENGINE: ${{env.DB_ENGINE}}
+#          DB_NAME: ${{env.DB_NAME}}
+#          DB_USER: ${{env.DB_USER}}
+#          DB_PASSWORD: ${{env.DB_PASSWORD}}
+#          DB_HOST: ${{env.DB_HOST}}
+#          DB_PORT: ${{env.DB_PORT}}
 
       - name: Деплой
         uses: appleboy/ssh-action@master
-
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
-          script: expect /home/user/gpu/deploy.exp
-      - name: try run
-        run: pip install -r requirements.txt
+          script: |
+            cd /home/user/gpu
+            sudo git pull origin main
+            source env/bin/activate
+            python manage.py collectstatic --no-input
+            pip install -r requirements.txt
+            python manage.py migrate
+            sudo systemctl restart gunicorn
+
+#          expect /home/user/gpu/deploy.exp
