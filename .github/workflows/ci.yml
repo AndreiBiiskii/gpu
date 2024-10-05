@@ -39,7 +39,6 @@ jobs:
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v3
-
 #        env:
 #          SECRET_KEY: ${{env.SECRET_KEY}}
 #          DEBUG: ${{env.DEBUG}}
@@ -50,7 +49,6 @@ jobs:
 #          DB_PASSWORD: ${{env.DB_PASSWORD}}
 #          DB_HOST: ${{env.DB_HOST}}
 #          DB_PORT: ${{env.DB_PORT}}
-
       - name: Деплой
         uses: appleboy/ssh-action@master
         with:
