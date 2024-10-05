@@ -54,6 +54,7 @@ jobs:
       - name: Деплой
         uses: appleboy/ssh-action@master
 
+      - name: try run
         run: |
           source env/bin/activate
           python manage.py collectstatic --no-input
