@@ -35,14 +35,13 @@
     <b>Комментарий</b>
     <textarea class="type2" name="description">{{equipment.descriptions.last.name}}</textarea>
     {%if si_or%}
-
+    {%if request.user.is_staff%}
     <b>Дата предыдущей поверки:</b>
     <input class="select" type="date" name="previous_verification"
            value='{{equipment.si.last.previous_verification|date:"Y-m-d"}}'>
-    {%if request.user.is_staff%}
+
     <b>Сертификат:</b>
     <input class="type2" type="text" name="certificate" value="{{equipment.si.last.certificate}}">
-    {%else%}
     <input readonly type="text" name="certificate" value="{{equipment.si.last.certificate}}" disabled>
     {%endif%}
     <br><br>
