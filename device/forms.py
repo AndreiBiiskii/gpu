@@ -2,6 +2,8 @@ import datetime
 import re
 from cProfile import label
 
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm
 from django.forms import Textarea, FileInput
 from markdown_it.rules_inline import image
 
@@ -25,13 +27,14 @@ class AddEquipmentForm(forms.Form):
                                required=False)
     manufacturer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Производитель:',
                                           queryset=Manufacturer.objects.all(), required=False)
-    manufacturer_new = forms.CharField(label='Добавить производителя:', widget=forms.TextInput(attrs={'class': 'type2'}),
+    manufacturer_new = forms.CharField(label='Добавить производителя:',
+                                       widget=forms.TextInput(attrs={'class': 'type2'}),
                                        required=False)
     name = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=EquipmentName.objects.all(),
                                   required=False, label='Наименование:')
     name_new = forms.CharField(label='Добавить наименование:', widget=forms.TextInput(attrs={'class': 'type2'}),
                                required=False)
-    description = forms.CharField(widget=forms.Textarea(attrs={'class':'type2'}), label='Комментарий:')
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), label='Комментарий:')
     position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                       label='Поз. по ГП')
     location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), max_length=50, required=False,
@@ -129,13 +132,14 @@ class AddDeviceForm(forms.Form):
                                required=False)
     manufacturer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Производитель:',
                                           queryset=Manufacturer.objects.all(), required=False)
-    manufacturer_new = forms.CharField(label='Добавить производителя:', widget=forms.TextInput(attrs={'class': 'type2'}),
+    manufacturer_new = forms.CharField(label='Добавить производителя:',
+                                       widget=forms.TextInput(attrs={'class': 'type2'}),
                                        required=False)
     name = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=EquipmentName.objects.all(),
                                   required=False, label='Наименование:')
     name_new = forms.CharField(label='Добавить наименование:', widget=forms.TextInput(attrs={'class': 'type'}),
                                required=False)
-    description = forms.CharField(widget=forms.Textarea(attrs={'class':'type2'}), label='Комментарий:')
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), label='Комментарий:')
     position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                       label='Поз. по ГП')
     location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), max_length=50, required=False,
@@ -286,6 +290,16 @@ class DraftFormDevice(forms.Form):
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': '4', 'cols': '80'}))
 
 
-
 class FormFilter(forms.Form):
     search = forms.ModelChoiceField(queryset=EquipmentType.objects.all())
+
+
+class LoginUserForm(AuthenticationForm):
+    username = forms.CharField(label='Логин',
+                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'User name'}))
+    password = forms.CharField(label='Пароль',
+                               widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'User name'}))
+
+    class Meta:
+        model = User
+        fields = ['username', 'password']

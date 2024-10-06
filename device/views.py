@@ -13,7 +13,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DetailView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm
+from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale
 from device.variables import year
@@ -438,8 +438,7 @@ class LoginUser(LoginView):
         'title': 'Авторизация',
         'menu': menu,
     }
-
-    form_class = AuthenticationForm
+    form_class = LoginUserForm
     success_url = '/'
 
 
