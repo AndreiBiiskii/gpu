@@ -17,6 +17,7 @@ width:90%
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 1000px;
 }
 tr, td, th {
   border: 1.5px solid black;
@@ -306,4 +307,8 @@ padding: .6em .8em .5em 1.4em;
 .form-control{
 width: 96%;
 font-size:50px;
+}
+
+.a-serial-number{
+color:blue
 }

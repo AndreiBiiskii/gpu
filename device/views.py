@@ -222,6 +222,13 @@ class MyFilter(django_filters.FilterSet):
 
         , field_name='si__next_verification', lookup_expr='lt'
     )
+    at_date = django_filters.DateFilter(
+        widget=forms.TextInput(attrs=
+        {
+            'type': 'date',
+            'class': 'type2',
+        }), label='Внесено в этот день',
+        field_name='at_date', lookup_expr='exact')
     status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                               queryset=StatusAdd.objects.all(), field_name='status__name',
                                               lookup_expr='exact', label='Статус')
@@ -229,7 +236,7 @@ class MyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Equipment
-        fields = ['serial_number', 'name', 'position', 'si_or', 'status']
+        fields = ['serial_number', 'name', 'position', 'si_or', 'status', 'at_date']
 
 
 def equipment_list(request):
