@@ -147,7 +147,7 @@ border: 3px solid purple;
   padding: 5px 5px;
   margin-left:10px;
   margin-top:10px;
-  width:100%;
+  width:96%;
   background: #f2f2f2;
   border: 1px solid #1E90FF;
   color: ##00BFFF;
@@ -303,13 +303,7 @@ color: #222;
 background-position: left .7em top 50%, 0 0;
 padding: .6em .8em .5em 1.4em;
 }
-
 .form-control{
-width: 100%;
-height:5%;
+width: 96%;
 font-size:50px;
-}
-
-.a-serial-number{
-color: blue;
 }

@@ -173,7 +173,7 @@ def device_add(request):
 
 
 def EquipmentUpdate(request, pk):
-    if not request.user.is_staff:
+    if not request.user.is_authenticated:
         redirect('login')
     equipment = get_object_or_404(Equipment, pk=pk)
     status = StatusAdd.objects.all()
