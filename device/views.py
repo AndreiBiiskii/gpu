@@ -388,16 +388,16 @@ def DeviceUpdate(request, pk):
 def EquipmentDelete(request, pk):
     if not request.user.is_staff:
         redirect('login')
-        obj = get_object_or_404(Equipment,
-                                pk=pk)
-        obj.descriptions.all().delete()
-        obj.positions.all().delete()
-        obj.locations.all().delete()
-        obj.tags.all().delete()
-        obj.status.all().delete()
-        obj.si.all().delete()
-        obj.delete()
-        return redirect('/')
+    obj = get_object_or_404(Equipment,
+                            pk=pk)
+    obj.descriptions.all().delete()
+    obj.positions.all().delete()
+    obj.locations.all().delete()
+    obj.tags.all().delete()
+    obj.status.all().delete()
+    obj.si.all().delete()
+    obj.delete()
+    return redirect('/')
 
 
 class AddCategory(CreateView):
@@ -558,6 +558,7 @@ def draft_delete(request, pk):
     obj.delete()
     try:
         os.remove(os.path.join(BASE_DIR, st))
+        return redirect(reverse_lazy('draft_list'))
     except:
-        return redirect('draft_list')
-    return redirect(reverse_lazy('draft_list'))
+        return redirect(reverse_lazy('draft_list'))
+
