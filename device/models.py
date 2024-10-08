@@ -60,7 +60,7 @@ class EquipmentType(models.Model):
 
     class Meta:
         verbose_name_plural = 'Типы оборудования'
-        ordering = ('name',)
+
 
 
 class EquipmentModel(models.Model):
@@ -71,7 +71,7 @@ class EquipmentModel(models.Model):
 
     class Meta:
         verbose_name_plural = 'Модели оборудования'
-        ordering = ('name',)
+
 
 
 class EquipmentName(models.Model):
@@ -81,7 +81,7 @@ class EquipmentName(models.Model):
         return self.name
 
     class Meta:
-        ordering = ('name',)
+
         verbose_name_plural = 'Наименование оборудования'
 
 
@@ -94,7 +94,7 @@ class Position(models.Model):
 
     class Meta:
         verbose_name_plural = 'Позиции'
-        ordering = ('-equipment',)
+
 
 
 class Description(models.Model):
@@ -109,6 +109,7 @@ class Description(models.Model):
         return self.equipment
 
     class Meta:
+        # ordering = ('-at_date',)
         verbose_name_plural = 'Описания оборудования'
 
 
