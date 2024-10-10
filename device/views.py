@@ -200,13 +200,7 @@ def EquipmentUpdate(request, pk):
     return render(request, 'device/equipment_update.html', context=data)
 
 
-def get_user(request):
-    return request.user
-
-
 class MyFilter(django_filters.FilterSet):
-    print(get_user)
-
     type = django_filters.CharFilter(field_name='type__name',
                                      lookup_expr='icontains',
                                      label='Тип:',
@@ -245,10 +239,33 @@ class MyFilter(django_filters.FilterSet):
         fields = ['serial_number', 'name', 'position', 'si_or', 'status', 'at_date']
 
 
+class MyFilterUser(django_filters.FilterSet):
+    type = django_filters.CharFilter(field_name='type__name',
+                                     lookup_expr='icontains',
+                                     label='Тип:',
+                                     widget=forms.TextInput(attrs={'class': 'type2'}))
+    serial_number = django_filters.CharFilter(lookup_expr='icontains', widget=forms.TextInput(attrs={'class': 'type2'}),
+                                              label='Серийный номер')
+    position = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
+                                                queryset=GP.objects.all(),
+                                                field_name='positions__name',
+                                                lookup_expr='exact', label='Позиция:', )
+    name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Название:',
+                                     widget=forms.TextInput(attrs={'class': 'type2'}))
+    status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
+                                              queryset=StatusAdd.objects.all(), field_name='status__name',
+                                              lookup_expr='exact', label='Статус')
+    si_or = django_filters.BooleanFilter(widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
+
+    class Meta:
+        model = Equipment
+        fields = ['serial_number', 'name', 'position', 'si_or', 'status']
+
+
 def equipment_list(request):
     if not request.user.is_authenticated:
         redirect('/')
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_staff:
         eq_filter = MyFilter(request.POST,
                              queryset=Equipment.objects.prefetch_related('si', 'status').all().order_by(
                                  '-si__next_verification'))
@@ -261,10 +278,20 @@ def equipment_list(request):
 
         }
         return render(request, 'device/equipments.html', context=data)
+    if request.method == 'POST' and not request.user.is_staff:
+        eq_filter = MyFilterUser(request.POST,
+                                 queryset=Equipment.objects.prefetch_related('si', 'status').all().order_by(
+                                     '-si__next_verification'))
+        data = {
+            'title': 'Поиск',
+            'menu': menu,
+            'si': True,
+            'equipments': eq_filter,
+            'count': eq_filter.qs.count(),
 
-    else:
-        if not request.user.is_authenticated:
-            redirect('/')
+        }
+        return render(request, 'device/equipments.html', context=data)
+    if request.method == 'GET':
         eq_filter = MyFilter(request.POST,
                              queryset=Equipment.objects.all()[0:0])
         data = {
@@ -272,11 +299,26 @@ def equipment_list(request):
             'menu': menu,
             'si': True,
             'equipments': eq_filter,
-        }
+            'count': eq_filter.qs.count(),
 
-        return render(request,
-                      'device/equipments.html',
-                      context=data)
+        }
+        return render(request, 'device/equipments.html', context=data)
+
+    # else:
+    #     if not request.user.is_authenticated:
+    #         redirect('/')
+    #     eq_filter = MyFilter(request.POST,
+    #                          queryset=Equipment.objects.all()[0:0])
+    #     data = {
+    #         'title': 'Поиск',
+    #         'menu': menu,
+    #         'si': True,
+    #         'equipments': eq_filter,
+    #     }
+
+    # return render(request,
+    #               'device/equipments.html',
+    #               context=data)
 
 
 def equipment_detail(request, pk):
