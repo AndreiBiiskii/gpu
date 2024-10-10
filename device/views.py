@@ -292,7 +292,7 @@ def equipment_list(request):
         }
         return render(request, 'device/equipments.html', context=data)
     if request.method == 'GET':
-        eq_filter = MyFilter(request.POST,
+        eq_filter = MyFilterUser(request.POST,
                              queryset=Equipment.objects.all()[0:0])
         data = {
             'title': 'Поиск',
