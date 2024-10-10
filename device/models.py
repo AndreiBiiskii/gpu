@@ -62,7 +62,6 @@ class EquipmentType(models.Model):
         verbose_name_plural = 'Типы оборудования'
 
 
-
 class EquipmentModel(models.Model):
     name = models.CharField(max_length=255, verbose_name='Модель оборудования', unique=True)
 
@@ -73,7 +72,6 @@ class EquipmentModel(models.Model):
         verbose_name_plural = 'Модели оборудования'
 
 
-
 class EquipmentName(models.Model):
     name = models.CharField(max_length=255, verbose_name='Наименование оборудования', unique=True)
 
@@ -81,7 +79,6 @@ class EquipmentName(models.Model):
         return self.name
 
     class Meta:
-
         verbose_name_plural = 'Наименование оборудования'
 
 
@@ -94,7 +91,6 @@ class Position(models.Model):
 
     class Meta:
         verbose_name_plural = 'Позиции'
-
 
 
 class Description(models.Model):
@@ -216,7 +212,7 @@ class GP(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['name',]
+        ordering = ['name', ]
 
 
 class RegNumber(models.Model):
@@ -263,7 +259,6 @@ class Defect(models.Model):
     models.TextField(verbose_name='Что требуется для устранения')
     operating_time = models.SmallIntegerField(verbose_name='Время наработки')
     invest_letter = models.CharField(max_length=255, verbose_name='Номер письма в Инвест')
-
     approve = models.ForeignKey('Approve', on_delete=models.DO_NOTHING, related_name='approve',
                                 verbose_name='Утверждающий')
     contractor = models.ForeignKey('Contractor', on_delete=models.DO_NOTHING, related_name='contractor',

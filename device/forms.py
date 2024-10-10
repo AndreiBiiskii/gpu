@@ -2,6 +2,7 @@ import datetime
 import re
 from cProfile import label
 
+from IPython.core.magic_arguments import defaults
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import Textarea, FileInput
@@ -275,7 +276,7 @@ class DraftForm(forms.ModelForm):
     location_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Расположение')
     description_draft = forms.CharField(
         widget=forms.Textarea(attrs={"class": "type2"}), label='Комментарий:')
-    tag_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Тэг:')
+    tag_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Тэг:', required=False)
     status_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                           queryset=StatusAdd.objects.all(),
                                           label='Статус')

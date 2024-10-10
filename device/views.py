@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
+# from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DetailView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -68,7 +69,6 @@ def si_loading(request, i):
                     year=y,
                 )
             except:
-                print(row['serial_number'], row['model'])
                 continue
 
             Status.objects.create(name=status, equipment=eq)
@@ -200,7 +200,13 @@ def EquipmentUpdate(request, pk):
     return render(request, 'device/equipment_update.html', context=data)
 
 
+def get_user(request):
+    return request.user
+
+
 class MyFilter(django_filters.FilterSet):
+    print(get_user)
+
     type = django_filters.CharFilter(field_name='type__name',
                                      lookup_expr='icontains',
                                      label='Тип:',
@@ -561,4 +567,3 @@ def draft_delete(request, pk):
         return redirect(reverse_lazy('draft_list'))
     except:
         return redirect(reverse_lazy('draft_list'))
-
