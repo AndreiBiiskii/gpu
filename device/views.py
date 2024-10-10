@@ -279,6 +279,7 @@ def equipment_list(request):
 
         }
         return render(request, 'device/equipments.html', context=data)
+
     if request.method == 'POST' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,
                                  queryset=Equipment.objects.prefetch_related('si', 'status').all())
@@ -291,18 +292,22 @@ def equipment_list(request):
 
         }
         return render(request, 'device/equipments.html', context=data)
-    if request.method == 'GET':
-        eq_filter = MyFilterUser(request.POST,
-                                 queryset=Equipment.objects.all()[0:0])
-        data = {
-            'title': 'Поиск',
-            'menu': menu,
-            'si': True,
-            'equipments': eq_filter,
-            'count': eq_filter.qs.count(),
 
-        }
-        return render(request, 'device/equipments.html', context=data)
+    if request.method == 'GET' and request.user.is_staff:
+        eq_filter = MyFilter(request.POST,
+                                 queryset=Equipment.objects.all()[0:0])
+    if request.method == 'GET' and not request.user.is_staff:
+        eq_filter = MyFilterUser(request.POST,
+                             queryset=Equipment.objects.all()[0:0])
+    data = {
+        'title': 'Поиск',
+        'menu': menu,
+        'si': True,
+        'equipments': eq_filter,
+        'count': eq_filter.qs.count(),
+
+    }
+    return render(request, 'device/equipments.html', context=data)
 
     # else:
     #     if not request.user.is_authenticated:
