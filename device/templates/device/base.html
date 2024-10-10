@@ -6,6 +6,7 @@
     <title>{{ title }}</title>
     {%if 'Android' in request.headers.user_agent or 'iPhone' in request.headers.user_agent%}
     <link rel="stylesheet" type="text/css" href="{% static 'device/css/style_phone.css' %}">
+    <script src="{% static 'js/script.js' %}"></script>
     {%else%}
     <link rel="stylesheet" type="text/css" href="{% static 'device/css/style.css' %}">
     {%endif%}

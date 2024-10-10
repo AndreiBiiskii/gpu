@@ -244,7 +244,8 @@ class MyFilterUser(django_filters.FilterSet):
                                      lookup_expr='icontains',
                                      label='Тип:',
                                      widget=forms.TextInput(attrs={'class': 'type2'}))
-    serial_number = django_filters.CharFilter(lookup_expr='icontains', widget=forms.TextInput(attrs={'class': 'type2'}),
+    serial_number = django_filters.CharFilter(lookup_expr='icontains',
+                                              widget=forms.TextInput(attrs={'class': 'type2'}),
                                               label='Серийный номер')
     position = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                                 queryset=GP.objects.all(),
@@ -280,8 +281,7 @@ def equipment_list(request):
         return render(request, 'device/equipments.html', context=data)
     if request.method == 'POST' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,
-                                 queryset=Equipment.objects.prefetch_related('si', 'status').all().order_by(
-                                     '-si__next_verification'))
+                                 queryset=Equipment.objects.prefetch_related('si', 'status').all())
         data = {
             'title': 'Поиск',
             'menu': menu,
@@ -293,7 +293,7 @@ def equipment_list(request):
         return render(request, 'device/equipments.html', context=data)
     if request.method == 'GET':
         eq_filter = MyFilterUser(request.POST,
-                             queryset=Equipment.objects.all()[0:0])
+                                 queryset=Equipment.objects.all()[0:0])
         data = {
             'title': 'Поиск',
             'menu': menu,
