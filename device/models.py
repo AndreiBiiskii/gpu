@@ -101,7 +101,7 @@ class Description(models.Model):
                                   related_name='descriptions')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='descriptions',
                              verbose_name='Пользователь')
-    at_date = models.DateField(auto_now=True)
+    at_date = models.DateField(auto_now=True, verbose_name='Дата внесения')
 
     def __str__(self):
         return self.equipment
