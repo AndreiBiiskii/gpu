@@ -237,7 +237,6 @@ class MyFilter(django_filters.FilterSet):
         model = Equipment
         fields = ['serial_number', 'name', 'position', 'si_or', 'status', ]
 
-
 class MyFilterUser(django_filters.FilterSet):
     type = django_filters.CharFilter(field_name='type__name',
                                      lookup_expr='icontains',

@@ -21,7 +21,7 @@ settings_local.py
 .DS_Store
 bag.csv
 
-migretions/
+migrations/
 media/
 static/
 deploy.sh
