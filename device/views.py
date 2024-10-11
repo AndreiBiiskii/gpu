@@ -281,7 +281,7 @@ def equipment_list(request):
 
     if request.method == 'POST' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,
-                                 queryset=Equipment.objects.prefetch_related('si', 'status','descriptions').all())
+                                 queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions').all())
         data = {
             'title': 'Поиск',
             'menu': menu,
@@ -370,7 +370,7 @@ def equipment_detail(request, pk):
             'user': users[i],
             'at_date': at_date[i],
         })
-        data_eq.sort(key=lambda x: x['at_date'], reverse=True)
+        data_eq.reverse()
     data = {
         'equipment': equipment,
         'title': 'Информация об оборудовании',
