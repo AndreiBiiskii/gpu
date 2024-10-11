@@ -219,7 +219,6 @@ class MyFilter(django_filters.FilterSet):
             'type': 'date',
             'class': 'type2',
         }), label='Дата следующей поверки:'
-
         , field_name='si__next_verification', lookup_expr='lt'
     )
     at_date = django_filters.DateFilter(
@@ -228,7 +227,7 @@ class MyFilter(django_filters.FilterSet):
             'type': 'date',
             'class': 'type2',
         }), label='Внесено в этот день',
-        field_name='at_date', lookup_expr='exact')
+        field_name='descriptions__at_date', lookup_expr='exact')
     status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                               queryset=StatusAdd.objects.all(), field_name='status__name',
                                               lookup_expr='exact', label='Статус')
@@ -236,7 +235,7 @@ class MyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Equipment
-        fields = ['serial_number', 'name', 'position', 'si_or', 'status', 'at_date']
+        fields = ['serial_number', 'name', 'position', 'si_or', 'status', ]
 
 
 class MyFilterUser(django_filters.FilterSet):
@@ -268,7 +267,7 @@ def equipment_list(request):
         redirect('/')
     if request.method == 'POST' and request.user.is_staff:
         eq_filter = MyFilter(request.POST,
-                             queryset=Equipment.objects.prefetch_related('si', 'status').all().order_by(
+                             queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions').all().order_by(
                                  '-si__next_verification'))
         data = {
             'title': 'Поиск',
@@ -282,7 +281,7 @@ def equipment_list(request):
 
     if request.method == 'POST' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,
-                                 queryset=Equipment.objects.prefetch_related('si', 'status').all())
+                                 queryset=Equipment.objects.prefetch_related('si', 'status','descriptions').all())
         data = {
             'title': 'Поиск',
             'menu': menu,
@@ -295,10 +294,10 @@ def equipment_list(request):
 
     if request.method == 'GET' and request.user.is_staff:
         eq_filter = MyFilter(request.POST,
-                                 queryset=Equipment.objects.all()[0:0])
+                             queryset=Equipment.objects.all()[0:0])
     if request.method == 'GET' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,
-                             queryset=Equipment.objects.all()[0:0])
+                                 queryset=Equipment.objects.all()[0:0])
     data = {
         'title': 'Поиск',
         'menu': menu,
