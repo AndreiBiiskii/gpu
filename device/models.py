@@ -256,6 +256,7 @@ class Defect(models.Model):
     project = models.CharField(max_length=100, verbose_name='Наименование проекта')
     short_description = models.TextField(verbose_name='Краткое описание деффекта')
     causes = models.TextField(verbose_name='Причина отказа')
+    status = models.CharField(verbose_name='Статус')
     models.TextField(verbose_name='Что требуется для устранения')
     operating_time = models.SmallIntegerField(verbose_name='Время наработки')
     invest_letter = models.CharField(max_length=255, verbose_name='Номер письма в Инвест')
@@ -267,21 +268,19 @@ class Defect(models.Model):
     worker = models.ForeignKey('Worker', on_delete=models.DO_NOTHING, related_name='worker', verbose_name='Мастер цеха')
 
 
-# class DefectAct(models.Model):
-#     defect_act = models.CharField(max_length=20, verbose_name='Номер деффектного акта')
-#     defect_act = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='acts')
-#
-#     def __str__(self):
-#         return self.name
-#
-#
-# class Project(models.Model):
-#     name = models.CharField(max_length=100, verbose_name='Наименование проекта')
-#     project = models.OneToOneField(Equipment, on_delete=models.DO_NOTHING, related_name='project')
-#
-#     def __str__(self):
-#         return self.name
-#
+class DefectAct(models.Model):
+    defect_act = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='acts')
+
+
+class Project(models.Model):
+    name = models.CharField(max_length=100, verbose_name='Наименование проекта')
+    gp = models.CharField(max_length=100, verbose_name='ГП')
+    year = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 #
 # class DateCreate(models.Model):
 #     name = models.DateField(verbose_name='Дата внесения записи дефекта')
