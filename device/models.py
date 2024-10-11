@@ -138,7 +138,7 @@ class Tag(models.Model):
 class Equipment(models.Model):
     serial_number = models.CharField(max_length=25, verbose_name='Серийный номер')
     model = models.ForeignKey(EquipmentModel, on_delete=models.CASCADE, related_name='model', blank=True, null=True)
-    # at_date = models.DateField(auto_created=True, auto_now=True, verbose_name='Дата добавления')
+    at_date = models.DateField(auto_now=True ,verbose_name='Дата добавления')
     defect = models.BooleanField(default=False, blank=True, null=True)
     si_or = models.BooleanField(default=True, verbose_name='Средство измерения')
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE, related_name='manufacturer',
