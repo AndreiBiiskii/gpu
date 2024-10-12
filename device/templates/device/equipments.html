@@ -16,7 +16,7 @@
 <hr>
 
 
-<table>
+<table class="table">
     <thead>
     <tr>
         <th>Серийный номер</th>
@@ -26,10 +26,11 @@
         <th>Тэг</th>
         <th>Дата предыдущей поверки</th>
         <th>Дата следующей поверки</th>
-
+    </tr>
     </thead>
-
+    <tbody>
     {%for equipment in equipments.qs%}
+
     <tr>
         <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a></td>
         <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
@@ -41,7 +42,9 @@
         <td>{{equipment.si.last.previous_verification|date:"d-m-Y"}}</td>
         <td>{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
     </tr>
+
     {%endfor%}
+    </tbody>
 </table>
 
 {%endif%}

@@ -14,15 +14,28 @@ color:red;
 .text{
 width:90%
 }
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 500px;
+.table{
+
+	border: 1px solid #eee;
+	margin-bottom: 250px;
 }
-tr, td, th {
-  border: 1.5px solid black;
-  padding: 4px;
-  text-align: left;
+.table th {
+	font-weight: bold;
+	padding: 5px;
+	background: #efefef;
+	border: 1px solid #ddddff;
+}
+.table td{
+
+	padding: 5px 10px;
+	border: 1px solid #eee;
+	text-align: left;
+}
+.table tbody tr:nth-child(odd){
+	background: #fff;
+}
+.table tbody tr:nth-child(even){
+	background: #dddddd;
 }
 
 
@@ -148,7 +161,7 @@ border: 3px solid purple;
   padding: 5px 5px;
   margin-left:10px;
   margin-top:10px;
-  width:100%;
+  width:99%;
   background: #f2f2f2;
   border: 1px solid #1E90FF;
   color: ##00BFFF;
@@ -169,7 +182,7 @@ border: 3px solid purple;
   display: inline-block;
   margin-left:10px;
   margin-top:10px;
-  width:100%;
+  width:99%;
   background: #f2f2f2;
   border: 1px solid #A52A2A;
   color: #800000;
