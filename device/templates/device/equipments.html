@@ -31,28 +31,9 @@
 
     {%for equipment in equipments.qs%}
     <tr>
-        {%if user.is_staff%}
         <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a></td>
-        {%endif%}
-        {%if not user.is_staff%}
-        {% if equipment.si_or %}
-        <td><a class="a-serial-number" href="{% url 'device_update' equipment.pk %}">{{equipment.serial_number}}</a>
-        </td>
-        {% else %}
-        <td><a class="a-serial-number"
-               href="{% url 'equipment_update' equipment.pk %}">{{equipment.serial_number}}</a>
-        </td>
-        {%endif%}
-        {%endif%}
-
         <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
 
-
-        {% if equipment.si_or %}
-        <td><a class="a-serial-number" href="{% url 'device_update' equipment.pk %}">{{equipment.name}}</a></td>
-        {% else %}
-        <td><a class="a-serial-number" href="{% url 'equipment_update' equipment.pk %}">{{equipment.name}}</a></td>
-        {%endif%}
 
         <td>{{equipment.positions.last.name}}</td>
         <td>{{equipment.locations.last.name}}</td>

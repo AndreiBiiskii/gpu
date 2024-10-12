@@ -212,6 +212,9 @@ class MyFilter(django_filters.FilterSet):
                                                 queryset=GP.objects.all(),
                                                 field_name='positions__name',
                                                 lookup_expr='exact', label='Позиция:', )
+    tag = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
+                                           field_name='tags__name',
+                                           lookup_expr='icontains', label='Тэг:', )
     name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Название:',
                                      widget=forms.TextInput(attrs={'class': 'type2'}))
     year__lt = django_filters.DateFilter(
@@ -236,7 +239,7 @@ class MyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Equipment
-        fields = ['serial_number', 'name', 'position', 'si_or', 'status', ]
+        fields = ['serial_number', 'name', 'position', 'si_or', 'status', 'tag']
 
 
 class MyFilterUser(django_filters.FilterSet):
@@ -257,10 +260,12 @@ class MyFilterUser(django_filters.FilterSet):
                                               queryset=StatusAdd.objects.all(), field_name='status__name',
                                               lookup_expr='exact', label='Статус')
     si_or = django_filters.BooleanFilter(widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
-
+    tag = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
+                                    field_name='tags__name',
+                                    lookup_expr='icontains', label='Тэг:', )
     class Meta:
         model = Equipment
-        fields = ['serial_number', 'name', 'position', 'si_or', 'status']
+        fields = ['serial_number', 'name', 'position', 'si_or', 'status', 'tag']
 
 
 def equipment_list(request):
@@ -268,7 +273,8 @@ def equipment_list(request):
         redirect('/')
     if request.method == 'POST' and request.user.is_staff:
         eq_filter = MyFilter(request.POST,
-                             queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions').all().order_by(
+                             queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
+                                                                         'tags').all().order_by(
                                  '-si__next_verification'))
         data = {
             'title': 'Поиск',
@@ -282,7 +288,8 @@ def equipment_list(request):
 
     if request.method == 'POST' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,
-                                 queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions').all())
+                                 queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
+                                                                             'tags').all())
         data = {
             'title': 'Поиск',
             'menu': menu,
