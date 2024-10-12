@@ -3,7 +3,7 @@
 {% block content %}
 {% if user.is_authenticated %}
 <hr>
-
+{{messages.error}}
 <form action="{% url 'search' %}" method="POST">
     {% csrf_token %}
     {{ equipments.form.as_p }}
@@ -44,16 +44,16 @@
         </td>
         {%endif%}
         {%endif%}
-        {%if user.is_staff%}
+
         <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
-        {%endif%}
-        {%if not user.is_staff%}
+
+
         {% if equipment.si_or %}
         <td><a class="a-serial-number" href="{% url 'device_update' equipment.pk %}">{{equipment.name}}</a></td>
         {% else %}
         <td><a class="a-serial-number" href="{% url 'equipment_update' equipment.pk %}">{{equipment.name}}</a></td>
         {%endif%}
-        {%endif%}
+
         <td>{{equipment.positions.last.name}}</td>
         <td>{{equipment.locations.last.name}}</td>
         <td>{{equipment.tags.last.name}}</td>

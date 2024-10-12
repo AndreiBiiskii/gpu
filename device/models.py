@@ -15,7 +15,7 @@ class StatusAdd(models.Model):
 
 class Status(models.Model):
     name = models.ForeignKey(StatusAdd, on_delete=models.DO_NOTHING, related_name='statuses', verbose_name='Статус')
-    equipment = models.ForeignKey('Equipment', on_delete=models.DO_NOTHING, related_name='status',
+    equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='status',
                                   verbose_name='Статус')
 
     def __str__(self):
@@ -86,7 +86,7 @@ class EquipmentName(models.Model):
 
 class Position(models.Model):
     name = models.CharField(verbose_name='Позиция по ГП', blank=True, null=True)
-    equipment = models.ForeignKey('Equipment', on_delete=models.DO_NOTHING, related_name='positions')
+    equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='positions')
 
     def __str__(self):
         return self.name
@@ -97,14 +97,14 @@ class Position(models.Model):
 
 class Description(models.Model):
     name = models.CharField(max_length=100, verbose_name='Описание', blank=False, null=False)
-    equipment = models.ForeignKey('Equipment', on_delete=models.DO_NOTHING, verbose_name='Описание оборудования',
+    equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, verbose_name='Описание оборудования',
                                   related_name='descriptions')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='descriptions',
                              verbose_name='Пользователь')
     at_date = models.DateField(auto_now=True, verbose_name='Дата внесения')
 
     def __str__(self):
-        return self.equipment
+        return self.name
 
     class Meta:
         # ordering = ('-at_date',)
@@ -113,7 +113,7 @@ class Description(models.Model):
 
 class Location(models.Model):
     name = models.CharField(max_length=255, verbose_name='Место нахождения.', blank=True, null=True)
-    equipment = models.ForeignKey('Equipment', on_delete=models.DO_NOTHING, related_name='locations',
+    equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='locations',
                                   verbose_name='Место установки', default='NoneLocation')
 
     def __str__(self):
@@ -141,13 +141,13 @@ class Equipment(models.Model):
     at_date = models.DateField(auto_now=True ,verbose_name='Дата добавления')
     defect = models.BooleanField(default=False, blank=True, null=True)
     si_or = models.BooleanField(default=True, verbose_name='Средство измерения')
-    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE, related_name='manufacturer',
+    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.DO_NOTHING, related_name='manufacturer',
                                      verbose_name='Производитель')
-    type = models.ForeignKey(EquipmentType, on_delete=models.CASCADE, related_name='type',
+    type = models.ForeignKey(EquipmentType, on_delete=models.DO_NOTHING, related_name='type',
                              verbose_name='Тип', default=None, null=True)
-    name = models.ForeignKey(EquipmentName, on_delete=models.CASCADE, related_name='n',
+    name = models.ForeignKey(EquipmentName, on_delete=models.DO_NOTHING, related_name='n',
                              verbose_name='Наименование оборудования')
-    year = models.ForeignKey('Year', on_delete=models.CASCADE, related_name='years', verbose_name='Год выпуска')
+    year = models.ForeignKey('Year', on_delete=models.DO_NOTHING, related_name='years', verbose_name='Год выпуска')
 
     def __str__(self):
         return self.serial_number
@@ -162,7 +162,7 @@ class Equipment(models.Model):
 
 
 class Si(models.Model):
-    equipment = models.ForeignKey(Equipment, blank=True, null=True, on_delete=models.DO_NOTHING,
+    equipment = models.ForeignKey(Equipment, blank=True, null=True, on_delete=models.CASCADE,
                                   related_name='si',
                                   verbose_name='Средство измерения')
     previous_verification = models.DateField(verbose_name='Дата предыдущей поверки')

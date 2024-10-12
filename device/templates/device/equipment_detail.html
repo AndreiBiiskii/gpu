@@ -2,7 +2,6 @@
 
 {% block content %}
 
-
 <div class="detail">
     <cite>
 
@@ -34,7 +33,7 @@
         <tbody>
         {%for i in data_eq%}
         <tr>
-            <td>{{i.position}}</td>
+            <td>{{i.position}} {% if request.user.is_staff %}<a href="{% url 'equipment_delete' equipment.pk %}?number={{i.number}}" >Delete</a>{%endif%}</td>
             <td>{{i.location}}</td>
             <td>{{i.tag}}</td>
             <td>{{i.status}}</td>
@@ -63,7 +62,7 @@
 {% endif %}
 <a href="{% url 'search' %}" class="button-style2">К поиску</a>
 {%if user.is_staff%}
-<a href="{% url 'equipment_delete' equipment.pk%}" class="button-style3">Delete</a>
+<a href="{% url 'equipment_delete' equipment.pk %}" class="button-style3">Delete</a>
 {%endif%}
 
 {% endblock %}

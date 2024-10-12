@@ -4,6 +4,7 @@ import os
 import django_filters
 from dateutil.relativedelta import relativedelta
 from django import forms
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -355,7 +356,7 @@ def equipment_detail(request, pk):
         at_date.append(i.at_date)
     for i in location:
         locations.append(i.name)
-    for i in range(len(descriptions)):
+    for number, i in enumerate(range(len(descriptions))):
         try:
             stat = statuses[i]
         except:
@@ -369,6 +370,7 @@ def equipment_detail(request, pk):
             'position': positions[i],
             'user': users[i],
             'at_date': at_date[i],
+            'number': number + 1,
         })
         data_eq.reverse()
     data = {
@@ -442,13 +444,19 @@ def EquipmentDelete(request, pk):
         redirect('login')
     obj = get_object_or_404(Equipment,
                             pk=pk)
-    obj.descriptions.all().delete()
-    obj.positions.all().delete()
-    obj.locations.all().delete()
-    obj.tags.all().delete()
-    obj.status.all().delete()
-    obj.si.all().delete()
-    obj.delete()
+    if request.GET.get('number'):
+        number = int(request.GET.get('number')) - 1
+
+        (obj.descriptions.all()[number]).delete()
+        (obj.positions.all()[number]).delete()
+        (obj.locations.all()[number]).delete()
+        (obj.tags.all()[number]).delete()
+        (obj.status.all()[number]).delete()
+        if obj.si_or:
+            (obj.si.all()[number]).delete()
+    else:
+
+        obj.delete()
     return redirect('/')
 
 
@@ -481,13 +489,12 @@ class UpdateCategory(UpdateView):
 
 
 def delete_category(request, pk, Mod):
-    if not request.user.is_authenticated:
+    if not request.user.is_staff:
         redirect('login')
     obj = get_object_or_404(Mod, pk=pk)
-    try:
-        obj.delete()
-    except:
-        pass
+
+    obj.delete()
+
     return redirect(reverse_lazy('search'))
 
 
