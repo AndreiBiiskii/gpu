@@ -12,18 +12,8 @@ class DefectAdd(CreateView):
     extra_context = {
         'title': 'Добавление дефекта',
     }
-    def form_valid(self, form):
-        form.instance.project = self.request.POST.get('project')
-        return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['menu'] = self.request.GET.getlist('menu')
-        return context
     def get_initial(self):
         initial = super().get_initial()
         initial['defect_act'] = 'kfkfkf'
         return initial
-
-
-
