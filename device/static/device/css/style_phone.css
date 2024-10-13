@@ -15,18 +15,23 @@ color:red;
 width:90%
 }
 .table{
-
-	border: 1px solid #eee;
-	margin-bottom: 250px;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border-spacing: 0;
+    font-size: 50px;
+    overflow-x: auto;
+    word-wrap: break-word;
 }
 .table th {
-	font-weight: bold;
+    text-align: left;
 	padding: 5px;
 	background: #efefef;
 	border: 1px solid #ddddff;
 }
 .table td{
-
+    font-size: 50px;
+    padding: 5px;
+    border: 1px solid #ddddff;
 	padding: 5px 10px;
 	border: 1px solid #eee;
 	text-align: left;
@@ -384,6 +389,7 @@ header{
  text-decoration: none;
  text-transform:uppercase;
  transition: all 0.3s ease;
+ z-index: 1;
 }
 .dws-menu li a:hover{
  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e0e1e5+0,454547+2,454547+98,e0e1e5+100 */
@@ -501,4 +507,9 @@ header{
   content: "\f0d8";
   color: #ffffff;
  }
+}
+
+.menu2{
+width: 100%;
+background: #454547;
 }

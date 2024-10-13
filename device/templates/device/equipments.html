@@ -15,7 +15,6 @@
 <b><a href="{% url 'draft' %}" class="button-style3"> Добавить новую запись</a></b>
 <hr>
 
-
 <table class="table">
     <thead>
     <tr>
@@ -30,23 +29,18 @@
     </thead>
     <tbody>
     {%for equipment in equipments.qs%}
-
     <tr>
         <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a></td>
         <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
-
-
         <td>{{equipment.positions.last.name}}</td>
         <td>{{equipment.locations.last.name}}</td>
         <td>{{equipment.tags.last.name}}</td>
         <td>{{equipment.si.last.previous_verification|date:"d-m-Y"}}</td>
         <td>{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
     </tr>
-
     {%endfor%}
     </tbody>
 </table>
-
 {%endif%}
 
 

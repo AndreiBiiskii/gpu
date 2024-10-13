@@ -156,7 +156,6 @@ def equipment_add(request):
             return redirect('/')
     else:
         form = AddEquipmentForm()
-
     return render(request, 'device/equipment_add.html', {'form': form, 'menu': menu})
 
 
