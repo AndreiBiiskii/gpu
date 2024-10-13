@@ -89,7 +89,8 @@ class AddEquipmentForm(forms.Form):
         if self.cleaned_data['status_new']:
             self.cleaned_data['status'] = self.cleaned_data['status_new']
 
-        if Equipment.objects.filter(Q(serial_number=self.cleaned_data['serial_number']) & Q(model__name=self.cleaned_data['model'])):
+        if Equipment.objects.filter(
+                Q(serial_number=self.cleaned_data['serial_number']) & Q(model__name=self.cleaned_data['model'])):
             raise forms.ValidationError(message='Оборудование уже есть.')
         return self.cleaned_data
 
@@ -226,7 +227,8 @@ class AddDeviceForm(forms.Form):
             self.cleaned_data['status'] = self.cleaned_data['status_new']
         if self.cleaned_data['reg_number_new']:
             self.cleaned_data['reg_number'] = self.cleaned_data['reg_number_new']
-        if Equipment.objects.filter(Q(serial_number=self.cleaned_data['serial_number']) & Q(model__name=self.cleaned_data['model'])):
+        if Equipment.objects.filter(
+                Q(serial_number=self.cleaned_data['serial_number']) & Q(model__name=self.cleaned_data['model'])):
             raise forms.ValidationError(message='Оборудование уже есть.')
         return self.cleaned_data
 
@@ -315,3 +317,4 @@ class LoginUserForm(AuthenticationForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+
