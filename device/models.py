@@ -161,6 +161,7 @@ class Si(models.Model):
                                    verbose_name='Регистрационный номер')
     result = models.BooleanField(default=True, )
     com = models.TextField(verbose_name='Комментарий', default='none')
+
     # def __str__(self):
     #     return self.equipment.name
 
