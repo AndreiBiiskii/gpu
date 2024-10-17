@@ -167,7 +167,6 @@ class AddDeviceForm(forms.Form):
     previous_verification = forms.DateField(label='Дата предыдущей поверки:', widget=forms.TextInput(attrs=
     {
         'type': 'date',
-        'value': datetime.date.today().strftime('%Y-%m-%d'),
         'class': 'type2',
     }))
     certificate = forms.CharField(widget=forms.TextInput(attrs={"class": "type2"}), label='Сертификат:')
