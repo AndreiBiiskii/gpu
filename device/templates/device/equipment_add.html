@@ -14,9 +14,11 @@
         <table>
             {{ form.as_table }}
         </table>
-        <button type="submit" class="button-style2"> Сохранить</button>
-
+        <button type="submit" class="button-style2"> Сохранить</button> --------------------------------
+        <a class="button-style2" href="{% url 'search' %}">К поиску</a>
     </form>
+    <br>
+    <hr>
 </div>
 
 {% endblock %}

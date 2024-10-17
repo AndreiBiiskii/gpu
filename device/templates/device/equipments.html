@@ -6,7 +6,9 @@
 {{messages.error}}
 <form action="{% url 'search' %}" method="POST">
     {% csrf_token %}
-    {{ equipments.form.as_p }}
+    <table>
+        {{ equipments.form.as_table }}
+    </table>
     <button type="submit" class="button-style2">Найти</button>
     <cite>Найдено:{{count}}</cite>
     <hr>
@@ -14,7 +16,6 @@
 <h1 class="error">{{error}}</h1>
 <b><a href="{% url 'draft' %}" class="button-style3"> Добавить новую запись</a></b>
 <hr>
-
 <table>
     <thead>
     <tr>
