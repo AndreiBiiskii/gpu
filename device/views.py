@@ -30,6 +30,10 @@ menu = [
     {'title': 'Года выпуска', 'url_name': 'years'},
     {'title': 'Позиция', 'url_name': 'gps'},
     {'title': 'Поиск', 'url_name': 'search'},
+    {'title': 'Подписанты', 'url_name': 'defect:approves'},
+    {'title': 'Подрядчики', 'url_name': 'defect:contractors'},
+    {'title': 'Мастера', 'url_name': 'defect:kaits'},
+    {'title': 'Работники', 'url_name': 'defect:workers'},
 ]
 
 
@@ -188,7 +192,7 @@ def EquipmentUpdate(request, pk):
     if request.method == 'POST':
         if request.POST['description'] != equipment.descriptions.last().name:
             Tag.objects.create(equipment=equipment, name=request.POST['tag'])
-            if len(request.POST['location'])>150:
+            if len(request.POST['location']) > 150:
                 data['error'] = 'Местоположение не может содержать более 150 символов'
                 return render(request, 'device/equipment_update.html', context=data)
             Location.objects.create(equipment=equipment, name=request.POST['location'])
@@ -423,7 +427,7 @@ def DeviceUpdate(request, pk):
             return render(request, 'device/equipment_update.html', context=data)
         if request.POST['description'] != equipment.descriptions.last().name:
             t = Tag(equipment=equipment, name=request.POST['tag'])
-            if len(request.POST['location'])>150:
+            if len(request.POST['location']) > 150:
                 data['error'] = 'Местоположение не может содержать более 255 символов'
                 return render(request, 'device/equipment_update.html', context=data)
             l = Location(equipment=equipment, name=request.POST['location'])
@@ -634,29 +638,28 @@ def draft_delete(request, pk):
     except:
         return redirect(reverse_lazy('draft_list'))
 
-
 # class DefectFilter(django_filters.FilterSet):
-    # type = django_filters.CharFilter(field_name='type__name',
-    #                                  lookup_expr='icontains',
-    #                                  label='Тип:',
-    #                                  widget=forms.TextInput(attrs={'class': 'type2'}))
-    # serial_number = django_filters.CharFilter(lookup_expr='icontains',
-    #                                           widget=forms.TextInput(attrs={'class': 'type2'}),
-    #                                           label='Серийный номер')
-    # position = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
-    #                                             queryset=GP.objects.all(),
-    #                                             field_name='positions__name',
-    #                                             lookup_expr='exact', label='Позиция:', )
-    # name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Название:',
-    #                                  widget=forms.TextInput(attrs={'class': 'type2'}))
-    # status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
-    #                                           queryset=StatusAdd.objects.all(), field_name='status__name',
-    #                                           lookup_expr='exact', label='Статус')
-    # si_or = django_filters.BooleanFilter(widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
-    # tag = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
-    #                                 field_name='tags__name',
-    #                                 lookup_expr='icontains', label='Тэг:', )
+# type = django_filters.CharFilter(field_name='type__name',
+#                                  lookup_expr='icontains',
+#                                  label='Тип:',
+#                                  widget=forms.TextInput(attrs={'class': 'type2'}))
+# serial_number = django_filters.CharFilter(lookup_expr='icontains',
+#                                           widget=forms.TextInput(attrs={'class': 'type2'}),
+#                                           label='Серийный номер')
+# position = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
+#                                             queryset=GP.objects.all(),
+#                                             field_name='positions__name',
+#                                             lookup_expr='exact', label='Позиция:', )
+# name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Название:',
+#                                  widget=forms.TextInput(attrs={'class': 'type2'}))
+# status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
+#                                           queryset=StatusAdd.objects.all(), field_name='status__name',
+#                                           lookup_expr='exact', label='Статус')
+# si_or = django_filters.BooleanFilter(widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
+# tag = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
+#                                 field_name='tags__name',
+#                                 lookup_expr='icontains', label='Тэг:', )
 
-    # class Meta:
-    #     model = Defect
-    #     fields = ['project', ]
+# class Meta:
+#     model = Defect
+#     fields = ['project', ]

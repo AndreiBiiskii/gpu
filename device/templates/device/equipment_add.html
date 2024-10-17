@@ -1,17 +1,21 @@
 {% extends 'device/base.html' %}
 
 {% block content%}
-{{ eq.model }}
-{{eq.id}}
-{% if draft %}
-<a href="{% url 'draft_delete' draft.pk %}">Удалить</a>
-<img src="{{draft.images.url}}">
-{%endif%}
 <div class="footer">
-    <form action="" method="POST" enctype="multipart/form-data">
+    {{ eq.model }}
+    {{eq.id}}
+    {% if draft %}
+    <a href="{% url 'draft_delete' draft.pk %}">Удалить</a>
+    <img src="{{draft.images.url}}">
+    {%endif%}
+
+    <form action="" method="POST" enctype="multipart/form-data" >
         {% csrf_token %}
-        {{ form.as_p }}
+        <table>
+            {{ form.as_table }}
+        </table>
         <button type="submit" class="button-style2"> Сохранить</button>
+
     </form>
 </div>
 

@@ -145,7 +145,7 @@ class AddDeviceForm(forms.Form):
                                        required=False)
     name = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=EquipmentName.objects.all(),
                                   required=False, label='Наименование:')
-    name_new = forms.CharField(label='Добавить наименование:', widget=forms.TextInput(attrs={'class': 'type'}),
+    name_new = forms.CharField(label='Добавить наименование:', widget=forms.TextInput(attrs={'class': 'type2'}),
                                required=False)
     description = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), label='Комментарий:')
     position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
@@ -168,7 +168,7 @@ class AddDeviceForm(forms.Form):
     {
         'type': 'date',
         'value': datetime.date.today().strftime('%Y-%m-%d'),
-        'class': 'type',
+        'class': 'type2',
     }))
     certificate = forms.CharField(widget=forms.TextInput(attrs={"class": "type2"}), label='Сертификат:')
     interval = forms.ChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Межповерочный интервал:',

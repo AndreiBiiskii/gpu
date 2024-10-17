@@ -20,16 +20,7 @@ width:8em;
 .text{
 width:90%
 }
-table {
-  width: 100%;
-  border-collapse: collapse;
 
-}
-tr, td, th {
-  border: 1.5px solid black;
-  padding: 4px;
-  text-align: left;
-}
 .detail{
 height:30px
 }
@@ -66,63 +57,7 @@ eq:active {
   background: red;
   color: white;
 }
-.td_position, th{
-border-collapse: collapse;
-border: 3px solid purple;
-}
 
-.category-wrap {
-  padding: 15px;
-  background: white;
-  width: 10em;
-  box-shadow: 2px 2px 8px rgba(0,0,0,.1);
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  border-radius: 10px;
-}
-.category-wrap h3 {
-  font-size: 16px;
-  color: rgba(0,0,0,.6);
-  margin: 0 0 10px;
-  padding: 0 5px;
-  position: relative;
-}
-.category-wrap h3:after {
-  content: "";
-  width: 6px;
-  height: 6px;
-  background: #80C8A0;
-  position: absolute;
-  right: 5px;
-  bottom: 2px;
-  box-shadow: -8px -8px #80C8A0, 0 -8px #80C8A0, -8px 0 #80C8A0;
-}
-.category-wrap ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  border-top: 1px solid rgba(0,0,0,.3);
-}
-.category-wrap li {margin: 12px 0 0 0px;}
-.category-wrap a {
-  text-decoration: none;
-  display: block;
-  font-size: 13px;
-  color: rgba(0,0,0,.6);
-  position: relative;
-  transition: .3s linear;
-}
-.category-wrap a:after {
-  content:"\f18e";
-  font-family: FontAwesome;
-  position: absolute;
-  right: 5px;
-  color: white;
-  transition: .2s linear;
-}
-.category-wrap a:hover {
-  background: #80C8A0;
-  color: white;
-}
 
 .button-style {
   display: inline-block;
@@ -212,14 +147,22 @@ a {
   padding: 8px 12px;
   background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
   border-radius: 10px;
+  float:right;
 }
 
 .footer	{
-	width: 100%;
+	width: 30%;
 	height: 100px; // не ограничивайте высоту основных блоков, лучше пишите min-height
-	background: #696969;
-	bottom: 0; // координата не работает без свойства position
+	background: red;
+	padding: 10px 10px 10px 10px;
+	border:10px;
+	border-color: red;
 }
+
+.select{
+width:200px;;
+}
+
 .strip	{
 	width: 1000px;
 	margin: 10px 0 0 auto;
@@ -248,10 +191,75 @@ width: 200px;
 }
 
 
+
+header{
+ /*margin-top: 200px;*/
+ font-family: Cuprum, Arial, Helvetica, sans-serif;
+
+}
+.dws-menu *{
+ margin: 0;
+ padding: 0;
+ width: auto;
+}
+.dws-menu ul,
+.dws-menu ol{
+ list-style: none;
+}
+.dws-menu > ul{
+ display: flex;
+ justify-content: left;
+}
+.dws-menu > ul li{
+ position: relative;
+ border-right: 1px solid #c7c8ca;
+}
+.dws-menu > ul li:first-child{
+ border-left: 1px solid #b2b3b5;
+}
+.dws-menu > ul li:last-child{
+ border-right: 1px solid #babbbd;
+}
+.dws-menu > ul li > a i.fa{
+ position: absolute;
+ top: 15px;
+ left: 12px;
+ font-size:14px;
+}
+.dws-menu > ul li a{
+ display: block;
+ /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#c9c9c9+0,f6f6f6+2,c4c5c7+98,757577+100;Custom+3 */
+ background: rgb(201,201,201); /* Old browsers */
+ background: -moz-linear-gradient(top,  rgba(201,201,201,1) 0%, rgba(246,246,246,1) 2%, rgba(196,197,199,1) 98%, rgba(117,117,119,1) 100%); /* FF3.6-15 */
+ background: -webkit-linear-gradient(top,  rgba(201,201,201,1) 0%,rgba(246,246,246,1) 2%,rgba(196,197,199,1) 98%,rgba(117,117,119,1) 100%); /* Chrome10-25,Safari5.1-6 */
+ background: linear-gradient(to bottom,  rgba(201,201,201,1) 0%,rgba(246,246,246,1) 2%,rgba(196,197,199,1) 98%,rgba(117,117,119,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c9c9c9', endColorstr='#757577',GradientType=0 ); /* IE6-9 */
+
+ padding: 15px 30px 15px 40px;
+ font-size:14px;
+ color: #454547;
+ text-decoration: none;
+ text-transform:uppercase;
+ transition: all 0.3s ease;
+ z-index: 1;
+}
+.dws-menu li a:hover{
+ /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e0e1e5+0,454547+2,454547+98,e0e1e5+100 */
+ background: rgb(224,225,229); /* Old browsers */
+ background: -moz-linear-gradient(top,  rgba(224,225,229,1) 0%, rgba(69,69,71,1) 2%, rgba(69,69,71,1) 98%, rgba(224,225,229,1) 100%); /* FF3.6-15 */
+ background: -webkit-linear-gradient(top,  rgba(224,225,229,1) 0%,rgba(69,69,71,1) 2%,rgba(69,69,71,1) 98%,rgba(224,225,229,1) 100%); /* Chrome10-25,Safari5.1-6 */
+ background: linear-gradient(to bottom,  rgba(224,225,229,1) 0%,rgba(69,69,71,1) 2%,rgba(69,69,71,1) 98%,rgba(224,225,229,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0e1e5', endColorstr='#e0e1e5',GradientType=0 ); /* IE6-9 */
+
+ color: #ffffff;
+ box-shadow: 1px 5px 10px -5px black;
+ transition: all 0.3s ease;
+}
+
 /*sub menu*/
 .dws-menu li ul{
  position: absolute;
- min-width: 150px;
+ min-width: 14px;
  display: none;
 }
 .dws-menu li > ul li{
@@ -329,7 +337,7 @@ width: 200px;
   position: absolute;
   top: 0;
   right: 0;
-  width: 100%;
+  width: auto;
   height: 100%;
   cursor: pointer;
   display: block;
@@ -352,8 +360,28 @@ width: 200px;
   color: #ffffff;
  }
 }
-
 .menu2{
-width: 100%;
+width: auto;
 background: #454547;
+}
+
+table {
+	border-spacing: 10px;
+	border-collapse: separate;
+	width: 400px;
+}
+td {
+	text-align: left;
+}
+
+th{
+border-collapse: collapse;
+width:30px;
+text-align:left;
+}
+
+.type2:focus{
+  caret-color: red;
+  caret-width: 5px; /* Чем шире курсор, тем выразительнее, правда? 😃 */
+
 }
