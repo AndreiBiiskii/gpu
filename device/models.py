@@ -17,7 +17,7 @@ class Status(models.Model):
     name = models.ForeignKey(StatusAdd, on_delete=models.DO_NOTHING, related_name='statuses', verbose_name='Статус')
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='status',
                                   verbose_name='Статус')
-    at_date = models.DateTimeField(default=datetime.datetime.now())
+    # at_date = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
         return self.equipment
@@ -73,7 +73,7 @@ class EquipmentName(models.Model):
 class Position(models.Model):
     name = models.CharField(verbose_name='Позиция по ГП', blank=True, null=True)
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='positions')
-    at_date = models.DateTimeField(default=datetime.datetime.now())
+    # at_date = models.DateTimeField(default=datetime.datetime.now())
 
     def __str__(self):
         return self.name
@@ -165,7 +165,7 @@ class Si(models.Model):
                                    verbose_name='Регистрационный номер')
     result = models.BooleanField(default=True, )
     com = models.TextField(verbose_name='Комментарий', default='none')
-    at_date = models.DateTimeField()
+    at_date = models.DateTimeField(default=datetime.datetime.now())
 
     # def __str__(self):
     #     return self.equipment.name
