@@ -17,13 +17,9 @@ class Status(models.Model):
     name = models.ForeignKey(StatusAdd, on_delete=models.DO_NOTHING, related_name='statuses', verbose_name='Статус')
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='status',
                                   verbose_name='Статус')
-    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     def __str__(self):
         return self.equipment
-
-    class Meta:
-        ordering = ('-at_date',)
 
 
 class VerificationInterval(models.Model):
@@ -78,13 +74,11 @@ class EquipmentName(models.Model):
 class Position(models.Model):
     name = models.CharField(verbose_name='Позиция по ГП', blank=True, null=True)
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='positions')
-    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ('-at_date',)
         verbose_name_plural = 'Позиции'
 
 
@@ -94,13 +88,11 @@ class Description(models.Model):
                                   related_name='descriptions')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='descriptions',
                              verbose_name='Пользователь')
-    at_date = models.DateField(auto_now=True, verbose_name='Дата внесения')
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ('-at_date',)
         verbose_name_plural = 'Описания оборудования'
 
 
@@ -108,13 +100,11 @@ class Location(models.Model):
     name = models.CharField(max_length=255, verbose_name='Место нахождения.', blank=True, null=True)
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='locations',
                                   verbose_name='Место установки', default='NoneLocation')
-    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     def __str__(self):
         return self.equipment
 
     class Meta:
-        ordering = ('-at_date',)
         verbose_name_plural = 'Места установки'
 
 
@@ -122,14 +112,12 @@ class Tag(models.Model):
     name = models.CharField(max_length=100, verbose_name='Тэг', blank=True, null=True)
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='tags', verbose_name='Тэг',
                                   default='NoneTag')
-    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name_plural = 'Тэг'
-        ordering = ('-at_date',)
 
 
 class Equipment(models.Model):
@@ -155,7 +143,6 @@ class Equipment(models.Model):
     class Meta:
         unique_together = ('serial_number', 'model')
         verbose_name_plural = 'Оборудование'
-        ordering = ('-at_date',)
 
 
 class Si(models.Model):
@@ -175,13 +162,11 @@ class Si(models.Model):
                                    verbose_name='Регистрационный номер')
     result = models.BooleanField(default=True, )
     com = models.TextField(verbose_name='Комментарий', default='none')
-    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     # def __str__(self):
     #     return self.equipment.name
 
     class Meta:
-        ordering = ('at_date',)
         verbose_name_plural = 'Средства измерения'
 
     # def get_absolute_url(self):
