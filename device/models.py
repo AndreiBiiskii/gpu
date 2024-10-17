@@ -17,22 +17,13 @@ class Status(models.Model):
     name = models.ForeignKey(StatusAdd, on_delete=models.DO_NOTHING, related_name='statuses', verbose_name='Статус')
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='status',
                                   verbose_name='Статус')
+    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     def __str__(self):
         return self.equipment
 
     class Meta:
-        ordering = ('equipment',)
-
-
-# class Category(models.Model):
-#     name = models.CharField(max_length=50, verbose_name='Категория', unique=True)
-#
-#     def __str__(self):
-#         return self.name
-#
-#     class Meta:
-#         verbose_name_plural = 'Категории'
+        ordering = ('-at_date',)
 
 
 class VerificationInterval(models.Model):
@@ -87,11 +78,13 @@ class EquipmentName(models.Model):
 class Position(models.Model):
     name = models.CharField(verbose_name='Позиция по ГП', blank=True, null=True)
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='positions')
+    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     def __str__(self):
         return self.name
 
     class Meta:
+        ordering = ('-at_date',)
         verbose_name_plural = 'Позиции'
 
 
@@ -107,7 +100,7 @@ class Description(models.Model):
         return self.name
 
     class Meta:
-        # ordering = ('-at_date',)
+        ordering = ('-at_date',)
         verbose_name_plural = 'Описания оборудования'
 
 
@@ -115,11 +108,13 @@ class Location(models.Model):
     name = models.CharField(max_length=255, verbose_name='Место нахождения.', blank=True, null=True)
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='locations',
                                   verbose_name='Место установки', default='NoneLocation')
+    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     def __str__(self):
         return self.equipment
 
     class Meta:
+        ordering = ('-at_date',)
         verbose_name_plural = 'Места установки'
 
 
@@ -127,18 +122,20 @@ class Tag(models.Model):
     name = models.CharField(max_length=100, verbose_name='Тэг', blank=True, null=True)
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='tags', verbose_name='Тэг',
                                   default='NoneTag')
+    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name_plural = 'Тэг'
+        ordering = ('-at_date',)
 
 
 class Equipment(models.Model):
     serial_number = models.CharField(max_length=25, verbose_name='Серийный номер')
     model = models.ForeignKey(EquipmentModel, on_delete=models.CASCADE, related_name='model', blank=True, null=True)
-    at_date = models.DateField(auto_now=True ,verbose_name='Дата добавления')
+    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
     defect = models.BooleanField(default=False, blank=True, null=True)
     si_or = models.BooleanField(default=True, verbose_name='Средство измерения')
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.DO_NOTHING, related_name='manufacturer',
@@ -158,7 +155,7 @@ class Equipment(models.Model):
     class Meta:
         unique_together = ('serial_number', 'model')
         verbose_name_plural = 'Оборудование'
-        # ordering = ('-at_date',)
+        ordering = ('-at_date',)
 
 
 class Si(models.Model):
@@ -178,11 +175,13 @@ class Si(models.Model):
                                    verbose_name='Регистрационный номер')
     result = models.BooleanField(default=True, )
     com = models.TextField(verbose_name='Комментарий', default='none')
+    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     # def __str__(self):
     #     return self.equipment.name
 
     class Meta:
+        ordering = ('at_date',)
         verbose_name_plural = 'Средства измерения'
 
     # def get_absolute_url(self):
@@ -249,145 +248,3 @@ class Unit(models.Model):
 
     def __str__(self):
         return self.name
-
-#
-# class Defect(models.Model):
-#     defect = models.ForeignKey(Equipment, blank=True, null=True, on_delete=models.DO_NOTHING, related_name='equipment')
-#     defect_act = models.CharField(max_length=20, verbose_name='Номер деффектного акта', blank=True, null=True,
-#                                   unique=True)
-#     project = models.CharField(max_length=100, verbose_name='Наименование проекта')
-#     short_description = models.TextField(verbose_name='Краткое описание деффекта')
-#     causes = models.TextField(verbose_name='Причина отказа')
-#     status = models.CharField(verbose_name='Статус')
-#     models.TextField(verbose_name='Что требуется для устранения')
-#     operating_time = models.SmallIntegerField(verbose_name='Время наработки')
-#     invest_letter = models.CharField(max_length=255, verbose_name='Номер письма в Инвест')
-#     approve = models.ForeignKey('Approve', on_delete=models.DO_NOTHING, related_name='approve',
-#                                 verbose_name='Утверждающий')
-#     contractor = models.ForeignKey('Contractor', on_delete=models.DO_NOTHING, related_name='contractor',
-#                                    verbose_name='Подрядчик')
-#     kait = models.ForeignKey('Kait', on_delete=models.DO_NOTHING, related_name='kait', verbose_name='Мастер по КАиТ')
-#     worker = models.ForeignKey('Worker', on_delete=models.DO_NOTHING, related_name='worker', verbose_name='Мастер цеха')
-#
-#     def get_absolute_url(self):
-#         return reverse('defect_detail', kwargs={'pk': self.pk})
-#
-# class DefectAct(models.Model):
-#     defect_act = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='acts')
-#
-#
-# class Project(models.Model):
-#     name = models.CharField(max_length=100, verbose_name='Наименование проекта')
-#     gp = models.CharField(max_length=100, verbose_name='ГП')
-#     year = models.DateField(auto_now_add=True)
-#
-#     def __str__(self):
-#         return self.name
-#
-#
-# #
-# # class DateCreate(models.Model):
-# #     name = models.DateField(verbose_name='Дата внесения записи дефекта')
-# #
-# #     # date_create = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='created')
-# #
-# #     def __str__(self):
-# #         return str(self.name)
-# #
-# #
-# # class ShortDescription(models.Model):
-# #     name = models.TextField(verbose_name='Краткое описание деффекта')
-# #     short_description = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='short_descriptions')
-# #
-# #     def __str__(self):
-# #         return self.name
-# #
-# #
-# # class Causes(models.Model):
-# #     name = models.TextField(verbose_name='Причина отказа')
-# #     causes = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='causes')
-# #
-# #     def __str__(self):
-# #         return self.name
-# #
-# #
-# # class Fix(models.Model):
-# #     name = models.TextField(verbose_name='Что требуется для устранения')
-# #     fix = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='fixes')
-# #
-# #     def __str__(self):
-# #         return self.name
-# #
-# #
-# # class OperatingTime(models.Model):
-# #     name = models.SmallIntegerField(verbose_name='Время наработки')
-# #     operating_time = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='operating_times')
-# #
-# #     def __str__(self):
-# #         return self.name
-# #
-# #
-# # class InvestLetter(models.Model):
-# #     name = models.CharField(max_length=255, verbose_name='Номер письма в Инвест')
-# #     invest_letter = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='invest_letters')
-# #
-# #     def __str__(self):
-# #         return self.name
-#
-#
-# class Approve(models.Model):
-#     name = models.CharField(max_length=30, verbose_name='ФИО утв.', unique=True)
-#     job_title = models.CharField(max_length=50, verbose_name='Должность')
-#     organization = models.CharField(max_length=100, verbose_name='Организация')
-#
-#     # approve = models.ForeignKey(Equipment, on_delete=.DO_NOTHING, related_name='approves', blank=True, null=True)
-#
-#     def __str__(self):
-#         return self.name
-#
-#     class Meta:
-#         verbose_name_plural = 'Утверждающие'
-#
-#
-# class Contractor(models.Model):
-#     name = models.CharField(max_length=30, verbose_name='ФИО подряднчика', unique=True)
-#     job_title = models.CharField(max_length=50, verbose_name='Должность')
-#     organization = models.CharField(max_length=100, verbose_name='Организация')
-#
-#     # contractor = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='contractors', blank=True,
-#     # null = True)
-#
-#     def __str__(self):
-#         return self.name
-#
-#     class Meta:
-#         verbose_name_plural = 'Подрядные организации'
-#
-#
-# class Kait(models.Model):
-#     name = models.CharField(max_length=30, verbose_name='ФИО мастера Каит', unique=True)
-#     job_title = models.CharField(max_length=50, verbose_name='Должность')
-#     organization = models.CharField(max_length=100, verbose_name='Организация')
-#
-#     # kait = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='kaits', blank=True, null=True)
-#
-#     def __str__(self):
-#         return self.name
-#
-#     class Meta:
-#         verbose_name_plural = 'Мастера КАиТ'
-#         ordering = ('-job_title',)
-#
-#
-# class Worker(models.Model):
-#     name = models.CharField(max_length=30, verbose_name='ФИО мастера цеха', unique=True)
-#     job_title = models.CharField(max_length=100, verbose_name='Должность')
-#     organization = models.CharField(max_length=100, verbose_name='Организация')
-#
-#     # worker = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='workers', blank=True, null=True)
-#
-#     def __str__(self):
-#         return self.name
-#
-#     class Meta:
-#         verbose_name_plural = 'Мастера цеха'
