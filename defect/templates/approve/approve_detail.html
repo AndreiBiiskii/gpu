@@ -1,0 +1,9 @@
+{% extends 'defect/base.html' %}
+
+{% block content%}
+{{object.name}}
+{{object.job_title}}
+{{object.organization}}
+<a href="{% url add_update object.pk %}">Update</a>
+<a href="{% url add_delete object.pk %}">Delete</a>
+{% endblock %}
