@@ -88,11 +88,13 @@ class Description(models.Model):
                                   related_name='descriptions')
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='descriptions',
                              verbose_name='Пользователь')
+    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     def __str__(self):
         return self.name
 
     class Meta:
+
         verbose_name_plural = 'Описания оборудования'
 
 
@@ -233,3 +235,4 @@ class Unit(models.Model):
 
     def __str__(self):
         return self.name
+
