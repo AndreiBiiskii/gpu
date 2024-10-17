@@ -17,7 +17,6 @@ class Status(models.Model):
     name = models.ForeignKey(StatusAdd, on_delete=models.DO_NOTHING, related_name='statuses', verbose_name='Статус')
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='status',
                                   verbose_name='Статус')
-    at_date = models.DateTimeField(default=datetime.datetime.now)
 
     def __str__(self):
         return self.equipment
@@ -73,7 +72,6 @@ class EquipmentName(models.Model):
 class Position(models.Model):
     name = models.CharField(verbose_name='Позиция по ГП', blank=True, null=True)
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='positions')
-    at_date = models.DateTimeField(default=datetime.datetime.now)
 
     def __str__(self):
         return self.name
@@ -101,7 +99,6 @@ class Location(models.Model):
     name = models.CharField(max_length=255, verbose_name='Место нахождения.', blank=True, null=True)
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='locations',
                                   verbose_name='Место установки', default='NoneLocation')
-    at_date = models.DateTimeField(default=datetime.datetime.now)
 
     def __str__(self):
         return self.equipment
@@ -114,7 +111,6 @@ class Tag(models.Model):
     name = models.CharField(max_length=100, verbose_name='Тэг', blank=True, null=True)
     equipment = models.ForeignKey('Equipment', on_delete=models.CASCADE, related_name='tags', verbose_name='Тэг',
                                   default='NoneTag')
-    at_date = models.DateTimeField(default=datetime.datetime.now)
 
     def __str__(self):
         return self.name
@@ -165,7 +161,6 @@ class Si(models.Model):
                                    verbose_name='Регистрационный номер')
     result = models.BooleanField(default=True, )
     com = models.TextField(verbose_name='Комментарий', default='none')
-    at_date = models.DateTimeField(default=datetime.datetime.now)
     # def __str__(self):
     #     return self.equipment.name
 
