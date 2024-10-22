@@ -262,6 +262,7 @@ class KaitList(ListView):
     }
 
 
+
 class KaitDelete(DeleteView):
     model = Kait
     success_url = reverse_lazy('defect:kaits')
