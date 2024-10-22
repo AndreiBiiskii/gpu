@@ -31,80 +31,85 @@ menu = [
     {'title': 'Позиция', 'url_name': 'gps'},
     {'title': 'Поиск', 'url_name': 'search'},
     {'title': 'Подписанты', 'url_name': 'defect:approves'},
-    {'title': 'Подрядчики', 'url_name': 'defect:contractors'},
     {'title': 'Мастера', 'url_name': 'defect:kaits'},
-    {'title': 'Работники', 'url_name': 'defect:workers'},
+    {'title': 'Мастера по цеху', 'url_name': 'defect:workers'},
+    {'title': 'Подрядчики', 'url_name': 'defect:contractors'},
+    {'title': 'Дефекты', 'url_name': 'defect:defect_list'}
 ]
 
 
 def si_loading(request, i):
-    u = User.objects.get(username='admin')
-    StatusAdd.objects.get_or_create(name='Установлен')
-    status = StatusAdd.objects.get(name='Установлен')
-    Manufacturer.objects.get_or_create(name='manufacturer')
-    man = Manufacturer.objects.get(name='manufacturer')
-    with open(f'{BASE_DIR}/si{i}.csv', encoding='utf-8') as si:
+    # u = User.objects.get(username='admin')
+    # StatusAdd.objects.get_or_create(name='Установлен')
+    # status = StatusAdd.objects.get(name='Установлен')
+    # Manufacturer.objects.get_or_create(name='manufacturer')
+    # man = Manufacturer.objects.get(name='manufacturer')
+    with open(f'{BASE_DIR}/gp.csv', encoding='utf-8') as si:
         reader = csv.DictReader(si, delimiter=';')
+        GP.objects.all().delete()
         for row in reader:
-            if Equipment.objects.filter(Q(serial_number=row['serial_number']) & Q(model__name=row['model'])):
-                continue
-            rez = row['previous_verification'].strip().split('.')
-            str_list = [i for i in rez if i]
-            d = '{}-{}-{}'.format(str_list[2], str_list[1], str_list[0])
-            previous_verification = datetime.date.fromisoformat(d)
-            next_verification = previous_verification + relativedelta(
-                months=+(int(row['interval'])))
-            EquipmentModel.objects.get_or_create(name=row['model'].strip().capitalize())
-            m = EquipmentModel.objects.get(name=row['model'].strip().capitalize())
-            EquipmentType.objects.get_or_create(name=row['type'].strip().capitalize())
-            t = EquipmentType.objects.get(name=row['type'].strip().capitalize())
-            EquipmentName.objects.get_or_create(name=row['name'].strip().capitalize())
-            n = EquipmentName.objects.get(name=row['name'].strip().capitalize())
-            Year.objects.get_or_create(name=row['year'])
-            y = Year.objects.get(name=row['year'])
-            GP.objects.get_or_create(name=row['position'].upper())
-            try:
-                eq = Equipment.objects.create(
-                    serial_number=row['serial_number'],
-                    model=m,
-                    si_or=True,
-                    manufacturer=man,
-                    type=t,
-                    name=n,
-                    year=y,
-                )
-            except:
-                continue
-
-            Status.objects.create(name=status, equipment=eq)
-            Position.objects.create(name=row['position'].strip().upper(), equipment=eq)
-            Location.objects.create(name=row['location'].strip().capitalize(), equipment=eq)
-            Tag.objects.create(name=row['teg'].capitalize(), equipment=eq)
-            Description.objects.create(name='description'.capitalize(), equipment=eq, user=u)
-            VerificationInterval.objects.get_or_create(name=row['interval'])
-            interval = VerificationInterval.objects.get(name=row['interval'])
-            Scale.objects.get_or_create(min_scale=row['min_scale'], max_scale=row['max_scale'])
-            scale = Scale.objects.get(min_scale=row['min_scale'], max_scale=row['max_scale'])
-            Unit.objects.get_or_create(name=row['unit'])
-            unit = Unit.objects.get(name=row['unit'])
-            RegNumber.objects.get_or_create(name=row['reg_number'])
-            reg_number = RegNumber.objects.get(name=row['reg_number'])
-            if row['result'] == 'Годен':
-                rezult = True
-            else:
-                rezult = False
-            Si.objects.create(
-                equipment=eq,
-                previous_verification=previous_verification,
-                next_verification=next_verification,
-                certificate=row['certificate'],
-                interval=interval,
-                scale=scale,
-                unit=unit,
-                reg_number=reg_number,
-                result=rezult,
-                com=row['comment']
-            )
+        #     if Equipment.objects.filter(Q(serial_number=row['serial_number']) & Q(model__name=row['model'])):
+        #         continue
+        #     rez = row['previous_verification'].strip().split('.')
+        #     str_list = [i for i in rez if i]
+        #     d = '{}-{}-{}'.format(str_list[2], str_list[1], str_list[0])
+        #     previous_verification = datetime.date.fromisoformat(d)
+        #     next_verification = previous_verification + relativedelta(
+        #         months=+(int(row['interval'])))
+        #     EquipmentModel.objects.get_or_create(name=row['model'].strip().capitalize())
+        #     m = EquipmentModel.objects.get(name=row['model'].strip().capitalize())
+        #     EquipmentType.objects.get_or_create(name=row['type'].strip().capitalize())
+        #     t = EquipmentType.objects.get(name=row['type'].strip().capitalize())
+        #     EquipmentName.objects.get_or_create(name=row['name'].strip().capitalize())
+        #     n = EquipmentName.objects.get(name=row['name'].strip().capitalize())
+        #     Year.objects.get_or_create(name=row['year'])
+        #     y = Year.objects.get(name=row['year'])
+            GP.objects.get_or_create(name=row['position'].upper(), construction=row['construction'])
+            # gp = GP.objects.get(name=row['position'])
+            # gp.construction = row['construction']
+            # gp.save()
+            # try:
+            #     eq = Equipment.objects.create(
+            #         serial_number=row['serial_number'],
+            #         model=m,
+            #         si_or=True,
+            #         manufacturer=man,
+            #         type=t,
+            #         name=n,
+            #         year=y,
+            #     )
+            # except:
+            #     continue
+            #
+            # Status.objects.create(name=status, equipment=eq)
+            # Position.objects.create(name=row['position'].strip().upper(), equipment=eq)
+            # Location.objects.create(name=row['location'].strip().capitalize(), equipment=eq)
+            # Tag.objects.create(name=row['teg'].capitalize(), equipment=eq)
+            # Description.objects.create(name='description'.capitalize(), equipment=eq, user=u)
+            # VerificationInterval.objects.get_or_create(name=row['interval'])
+            # interval = VerificationInterval.objects.get(name=row['interval'])
+            # Scale.objects.get_or_create(min_scale=row['min_scale'], max_scale=row['max_scale'])
+            # scale = Scale.objects.get(min_scale=row['min_scale'], max_scale=row['max_scale'])
+            # Unit.objects.get_or_create(name=row['unit'])
+            # unit = Unit.objects.get(name=row['unit'])
+            # RegNumber.objects.get_or_create(name=row['reg_number'])
+            # reg_number = RegNumber.objects.get(name=row['reg_number'])
+            # if row['result'] == 'Годен':
+            #     rezult = True
+            # else:
+            #     rezult = False
+            # Si.objects.create(
+            #     equipment=eq,
+            #     previous_verification=previous_verification,
+            #     next_verification=next_verification,
+            #     certificate=row['certificate'],
+            #     interval=interval,
+            #     scale=scale,
+            #     unit=unit,
+            #     reg_number=reg_number,
+            #     result=rezult,
+            #     com=row['comment']
+            # )
 
         return render(request, 'device/equipments.html')
 
@@ -322,22 +327,6 @@ def equipment_list(request):
 
     }
     return render(request, 'device/equipments.html', context=data)
-
-    # else:
-    #     if not request.user.is_authenticated:
-    #         redirect('/')
-    #     eq_filter = MyFilter(request.POST,
-    #                          queryset=Equipment.objects.all()[0:0])
-    #     data = {
-    #         'title': 'Поиск',
-    #         'menu': menu,
-    #         'si': True,
-    #         'equipments': eq_filter,
-    #     }
-
-    # return render(request,
-    #               'device/equipments.html',
-    #               context=data)
 
 
 def equipment_detail(request, pk):

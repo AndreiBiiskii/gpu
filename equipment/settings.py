@@ -137,3 +137,12 @@ LOGIN_REDIRECT_URL = '/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = 'freemail_2019@mail.ru'
+EMAIL_HOST_PASSWORD = 'dwAAdanBBumBtdrznvHA'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

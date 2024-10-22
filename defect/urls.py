@@ -1,12 +1,15 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from defect.views import DefectAdd, ApproveAdd, ApproveList,  ApproveDelete, ApproveUpdate, ContractorAdd, \
-    ContractorList,  ContractorDelete, ContractorUpdate, KaitAdd, KaitList,  KaitDelete, \
-    KaitUpdate, WorkerAdd, WorkerList,  WorkerDelete, WorkerUpdate
+from defect.views import DefectAdd, ApproveAdd, ApproveList, ApproveDelete, ApproveUpdate, ContractorAdd, \
+    ContractorList, ContractorDelete, ContractorUpdate, KaitAdd, KaitList, KaitDelete, \
+    KaitUpdate, WorkerAdd, WorkerList, WorkerDelete, WorkerUpdate, defect_list, defect_list, DefectUpdate, send_act
 
 urlpatterns = [
     path('defect_add/<int:pk>/', DefectAdd.as_view(), name='defect_add'),
+    path('defect_list', defect_list, name='defect_list'),
+    path('defect_update/<int:pk>/', DefectUpdate.as_view(), name='defect_update'),
+    path('send_act/<int:pk> ', send_act, name='send_act'),
 
 ]
 urlpatterns += [path('approve/', ApproveAdd.as_view(), name='approve_add'),

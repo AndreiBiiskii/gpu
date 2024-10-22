@@ -1,10 +1,12 @@
 {% extends 'device/base.html' %}
 {% block content%}
-    <br>
+<br>
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="button-style2"> Сохранить </button>
+    <table>
+        {{ form.as_table }}
+    </table>
+    <button type="submit" class="button-style2"> Сохранить</button>
     <a href="{% url 'search' %}" class="button-style2">К поиску</a>
 </form>
 {% endblock %}

@@ -6,27 +6,37 @@ from device.models import Equipment
 
 class Defect(models.Model):
     defect = models.ForeignKey(Equipment, blank=True, null=True, on_delete=models.DO_NOTHING, related_name='equipment')
-    serial_number = models.CharField(max_length=100)
-    gp = models.CharField(max_length=50, default='none')
-    location = models.CharField(max_length=255)
-    defect_act = models.CharField(max_length=20, verbose_name='Номер деффектного акта', blank=True, null=True,
+    serial_number = models.CharField(max_length=100, verbose_name='Серийный номер')
+    gp = models.CharField(max_length=50, default='none', verbose_name='Поз. по ГП')
+    location = models.CharField(max_length=255, verbose_name='Место установки')
+    tag = models.CharField(max_length=50, verbose_name='Тэг', blank=True)
+    defect_act = models.CharField(max_length=50, verbose_name='Номер деффектного акта', blank=True, null=True,
                                   unique=True)
     project = models.CharField(max_length=100, verbose_name='Наименование проекта')
     short_description = models.TextField(verbose_name='Краткое описание деффекта')
     causes = models.TextField(verbose_name='Причина отказа')
-    status = models.CharField(verbose_name='Статус')
+    status = models.TextField(verbose_name='Статус')
     fix = models.TextField(verbose_name='Что требуется для устранения', default='None')
     operating_time = models.SmallIntegerField(verbose_name='Время наработки')
     invest_letter = models.CharField(max_length=255, verbose_name='Номер письма в Инвест')
     approve = models.ForeignKey('Approve', on_delete=models.DO_NOTHING, related_name='approve',
-                                verbose_name='Утверждающий')
+                                verbose_name='Утверждающий', blank=True, null=True)
     contractor = models.ForeignKey('Contractor', on_delete=models.DO_NOTHING, related_name='contractor',
-                                   verbose_name='Подрядчик')
-    kait = models.ForeignKey('Kait', on_delete=models.DO_NOTHING, related_name='kait', verbose_name='Мастер по КАиТ')
-    worker = models.ForeignKey('Worker', on_delete=models.DO_NOTHING, related_name='worker', verbose_name='Мастер цеха')
+                                   verbose_name='Подрядчик', )
+    kait = models.ForeignKey('Kait', on_delete=models.DO_NOTHING, related_name='kait', verbose_name='Мастер по КАиТ',
+                             blank=True, null=True)
+    worker = models.ForeignKey('Worker', on_delete=models.DO_NOTHING, related_name='worker', verbose_name='Мастер цеха',
+                               blank=True, null=True)
+    at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
 
     def get_absolute_url(self):
-        return reverse('defect_detail', kwargs={'pk': self.pk})
+        return reverse('defect:defect_update', kwargs={'pk': self.pk})
+
+    def str(self):
+        return self.serial_number
+
+    class Meta:
+        verbose_name_plural = 'Дефекты'
 
 
 class DefectAct(models.Model):
@@ -94,11 +104,10 @@ class Kait(models.Model):
 
 
 class Worker(models.Model):
-    name = models.CharField(max_length=30, verbose_name='ФИО мастера цеха', unique=True)
+    name = models.CharField(max_length=30, verbose_name='ФИО слесаря', unique=True)
     job_title = models.CharField(max_length=100, verbose_name='Должность')
     organization = models.CharField(max_length=100, verbose_name='Организация')
 
-    # worker = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='workers', blank=True, null=True)
     def get_absolute_url(self):
         return reverse('defect:worker_detail', kwargs={'pk': self.pk})
 
@@ -106,4 +115,4 @@ class Worker(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'Мастера цеха'
+        verbose_name_plural = 'Слесарь'
