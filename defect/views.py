@@ -148,7 +148,7 @@ class ApproveAdd(CreateView):
     model = Approve
     fields = '__all__'
     success_url = reverse_lazy('defect:approves')
-    template_name = 'approve/approve_add.html'
+    template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Добавить подписанта',
         'menu': menu,
@@ -157,7 +157,7 @@ class ApproveAdd(CreateView):
 
 class ApproveList(ListView):
     model = Approve
-    template_name = 'approve/approve_list.html'
+    template_name = 'defect/approve_list.html'
     context_object_name = 'objects'
     extra_context = {
         'title': 'Добавить подписанта',
@@ -171,7 +171,7 @@ class ApproveList(ListView):
 class ApproveDelete(DeleteView):
     model = Approve
     success_url = reverse_lazy('defect:approves')
-    template_name = 'approve/approve_delete.html'
+    template_name = 'defect/approve_delete.html'
     context_object_name = 'object'
     extra_context = {
         'title': 'Удалить подписанта',
@@ -183,7 +183,7 @@ class ApproveUpdate(UpdateView):
     model = Approve
     fields = '__all__'
     success_url = reverse_lazy('defect:approves')
-    template_name = 'approve/approve_add.html'
+    template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Изменить подписанта',
         'menu': menu,
@@ -195,7 +195,7 @@ class ContractorAdd(CreateView):
     model = Contractor
     fields = '__all__'
     success_url = reverse_lazy('defect:contractors')
-    template_name = 'approve/approve_add.html'
+    template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Добавить подрядчика',
         'menu': menu,
@@ -204,7 +204,7 @@ class ContractorAdd(CreateView):
 
 class ContractorList(ListView):
     model = Contractor
-    template_name = 'approve/approve_list.html'
+    template_name = 'defect/approve_list.html'
     context_object_name = 'objects'
     extra_context = {
         'title': 'Добавить подрядчика',
@@ -218,7 +218,7 @@ class ContractorList(ListView):
 class ContractorDelete(DeleteView):
     model = Contractor
     success_url = reverse_lazy('defect:contractors')
-    template_name = 'approve/approve_delete.html'
+    template_name = 'defect/approve_delete.html'
     context_object_name = 'object'
     extra_context = {
         'title': 'Удалить подрядчика',
@@ -230,7 +230,7 @@ class ContractorUpdate(UpdateView):
     model = Contractor
     fields = '__all__'
     success_url = reverse_lazy('defect:contractors')
-    template_name = 'approve/approve_add.html'
+    template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Измененить подрядчика',
         'menu': menu,
@@ -242,7 +242,7 @@ class KaitAdd(CreateView):
     model = Kait
     fields = '__all__'
     success_url = reverse_lazy('defect:kaits')
-    template_name = 'approve/approve_add.html'
+    template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Добавить мастера по КАиТ',
         'menu': menu,
@@ -251,7 +251,7 @@ class KaitAdd(CreateView):
 
 class KaitList(ListView):
     model = Kait
-    template_name = 'approve/approve_list.html'
+    template_name = 'defect/approve_list.html'
     context_object_name = 'objects'
     extra_context = {
         'title': 'Добавить мастера по КАиТ',
@@ -265,7 +265,7 @@ class KaitList(ListView):
 class KaitDelete(DeleteView):
     model = Kait
     success_url = reverse_lazy('defect:kaits')
-    template_name = 'approve/approve_delete.html'
+    template_name = 'defect/approve_delete.html'
     context_object_name = 'object'
     extra_context = {
         'title': 'Удалить мастера по КАиТ',
@@ -277,7 +277,7 @@ class KaitUpdate(UpdateView):
     model = Kait
     fields = '__all__'
     success_url = reverse_lazy('defect:approves')
-    template_name = 'approve/approve_add.html'
+    template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Изменить мастера по КАиТ',
         'menu': menu,
@@ -289,7 +289,7 @@ class WorkerAdd(CreateView):
     model = Worker
     fields = '__all__'
     success_url = reverse_lazy('defect:workers')
-    template_name = 'approve/approve_add.html'
+    template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Добавить мастера по цеху',
         'menu': menu,
@@ -299,7 +299,7 @@ class WorkerAdd(CreateView):
 
 class WorkerList(ListView):
     model = Worker
-    template_name = 'approve/approve_list.html'
+    template_name = 'defect/approve_list.html'
     context_object_name = 'objects'
     extra_context = {
         'title': 'Мастера цеха',
@@ -313,7 +313,7 @@ class WorkerList(ListView):
 class WorkerDelete(DeleteView):
     model = Worker
     success_url = reverse_lazy('defect:workers')
-    template_name = 'approve/approve_delete.html'
+    template_name = 'defect/approve_delete.html'
     context_object_name = 'object'
     extra_context = {
         'title': 'Удалить мастера по цеху',
@@ -325,7 +325,7 @@ class WorkerUpdate(UpdateView):
     model = Worker
     fields = '__all__'
     success_url = reverse_lazy('defect:workers')
-    template_name = 'approve/approve_add.html'
+    template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Изменить мастера по цеху',
         'menu': menu,
