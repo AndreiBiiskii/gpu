@@ -44,7 +44,7 @@ def si_loading(request, i):
     # status = StatusAdd.objects.get(name='Установлен')
     # Manufacturer.objects.get_or_create(name='manufacturer')
     # man = Manufacturer.objects.get(name='manufacturer')
-    with open(f'{BASE_DIR}/gp.csv', encoding='utf-8') as si:
+    with open('./gp.csv', encoding='utf-8') as si:
         reader = csv.DictReader(si, delimiter=';')
         GP.objects.all().delete()
         for row in reader:
