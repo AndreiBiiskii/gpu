@@ -20,7 +20,10 @@ settings_local.py
 ### OS specific ###
 .DS_Store
 bag.csv
+Дефектные акты УКПГ-2 в.4.xlsx
 
 media/
 deploy.sh
 deploy.exp
+migrations/
+static/
