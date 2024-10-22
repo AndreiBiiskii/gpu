@@ -249,6 +249,7 @@ class KaitAdd(CreateView):
     }
 
 
+
 class KaitList(ListView):
     model = Kait
     template_name = 'defect/approve_list.html'
@@ -260,7 +261,6 @@ class KaitList(ListView):
         'add_delete': 'defect:kait_delete',
         'add_update': 'defect:kait_update'
     }
-
 
 
 class KaitDelete(DeleteView):

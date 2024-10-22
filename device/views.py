@@ -114,7 +114,6 @@ def si_loading(request, i):
 
         return render(request, 'device/equipments.html')
 
-
 def IM(request):
     u = User.objects.get(username='admin')
     with open('./im.csv') as f:
