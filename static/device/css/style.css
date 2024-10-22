@@ -83,7 +83,8 @@ eq:active {
   padding: 5px 5px;
   margin-left:10px;
   margin-top:10px;
-  width:88px;
+  width:auto;
+  font-size:20px;
   background: #f2f2f2;
   border: 1px solid #1E90FF;
   color: ##00BFFF;
@@ -93,10 +94,8 @@ eq:active {
   color:#00BFFF;
   width:auto;
 }
-
 .button-style2:hover, .button-style:focus {
   background: #e2e2f2;
-
 }
 
 .button-style3 {
@@ -104,7 +103,7 @@ eq:active {
   padding: 5px 5px;
   margin-left:10px;
   margin-top:10px;
-  width:88px;
+  width:auto;
   background: #f2f2f2;
   border: 1px solid #A52A2A;
   color: #800000;
@@ -365,20 +364,38 @@ width: auto;
 background: #454547;
 }
 
-table {
-	border-spacing: 10px;
-	border-collapse: separate;
-	width: 400px;
+table{
+    border-collapse: collapse;
+    margin-top: 10px;
+    border-spacing: 0;
+    font-size: 14px;
+    overflow-x: auto;
+    word-wrap: break-word;
 }
-td {
+table th {
+    min-width:100px;`
+    text-align: left;
+	padding: 5px;
+	background: #efefef;
+	border: 1px solid #ddddff;
+}
+table td{
+    font-size: 14px;
+    padding: 5px;
+	padding: 5px 10px;
+	border: 1px solid #eee;
 	text-align: left;
+	border: 1.5px solid black;
+    padding: 4px;
+    text-align: left;
+}
+table tbody tr:nth-child(odd){
+	background: #fff;
+}
+table tbody tr:nth-child(even){
+	background: #dddddd;
 }
 
-th{
-border-collapse: collapse;
-width:30px;
-text-align:left;
-}
 
 .type2:focus{
   caret-color: red;

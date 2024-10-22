@@ -18,7 +18,6 @@ def defect_act(request, poz, n):
     da = f'КАиТ-{poz}-{datetime.now().date()}-{n}'
     return da
 
-
 def send_act(request, pk):
     de = Defect.objects.get(pk=pk)
     eq = Equipment.objects.get(serial_number=de.serial_number)
@@ -236,7 +235,6 @@ class ContractorUpdate(UpdateView):
         'menu': menu,
         'add': 'defect:contractor_add'
     }
-
 
 class KaitAdd(CreateView):
     model = Kait
