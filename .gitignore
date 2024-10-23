@@ -25,5 +25,7 @@ bag.csv
 media/
 deploy.sh
 deploy.exp
-migrations/
-static/
+defect/migrations/
+device/migrations/
+
+
