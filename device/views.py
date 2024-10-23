@@ -44,7 +44,6 @@ def si_loading(request, i):
     # status = StatusAdd.objects.get(name='Установлен')
     # Manufacturer.objects.get_or_create(name='manufacturer')
     # man = Manufacturer.objects.get(name='manufacturer')
-
     with open('./gp.csv', encoding='utf-8') as si:
         reader = csv.DictReader(si, delimiter=';')
         GP.objects.all().delete()
@@ -113,6 +112,7 @@ def si_loading(request, i):
             # )
 
         return render(request, 'device/equipments.html')
+
 
 def IM(request):
     u = User.objects.get(username='admin')
