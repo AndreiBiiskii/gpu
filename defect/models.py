@@ -28,7 +28,6 @@ class Defect(models.Model):
     worker = models.ForeignKey('Worker', on_delete=models.DO_NOTHING, related_name='worker', verbose_name='Мастер цеха',
                                blank=True, null=True)
     at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
-    test = models.CharField(max_length=10)
 
     def get_absolute_url(self):
         return reverse('defect:defect_update', kwargs={'pk': self.pk})
