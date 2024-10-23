@@ -94,7 +94,7 @@ class MyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Defect
-        fields = ['serial_number', ]
+        fields = '__all__'
 
 
 def defect_list(request):
