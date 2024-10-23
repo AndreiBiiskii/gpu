@@ -97,14 +97,6 @@ class MyFilter(django_filters.FilterSet):
         fields = ['serial_number', ]
 
 
-def get_last_id_from_excel(filename, sheetname="Sheet1", id_col="C"):
-    wb = load_workbook('../act.xlsx')
-    ws = wb[sheetname]
-    ws['J5'] = 'value'
-    wb.close()
-    return ws
-
-
 def defect_list(request):
     if not request.user.is_authenticated:
         redirect('/')
