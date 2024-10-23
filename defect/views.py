@@ -54,7 +54,7 @@ def send_act(request, pk):
 
 class DefectAdd(CreateView):
     model = Defect
-    fields = ( 'gp', 'location', 'tag', 'defect_act', 'project', 'short_description', 'causes',
+    fields = ('serial_number', 'gp', 'location', 'tag', 'defect_act', 'project', 'short_description', 'causes',
               'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
     success_url = '/'
     template_name = 'defect/defect_add.html'
@@ -124,7 +124,7 @@ def defect_list(request):
 
 class DefectUpdate(UpdateView):
     model = Defect
-    fields = ( 'gp', 'location', 'tag', 'defect_act', 'project', 'short_description', 'causes',
+    fields = ('serial_number', 'gp', 'location', 'tag', 'defect_act', 'project', 'short_description', 'causes',
               'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
     success_url = reverse_lazy('defect:defect_list')
     template_name = 'defect/defect_update.html'
