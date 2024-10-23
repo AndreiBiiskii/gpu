@@ -36,9 +36,8 @@
     <tbody>
     {%for object in objects.qs%}
     <tr>
-        <td> <a href="{% url 'defect:send_act' object.pk %}"> Акт</a> </td>
+        <td><a href="{{ object.get_absolute_url}}"> {{object.serial_number}}</a> <a href="{% url 'defect:send_act' object.pk %}"> Акт</a> </td>
         <td>{{object.gp}}</td>
-        <td>{{object.location}}</td>
         <td>{{object.tag}}</td>
         <td>{{object.defect_act}}</td>
         <td>{{object.project}}</td>
