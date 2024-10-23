@@ -23,8 +23,6 @@ bag.csv
 Дефектные акты УКПГ-2 в.4.xlsx
 
 media/
-deploy.sh
-deploy.exp
 defect/migrations/
 device/migrations/
 
