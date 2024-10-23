@@ -7,7 +7,7 @@ from device.models import Equipment
 class Defect(models.Model):
     defect = models.ForeignKey(Equipment, blank=True, null=True, on_delete=models.DO_NOTHING, related_name='equipment')
     serial_number = models.CharField(max_length=100, verbose_name='Серийный номер')
-    gp = models.CharField(max_length=50, default='none', verbose_name='Поз. по ГП')
+    # gp = models.CharField(max_length=50, verbose_name='Поз. по ГП')
     location = models.CharField(max_length=255, verbose_name='Место установки')
     tag = models.CharField(max_length=50, verbose_name='Тэг', blank=True)
     defect_act = models.CharField(max_length=50, verbose_name='Номер деффектного акта', blank=True, null=True,
