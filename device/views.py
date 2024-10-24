@@ -30,11 +30,11 @@ menu = [
     {'title': 'Года выпуска', 'url_name': 'years'},
     {'title': 'Позиция', 'url_name': 'gps'},
     {'title': 'Поиск', 'url_name': 'search'},
-    {'title': 'Подписанты', 'url_name': 'defect:approves'},
-    {'title': 'Мастера', 'url_name': 'defect:kaits'},
-    {'title': 'Мастера по цеху', 'url_name': 'defect:workers'},
-    {'title': 'Подрядчики', 'url_name': 'defect:contractors'},
-    {'title': 'Дефекты', 'url_name': 'defect:defect_list'}
+    {'title': 'Подписанты', 'url_name': 'defectone:approves'},
+    {'title': 'Мастера', 'url_name': 'defectone:kaits'},
+    {'title': 'Мастера по цеху', 'url_name': 'defectone:workers'},
+    {'title': 'Подрядчики', 'url_name': 'defectone:contractors'},
+    {'title': 'Дефекты', 'url_name': 'defectone:defect_list'}
 ]
 
 

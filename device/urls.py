@@ -7,7 +7,7 @@ from .views import *
 urlpatterns = [
     path('', equipment_list, name='search'),
     path('users/', include(('users.urls', 'users'), namespace='users')),
-    path('defects/', include(('defect.urls', 'defect'), namespace='defect')),
+    path('defects/', include(('defectone.urls', 'defectone'), namespace='defectone')),
     path('draft', DraftCreate.as_view(), name='draft'),
     path('draft_list/', DraftList.as_view(), name='draft_list'),
     path('draft_detail/<int:pk>', DraftDetail.as_view(), name='draft_detail'),

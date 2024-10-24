@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from defect.models import Approve
+from defectone.models import Approve
 
 
 class PersonForm(ModelForm):

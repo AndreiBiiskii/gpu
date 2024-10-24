@@ -28,10 +28,9 @@ class Defect(models.Model):
     worker = models.ForeignKey('Worker', on_delete=models.DO_NOTHING, related_name='worker', verbose_name='Мастер цеха',
                                blank=True, null=True)
     at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
-    nnnnn = models.CharField(max_length=10)
 
     def get_absolute_url(self):
-        return reverse('defect:defect_update', kwargs={'pk': self.pk})
+        return reverse('defectone:defect_update', kwargs={'pk': self.pk})
 
     def str(self):
         return self.serial_number
@@ -44,10 +43,10 @@ class DefectAct(models.Model):
     defect_act = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='acts')
 
 
-class Project(models.Model):
+class Projects(models.Model):
     name = models.CharField(max_length=100, verbose_name='Наименование проекта')
     gp = models.CharField(max_length=100, verbose_name='ГП')
-    year = models.DateField(auto_now_add=True)
+    year = models.DateField(auto_now_add=False, blank=True)
 
     def __str__(self):
         return self.name
@@ -64,7 +63,7 @@ class Approve(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('defect:approve_detail', kwargs={'pk': self.pk})
+        return reverse('defectone:approve_detail', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name_plural = 'Утверждающие'
@@ -78,7 +77,7 @@ class Contractor(models.Model):
     # contractor = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='contractors', blank=True,
     # null = True)
     def get_absolute_url(self):
-        return reverse('defect:contractor_detail', kwargs={'pk': self.pk})
+        return reverse('defectone:contractor_detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name
@@ -94,7 +93,7 @@ class Kait(models.Model):
 
     # kait = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='kaits', blank=True, null=True)
     def get_absolute_url(self):
-        return reverse('defect:kait_detail', kwargs={'pk': self.pk})
+        return reverse('defectone:kait_detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name
@@ -110,7 +109,7 @@ class Worker(models.Model):
     organization = models.CharField(max_length=100, verbose_name='Организация')
 
     def get_absolute_url(self):
-        return reverse('defect:worker_detail', kwargs={'pk': self.pk})
+        return reverse('defectone:worker_detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name

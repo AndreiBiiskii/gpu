@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'device.apps.DeviceConfig',
     'users.apps.UsersConfig',
-    'defect.apps.DefectConfig',
+    'defectone.apps.DefectConfig',
     'django_filters',
 ]
 

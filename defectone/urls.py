@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from defect.views import DefectAdd, ApproveAdd, ApproveList, ApproveDelete, ApproveUpdate, ContractorAdd, \
+from defectone.views import DefectAdd, ApproveAdd, ApproveList, ApproveDelete, ApproveUpdate, ContractorAdd, \
     ContractorList, ContractorDelete, ContractorUpdate, KaitAdd, KaitList, KaitDelete, \
     KaitUpdate, WorkerAdd, WorkerList, WorkerDelete, WorkerUpdate, defect_list, defect_list, DefectUpdate, send_act
 

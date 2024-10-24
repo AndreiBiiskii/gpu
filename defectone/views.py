@@ -8,7 +8,7 @@ from django.template.context_processors import request
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from rest_framework.reverse import reverse_lazy
 from openpyxl import load_workbook
-from defect.models import Defect, Approve, Contractor, Kait, Worker
+from defectone.models import Defect, Approve, Contractor, Kait, Worker
 from device.models import Equipment, Position, Location, Status, Description, GP, Tag
 from device.views import menu
 from equipment.settings import BASE_DIR
@@ -49,7 +49,7 @@ def send_act(request, pk):
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(f'{BASE_DIR}/act1.xlsx')
     msg.send()
-    return redirect(reverse_lazy('defect:defect_list'))
+    return redirect(reverse_lazy('defectone:defect_list'))
 
 
 class DefectAdd(CreateView):
@@ -81,7 +81,7 @@ class MyFilter(django_filters.FilterSet):
     serial_number = django_filters.CharFilter(lookup_expr='icontains', label='Серийный номер')
 
     gp = django_filters.CharFilter(field_name='gp',
-                                   lookup_expr='exact', label='Позиция:', )
+                                   lookup_expr='icontains', label='Позиция:', )
     tag = django_filters.CharFilter(field_name='tag',
                                     lookup_expr='icontains', label='Тэг:', )
 
@@ -94,7 +94,7 @@ class MyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Defect
-        fields = '__all__'
+        fields = ['serial_number', 'gp', 'at_date', 'tag']
 
 
 def defect_list(request):
@@ -126,19 +126,19 @@ class DefectUpdate(UpdateView):
     model = Defect
     fields = ('serial_number', 'gp', 'location', 'tag', 'defect_act', 'project', 'short_description', 'causes',
               'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
-    success_url = reverse_lazy('defect:defect_list')
+    success_url = reverse_lazy('defectone:defect_list')
     template_name = 'defect/defect_update.html'
     extra_context = {
         'title': 'Изменить данные',
         'menu': menu,
-        # 'add': 'defect:approve_add'
+        # 'add': 'defectone:approve_add'
     }
 
 
 class ApproveAdd(CreateView):
     model = Approve
     fields = '__all__'
-    success_url = reverse_lazy('defect:approves')
+    success_url = reverse_lazy('defectone:approves')
     template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Добавить подписанта',
@@ -153,15 +153,15 @@ class ApproveList(ListView):
     extra_context = {
         'title': 'Добавить подписанта',
         'menu': menu,
-        'add': 'defect:approve_add',
-        'add_delete': 'defect:approve_delete',
-        'add_update': 'defect:approve_update'
+        'add': 'defectone:approve_add',
+        'add_delete': 'defectone:approve_delete',
+        'add_update': 'defectone:approve_update'
     }
 
 
 class ApproveDelete(DeleteView):
     model = Approve
-    success_url = reverse_lazy('defect:approves')
+    success_url = reverse_lazy('defectone:approves')
     template_name = 'defect/approve_delete.html'
     context_object_name = 'object'
     extra_context = {
@@ -173,19 +173,19 @@ class ApproveDelete(DeleteView):
 class ApproveUpdate(UpdateView):
     model = Approve
     fields = '__all__'
-    success_url = reverse_lazy('defect:approves')
+    success_url = reverse_lazy('defectone:approves')
     template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Изменить подписанта',
         'menu': menu,
-        'add': 'defect:approve_add'
+        'add': 'defectone:approve_add'
     }
 
 
 class ContractorAdd(CreateView):
     model = Contractor
     fields = '__all__'
-    success_url = reverse_lazy('defect:contractors')
+    success_url = reverse_lazy('defectone:contractors')
     template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Добавить подрядчика',
@@ -200,15 +200,15 @@ class ContractorList(ListView):
     extra_context = {
         'title': 'Добавить подрядчика',
         'menu': menu,
-        'add': 'defect:contractor_add',
-        'add_delete': 'defect:contractor_delete',
-        'add_update': 'defect:contractor_update'
+        'add': 'defectone:contractor_add',
+        'add_delete': 'defectone:contractor_delete',
+        'add_update': 'defectone:contractor_update'
     }
 
 
 class ContractorDelete(DeleteView):
     model = Contractor
-    success_url = reverse_lazy('defect:contractors')
+    success_url = reverse_lazy('defectone:contractors')
     template_name = 'defect/approve_delete.html'
     context_object_name = 'object'
     extra_context = {
@@ -220,18 +220,18 @@ class ContractorDelete(DeleteView):
 class ContractorUpdate(UpdateView):
     model = Contractor
     fields = '__all__'
-    success_url = reverse_lazy('defect:contractors')
+    success_url = reverse_lazy('defectone:contractors')
     template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Измененить подрядчика',
         'menu': menu,
-        'add': 'defect:contractor_add'
+        'add': 'defectone:contractor_add'
     }
 
 class KaitAdd(CreateView):
     model = Kait
     fields = '__all__'
-    success_url = reverse_lazy('defect:kaits')
+    success_url = reverse_lazy('defectone:kaits')
     template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Добавить мастера по КАиТ',
@@ -247,15 +247,15 @@ class KaitList(ListView):
     extra_context = {
         'title': 'Добавить мастера по КАиТ',
         'menu': menu,
-        'add': 'defect:kait_add',
-        'add_delete': 'defect:kait_delete',
-        'add_update': 'defect:kait_update'
+        'add': 'defectone:kait_add',
+        'add_delete': 'defectone:kait_delete',
+        'add_update': 'defectone:kait_update'
     }
 
 
 class KaitDelete(DeleteView):
     model = Kait
-    success_url = reverse_lazy('defect:kaits')
+    success_url = reverse_lazy('defectone:kaits')
     template_name = 'defect/approve_delete.html'
     context_object_name = 'object'
     extra_context = {
@@ -267,19 +267,19 @@ class KaitDelete(DeleteView):
 class KaitUpdate(UpdateView):
     model = Kait
     fields = '__all__'
-    success_url = reverse_lazy('defect:approves')
+    success_url = reverse_lazy('defectone:approves')
     template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Изменить мастера по КАиТ',
         'menu': menu,
-        'add': 'defect:kait_add'
+        'add': 'defectone:kait_add'
     }
 
 
 class WorkerAdd(CreateView):
     model = Worker
     fields = '__all__'
-    success_url = reverse_lazy('defect:workers')
+    success_url = reverse_lazy('defectone:workers')
     template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Добавить мастера по цеху',
@@ -295,15 +295,15 @@ class WorkerList(ListView):
     extra_context = {
         'title': 'Мастера цеха',
         'menu': menu,
-        'add': 'defect:worker_add',
-        'add_delete': 'defect:worker_delete',
-        'add_update': 'defect:worker_update'
+        'add': 'defectone:worker_add',
+        'add_delete': 'defectone:worker_delete',
+        'add_update': 'defectone:worker_update'
     }
 
 
 class WorkerDelete(DeleteView):
     model = Worker
-    success_url = reverse_lazy('defect:workers')
+    success_url = reverse_lazy('defectone:workers')
     template_name = 'defect/approve_delete.html'
     context_object_name = 'object'
     extra_context = {
@@ -315,10 +315,10 @@ class WorkerDelete(DeleteView):
 class WorkerUpdate(UpdateView):
     model = Worker
     fields = '__all__'
-    success_url = reverse_lazy('defect:workers')
+    success_url = reverse_lazy('defectone:workers')
     template_name = 'defect/approve_add.html'
     extra_context = {
         'title': 'Изменить мастера по цеху',
         'menu': menu,
-        'add': 'defect:worker_add'
+        'add': 'defectone:worker_add'
     }
