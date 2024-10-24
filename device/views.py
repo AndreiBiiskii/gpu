@@ -3,17 +3,19 @@ import datetime
 import os
 import django_filters
 from dateutil.relativedelta import relativedelta
-from django import forms
-from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, PasswordChangeView
-from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
-# from django.template.context_processors import request
+from datetime import timedelta
+from django import forms
+from django.db.models import Q
+from django.utils.timezone import now
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DetailView
+from django_filters.filters import _truncate
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
@@ -39,77 +41,77 @@ menu = [
 
 
 def si_loading(request, i):
-    # u = User.objects.get(username='admin')
-    # StatusAdd.objects.get_or_create(name='Установлен')
-    # status = StatusAdd.objects.get(name='Установлен')
-    # Manufacturer.objects.get_or_create(name='manufacturer')
-    # man = Manufacturer.objects.get(name='manufacturer')
-    with open('./gp.csv', encoding='utf-8') as si:
+    u = User.objects.get(username='admin')
+    StatusAdd.objects.get_or_create(name='Установлен')
+    status = StatusAdd.objects.get(name='Установлен')
+    Manufacturer.objects.get_or_create(name='manufacturer')
+    man = Manufacturer.objects.get(name='manufacturer')
+    with open(f'./si{i}.csv', encoding='utf-8') as si:
         reader = csv.DictReader(si, delimiter=';')
-        GP.objects.all().delete()
+        # GP.objects.all().delete()
         for row in reader:
-        #     if Equipment.objects.filter(Q(serial_number=row['serial_number']) & Q(model__name=row['model'])):
-        #         continue
-        #     rez = row['previous_verification'].strip().split('.')
-        #     str_list = [i for i in rez if i]
-        #     d = '{}-{}-{}'.format(str_list[2], str_list[1], str_list[0])
-        #     previous_verification = datetime.date.fromisoformat(d)
-        #     next_verification = previous_verification + relativedelta(
-        #         months=+(int(row['interval'])))
-        #     EquipmentModel.objects.get_or_create(name=row['model'].strip().capitalize())
-        #     m = EquipmentModel.objects.get(name=row['model'].strip().capitalize())
-        #     EquipmentType.objects.get_or_create(name=row['type'].strip().capitalize())
-        #     t = EquipmentType.objects.get(name=row['type'].strip().capitalize())
-        #     EquipmentName.objects.get_or_create(name=row['name'].strip().capitalize())
-        #     n = EquipmentName.objects.get(name=row['name'].strip().capitalize())
-        #     Year.objects.get_or_create(name=row['year'])
-        #     y = Year.objects.get(name=row['year'])
-            GP.objects.get_or_create(name=row['position'].upper(), construction=row['construction'])
-            # gp = GP.objects.get(name=row['position'])
-            # gp.construction = row['construction']
-            # gp.save()
-            # try:
-            #     eq = Equipment.objects.create(
-            #         serial_number=row['serial_number'],
-            #         model=m,
-            #         si_or=True,
-            #         manufacturer=man,
-            #         type=t,
-            #         name=n,
-            #         year=y,
-            #     )
-            # except:
-            #     continue
-            #
-            # Status.objects.create(name=status, equipment=eq)
-            # Position.objects.create(name=row['position'].strip().upper(), equipment=eq)
-            # Location.objects.create(name=row['location'].strip().capitalize(), equipment=eq)
-            # Tag.objects.create(name=row['teg'].capitalize(), equipment=eq)
-            # Description.objects.create(name='description'.capitalize(), equipment=eq, user=u)
-            # VerificationInterval.objects.get_or_create(name=row['interval'])
-            # interval = VerificationInterval.objects.get(name=row['interval'])
-            # Scale.objects.get_or_create(min_scale=row['min_scale'], max_scale=row['max_scale'])
-            # scale = Scale.objects.get(min_scale=row['min_scale'], max_scale=row['max_scale'])
-            # Unit.objects.get_or_create(name=row['unit'])
-            # unit = Unit.objects.get(name=row['unit'])
-            # RegNumber.objects.get_or_create(name=row['reg_number'])
-            # reg_number = RegNumber.objects.get(name=row['reg_number'])
-            # if row['result'] == 'Годен':
-            #     rezult = True
-            # else:
-            #     rezult = False
-            # Si.objects.create(
-            #     equipment=eq,
-            #     previous_verification=previous_verification,
-            #     next_verification=next_verification,
-            #     certificate=row['certificate'],
-            #     interval=interval,
-            #     scale=scale,
-            #     unit=unit,
-            #     reg_number=reg_number,
-            #     result=rezult,
-            #     com=row['comment']
-            # )
+            if Equipment.objects.filter(Q(serial_number=row['serial_number']) & Q(model__name=row['model'])):
+                continue
+            rez = row['previous_verification'].strip().split('.')
+            str_list = [i for i in rez if i]
+            d = '{}-{}-{}'.format(str_list[2], str_list[1], str_list[0])
+            previous_verification = datetime.date.fromisoformat(d)
+            next_verification = previous_verification + relativedelta(
+                months=+(int(row['interval'])))
+            EquipmentModel.objects.get_or_create(name=row['model'].strip().capitalize())
+            m = EquipmentModel.objects.get(name=row['model'].strip().capitalize())
+            EquipmentType.objects.get_or_create(name=row['type'].strip().capitalize())
+            t = EquipmentType.objects.get(name=row['type'].strip().capitalize())
+            EquipmentName.objects.get_or_create(name=row['name'].strip().capitalize())
+            n = EquipmentName.objects.get(name=row['name'].strip().capitalize())
+            Year.objects.get_or_create(name=row['year'])
+            y = Year.objects.get(name=row['year'])
+            #     GP.objects.get_or_create(name=row['position'].upper(), construction=row['construction'])
+            #     gp = GP.objects.get(name=row['position'])
+            #     gp.construction = row['construction']
+            #     gp.save()
+            try:
+                eq = Equipment.objects.create(
+                    serial_number=row['serial_number'],
+                    model=m,
+                    si_or=True,
+                    manufacturer=man,
+                    type=t,
+                    name=n,
+                    year=y,
+                )
+            except:
+                continue
+
+            Status.objects.create(name=status, equipment=eq)
+            Position.objects.create(name=row['position'].strip().upper(), equipment=eq)
+            Location.objects.create(name=row['location'].strip().capitalize(), equipment=eq)
+            Tag.objects.create(name=row['teg'].capitalize(), equipment=eq)
+            Description.objects.create(name='description'.capitalize(), equipment=eq, user=u)
+            VerificationInterval.objects.get_or_create(name=row['interval'])
+            interval = VerificationInterval.objects.get(name=row['interval'])
+            Scale.objects.get_or_create(min_scale=row['min_scale'], max_scale=row['max_scale'])
+            scale = Scale.objects.get(min_scale=row['min_scale'], max_scale=row['max_scale'])
+            Unit.objects.get_or_create(name=row['unit'])
+            unit = Unit.objects.get(name=row['unit'])
+            RegNumber.objects.get_or_create(name=row['reg_number'])
+            reg_number = RegNumber.objects.get(name=row['reg_number'])
+            if row['result'] == 'Годен':
+                rezult = True
+            else:
+                rezult = False
+            Si.objects.create(
+                equipment=eq,
+                previous_verification=previous_verification,
+                next_verification=next_verification,
+                certificate=row['certificate'],
+                interval=interval,
+                scale=scale,
+                unit=unit,
+                reg_number=reg_number,
+                result=rezult,
+                com=row['comment']
+            )
 
         return render(request, 'device/equipments.html')
 
@@ -228,14 +230,49 @@ class MyFilter(django_filters.FilterSet):
                                     lookup_expr='icontains', label='Тэг:', )
     name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Название:',
                                      widget=forms.TextInput(attrs={'class': 'type2'}))
-    year__lt = django_filters.DateFilter(
+
+    start_date = django_filters.DateFilter(
         widget=forms.TextInput(attrs=
         {
             'type': 'date',
             'class': 'type2',
-        }), label='Дата следующей поверки:'
-        , field_name='si__next_verification', lookup_expr='lt'
-    )
+        }), label='Поверка от:',
+        field_name='si__next_verification', lookup_expr='gte', )
+    end_date = django_filters.DateFilter(
+        widget=forms.TextInput(attrs=
+        {
+            'type': 'date',
+            'class': 'type2',
+        }), label='Поверка до:',
+        field_name='si__next_verification', lookup_expr='lte')
+    choices = [
+        ("today", _("Today")),
+        ("week", _("Past 7 days")),
+        ("month", _("This month")),
+    ]
+    filters = {
+        "today": lambda qs, name: qs.filter(
+            **{
+                "%s__year" % name: now().year,
+                "%s__month" % name: now().month,
+                "%s__day" % name: now().day,
+            }
+        ),
+
+        "week": lambda qs, name: qs.filter(
+            **{
+                "%s__gte" % name: _truncate(now() - timedelta(days=7)),
+                "%s__lt" % name: _truncate(now() + timedelta(days=1)),
+            }
+        ),
+        "month": lambda qs, name: qs.filter(
+            **{"%s__year" % name: now().year, "%s__month" % name: now().month}
+        ),
+    }
+
+    date_range = django_filters.DateRangeFilter(
+        label='Поверка:', filters=filters, choices=choices, field_name='si__next_verification')
+
     at_date = django_filters.DateFilter(
         widget=forms.TextInput(attrs=
         {
@@ -627,28 +664,4 @@ def draft_delete(request, pk):
     except:
         return redirect(reverse_lazy('draft_list'))
 
-# class DefectFilter(django_filters.FilterSet):
-# type = django_filters.CharFilter(field_name='type__name',
-#                                  lookup_expr='icontains',
-#                                  label='Тип:',
-#                                  widget=forms.TextInput(attrs={'class': 'type2'}))
-# serial_number = django_filters.CharFilter(lookup_expr='icontains',
-#                                           widget=forms.TextInput(attrs={'class': 'type2'}),
-#                                           label='Серийный номер')
-# position = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
-#                                             queryset=GP.objects.all(),
-#                                             field_name='positions__name',
-#                                             lookup_expr='exact', label='Позиция:', )
-# name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Название:',
-#                                  widget=forms.TextInput(attrs={'class': 'type2'}))
-# status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
-#                                           queryset=StatusAdd.objects.all(), field_name='status__name',
-#                                           lookup_expr='exact', label='Статус')
-# si_or = django_filters.BooleanFilter(widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
-# tag = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
-#                                 field_name='tags__name',
-#                                 lookup_expr='icontains', label='Тэг:', )
 
-# class Meta:
-#     model = Defect
-#     fields = ['project', ]

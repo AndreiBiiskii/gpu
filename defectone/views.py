@@ -18,6 +18,7 @@ def defect_act(request, poz, n):
     da = f'КАиТ-{poz}-{datetime.now().date()}-{n}'
     return da
 
+
 def send_act(request, pk):
     de = Defect.objects.get(pk=pk)
     eq = Equipment.objects.get(serial_number=de.serial_number)
@@ -228,6 +229,7 @@ class ContractorUpdate(UpdateView):
         'add': 'defectone:contractor_add'
     }
 
+
 class KaitAdd(CreateView):
     model = Kait
     fields = '__all__'
@@ -237,7 +239,6 @@ class KaitAdd(CreateView):
         'title': 'Добавить мастера по КАиТ',
         'menu': menu,
     }
-
 
 
 class KaitList(ListView):
