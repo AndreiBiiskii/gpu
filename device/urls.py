@@ -20,6 +20,7 @@ urlpatterns = [
     path('equipment_delete/<int:pk>', EquipmentDelete, name='equipment_delete'),
     path('device_add/', device_add, name='device_add'),
     path('device_update/<int:pk>', DeviceUpdate, name='device_update'),
+    path('send_v/', send_v, name='send_v'),
     path('im/', IM, name='im'),
     path('si_loading/<int:i>', si_loading, name='si_loading'),
     path('manufacturers/', ListCategory.as_view(model=Manufacturer, extra_context={

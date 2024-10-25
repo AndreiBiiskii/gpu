@@ -3,6 +3,7 @@ import datetime
 import os
 import django_filters
 from dateutil.relativedelta import relativedelta
+from django.core.mail import EmailMessage
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
@@ -16,6 +17,7 @@ from django.utils.timezone import now
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DetailView
 from django_filters.filters import _truncate
+from openpyxl.reader.excel import load_workbook
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
@@ -38,6 +40,44 @@ menu = [
     {'title': 'Подрядчики', 'url_name': 'defectone:contractors'},
     {'title': 'Дефекты', 'url_name': 'defectone:defect_list'}
 ]
+
+
+def send_v(request):
+    for i  in request.POST.items():
+
+        print(i)
+    print('****************************************************************')
+    # de = Defect.objects.get(pk=pk)
+    # eq = Equipment.objects.get(serial_number=de.serial_number)
+    # wb = load_workbook(f'{BASE_DIR}/act.xlsx')
+    # ws = wb['act']
+    # ws['E9'] = de.defect_act
+    # ws['J5'] = de.approve.name
+    # ws['B5'] = de.gp
+    # ws['D12'] = f'{eq.name}, {eq.type}, {eq.model}'
+    # ws['D18'] = de.serial_number
+    # ws['D19'] = eq.manufacturer.name
+    # ws['D21'] = de.project
+    # ws['D23'] = de.location
+    # ws['D25'] = datetime.date(datetime.now())
+    # ws['D26'] = de.short_description
+    # ws['D30'] = de.causes
+    # ws['D32'] = de.fix
+    # ws['A36'] = de.contractor.name
+    # ws['A40'] = de.kait.name
+    # ws['A43'] = de.worker.name
+    # wb.save(f'{BASE_DIR}/act1.xlsx')
+    #
+    # wb.close()
+    # sm = EmailMessage
+    # subject = 'Worker'
+    # body = 'Дефектный акт был отправлен на почту.'
+    # from_email = request.user.email
+    # to_email = 'freemail_2019@mail.ru'
+    # msg = sm(subject, body, from_email, [to_email])
+    # msg.attach_file(f'{BASE_DIR}/act1.xlsx')
+    # msg.send()
+    return redirect(reverse_lazy('search'))
 
 
 def si_loading(request, i):
@@ -279,7 +319,7 @@ class MyFilter(django_filters.FilterSet):
             'type': 'date',
             'class': 'type2',
         }), label='Внесено в этот день',
-        field_name='descriptions__at_date', lookup_expr='icontains')
+        field_name='descriptions__at_date', lookup_expr='contains')
     status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                               queryset=StatusAdd.objects.all(), field_name='status__name',
                                               lookup_expr='exact', label='Статус')
@@ -333,6 +373,8 @@ def equipment_list(request):
             'count': eq_filter.qs.count(),
 
         }
+        # for item in eq_filter.qs:
+        #     print(item.serial_number)
         return render(request, 'device/equipments.html', context=data)
 
     if request.method == 'POST' and not request.user.is_staff:
@@ -663,5 +705,3 @@ def draft_delete(request, pk):
         return redirect(reverse_lazy('draft_list'))
     except:
         return redirect(reverse_lazy('draft_list'))
-
-
