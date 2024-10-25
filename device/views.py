@@ -43,6 +43,8 @@ menu = [
 
 
 def send_v(request):
+    with open('./all_data.csv', 'w', encoding='utf-8'):
+        pass
     start, stop = 0, 1500
     get_last = Equipment.objects.last().pk
     while get_last > stop:
@@ -86,9 +88,7 @@ def send_v(request):
     to_email = 'freemail_2019@mail.ru'
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(f'./all_data.csv')
-    # msg.send()
-    # with open('./all_data.csv', 'w', encoding='utf-8'):
-    #     pass
+    msg.send()
     return redirect(reverse_lazy('search'))
 
 
