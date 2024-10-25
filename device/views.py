@@ -51,7 +51,9 @@ def send_v(request):
         writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
         writer.writeheader()
         for eq in get_all:
-            from_si = Si.objects.get(equipment=eq)
+            try:
+                from_si = Si.objects.get(equipment=eq)
+            except: continue
             writer.writerow({
                 'position': eq.positions.last().name,
                 'location': eq.locations.last().name,
