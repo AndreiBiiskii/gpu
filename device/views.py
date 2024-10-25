@@ -1,6 +1,8 @@
 import csv
 import datetime
 import os
+from time import sleep
+
 import django_filters
 from dateutil.relativedelta import relativedelta
 from django.core.mail import EmailMessage
@@ -50,7 +52,11 @@ def send_v(request):
                       'next_verification', 'result', ]  #
         writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
         writer.writeheader()
+        count=0
         for eq in get_all:
+            count+=1
+            if count == 1500:
+                sleep(10)
             try:
                 from_si = Si.objects.get(equipment=eq)
             except: continue
