@@ -11,8 +11,7 @@
     </table>
     <button type="submit" class="button-style2">Найти</button>
     <cite>Найдено:{{count}}</cite>
-    <a href="{% url 'send_v' %}">Отправить</a>
-<!--            <button type="submit" class="button-style2">Отправить</button>-->
+    {%if request.user.is_staff%}<a href="{% url 'send_v' %}">Выгрузить все СИ</a>{%endif%}
     <hr>
 </form>
 <h1 class="error">{{error}}</h1>

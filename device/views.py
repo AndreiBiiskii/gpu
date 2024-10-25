@@ -43,40 +43,42 @@ menu = [
 
 
 def send_v(request):
-    for i  in request.POST.items():
-
-        print(i)
-    print('****************************************************************')
-    # de = Defect.objects.get(pk=pk)
-    # eq = Equipment.objects.get(serial_number=de.serial_number)
-    # wb = load_workbook(f'{BASE_DIR}/act.xlsx')
-    # ws = wb['act']
-    # ws['E9'] = de.defect_act
-    # ws['J5'] = de.approve.name
-    # ws['B5'] = de.gp
-    # ws['D12'] = f'{eq.name}, {eq.type}, {eq.model}'
-    # ws['D18'] = de.serial_number
-    # ws['D19'] = eq.manufacturer.name
-    # ws['D21'] = de.project
-    # ws['D23'] = de.location
-    # ws['D25'] = datetime.date(datetime.now())
-    # ws['D26'] = de.short_description
-    # ws['D30'] = de.causes
-    # ws['D32'] = de.fix
-    # ws['A36'] = de.contractor.name
-    # ws['A40'] = de.kait.name
-    # ws['A43'] = de.worker.name
-    # wb.save(f'{BASE_DIR}/act1.xlsx')
-    #
-    # wb.close()
-    # sm = EmailMessage
-    # subject = 'Worker'
-    # body = 'Дефектный акт был отправлен на почту.'
-    # from_email = request.user.email
-    # to_email = 'freemail_2019@mail.ru'
-    # msg = sm(subject, body, from_email, [to_email])
-    # msg.attach_file(f'{BASE_DIR}/act1.xlsx')
-    # msg.send()
+    get_all = Equipment.objects.filter(si_or=True)
+    with open('./all_data.csv', 'w', encoding='utf-8') as f:
+        fieldnames = ['position', 'location', 'teg', 'type', 'model', 'name', 'reg_number', 'serial_number',
+                      'min_scale', 'max_scale', 'unit', 'comment', 'interval', 'previous_verification',
+                      'next_verification', 'result', ]  #
+        writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
+        writer.writeheader()
+        for eq in get_all:
+            from_si = Si.objects.get(equipment=eq)
+            writer.writerow({
+                'position': eq.positions.last().name,
+                'location': eq.locations.last().name,
+                'teg': eq.tags.last().name,
+                'type': eq.type.name,
+                'model': eq.model.name,
+                'name': eq.name.name,
+                'reg_number': from_si.reg_number,
+                'serial_number': eq.serial_number,
+                'min_scale': from_si.scale.min_scale,
+                'max_scale': from_si.scale.max_scale,
+                'unit': from_si.unit,
+                'comment': from_si.com,
+                'interval': from_si.interval,
+                'previous_verification': from_si.previous_verification,
+                'next_verification': from_si.next_verification,
+                'result': from_si.result,
+            }
+            )
+    sm = EmailMessage
+    subject = 'all'
+    body = 'all si'
+    from_email = request.user.email
+    to_email = 'freemail_2019@mail.ru'
+    msg = sm(subject, body, from_email, [to_email])
+    msg.attach_file(f'./all_data.csv')
+    msg.send()
     return redirect(reverse_lazy('search'))
 
 
@@ -259,7 +261,8 @@ class MyFilter(django_filters.FilterSet):
                                      lookup_expr='icontains',
                                      label='Тип:',
                                      widget=forms.TextInput(attrs={'class': 'type2'}))
-    serial_number = django_filters.CharFilter(lookup_expr='icontains', widget=forms.TextInput(attrs={'class': 'type2'}),
+    serial_number = django_filters.CharFilter(lookup_expr='icontains',
+                                              widget=forms.TextInput(attrs={'class': 'type2'}),
                                               label='Серийный номер')
     position = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                                 queryset=GP.objects.all(),
