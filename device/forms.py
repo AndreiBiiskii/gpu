@@ -1,3 +1,5 @@
+from cProfile import label
+
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from django.template.context_processors import request
@@ -137,7 +139,9 @@ class AddDeviceForm(forms.Form):
                                required=False)
     description = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), label='Комментарий:')
     position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
-                                      label='Поз. по ГП')
+                                      label='Поз. по ГП', required=False)
+    position_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
+                                   label='Добавить позицию по ГП:', max_length=20, required=False)
     location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), max_length=50, required=False,
                                label='Место установки:')
     tag = forms.CharField(label='Тег', widget=forms.TextInput(attrs={'class': 'type2'}), max_length=100)
@@ -163,8 +167,8 @@ class AddDeviceForm(forms.Form):
     min_scale = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type2"}), label='Мин. шкалы:')
     max_scale = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type2"}), label='Макс. шкалы:')
     unit = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
-                             label='Единицы измерения:', queryset=Unit.objects.all(), required=False)
-    unit_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}))
+                                  label='Единицы измерения:', queryset=Unit.objects.all(), required=False)
+    unit_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Довавить ЕИ', required=False)
 
     def clean(self):
         if Equipment.objects.filter(serial_number=self.cleaned_data['serial_number'],
@@ -212,6 +216,12 @@ class AddDeviceForm(forms.Form):
             self.cleaned_data['reg_number'] = self.cleaned_data['reg_number_new']
         if self.cleaned_data['unit_new']:
             self.cleaned_data['unit'] = self.cleaned_data['unit_new']
+        if (self.cleaned_data['unit_new'] == '') and (self.cleaned_data['unit'] is None):
+            raise forms.ValidationError(message='Не указаны единицы измерения')
+        if self.cleaned_data['position_new']:
+            self.cleaned_data['position'] = self.cleaned_data['position_new']
+        if (self.cleaned_data['position_new'] == '') and (self.cleaned_data['position'] is None):
+            raise forms.ValidationError(message='Не указана позиция по ГП')
         if Equipment.objects.filter(
                 Q(serial_number=self.cleaned_data['serial_number']) & Q(model__name=self.cleaned_data['model'])):
             raise forms.ValidationError(message='Оборудование уже есть.')
@@ -219,7 +229,6 @@ class AddDeviceForm(forms.Form):
 
     def save(self, user):
         description = self.cleaned_data.pop('description')
-        position = self.cleaned_data.pop('position')
         location = self.cleaned_data.pop('location')
         tag = self.cleaned_data.pop('tag')
         min_scale = self.cleaned_data.pop('min_scale')
@@ -231,6 +240,7 @@ class AddDeviceForm(forms.Form):
         EquipmentName.objects.get_or_create(name=self.cleaned_data['name'])
         EquipmentModel.objects.get_or_create(name=self.cleaned_data['model'])
         StatusAdd.objects.get_or_create(name=self.cleaned_data['status'])
+        GP.objects.get_or_create(name=self.cleaned_data['position'])
         equipment = Equipment.objects.create(serial_number=self.cleaned_data['serial_number'],
                                              type=EquipmentType.objects.get(name=self.cleaned_data['type']),
                                              manufacturer=Manufacturer.objects.get(
@@ -244,7 +254,7 @@ class AddDeviceForm(forms.Form):
         Status.objects.create(equipment=equipment, name=status)
         Tag.objects.create(equipment=equipment, name=tag)
         Location.objects.create(equipment=equipment, name=location)
-        Position.objects.create(equipment=equipment, name=position)
+        Position.objects.create(equipment=equipment, name=self.cleaned_data['position'])
         Description.objects.create(equipment=equipment, user=user, name=description)
         VerificationInterval.objects.get_or_create(name=self.cleaned_data['interval'])
         Scale.objects.get_or_create(min_scale=min_scale, max_scale=max_scale)
@@ -302,4 +312,3 @@ class LoginUserForm(AuthenticationForm):
     class Meta:
         model = User
         fields = ['username', 'password']
-

@@ -12,6 +12,9 @@ class StatusAdd(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 
 class Status(models.Model):
     name = models.ForeignKey(StatusAdd, on_delete=models.DO_NOTHING, related_name='statuses', verbose_name='Статус')
@@ -20,6 +23,9 @@ class Status(models.Model):
 
     def __str__(self):
         return self.equipment
+
+    class Meta:
+        ordering = ['name']
 
 
 class VerificationInterval(models.Model):
@@ -37,6 +43,7 @@ class Manufacturer(models.Model):
 
     class Meta:
         verbose_name_plural = 'Производители'
+        ordering = ['name']
 
 
 class EquipmentType(models.Model):
@@ -47,6 +54,7 @@ class EquipmentType(models.Model):
 
     class Meta:
         verbose_name_plural = 'Типы оборудования'
+        ordering = ['name']
 
 
 class EquipmentModel(models.Model):
@@ -57,6 +65,7 @@ class EquipmentModel(models.Model):
 
     class Meta:
         verbose_name_plural = 'Модели оборудования'
+        ordering = ['name']
 
 
 class EquipmentName(models.Model):
@@ -67,6 +76,7 @@ class EquipmentName(models.Model):
 
     class Meta:
         verbose_name_plural = 'Наименование оборудования'
+        ordering = ['name']
 
 
 class Position(models.Model):
