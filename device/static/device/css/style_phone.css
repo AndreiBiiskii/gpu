@@ -14,22 +14,24 @@ color:red;
 .text{
 width:90%
 }
-.table{
+
+table{
     border-collapse: collapse;
     margin-top: 10px;
     border-spacing: 0;
-    font-size: 50px;
+    font-size: 30px;
     overflow-x: auto;
     word-wrap: break-word;
 }
-.table th {
+table th {
+    min-width:150px;`
     text-align: left;
 	padding: 5px;
 	background: #efefef;
 	border: 1px solid #ddddff;
 }
-.table td{
-    font-size: 50px;
+table td{
+    font-size: 30px;
     padding: 5px;
 	padding: 5px 10px;
 	border: 1px solid #eee;
@@ -37,19 +39,12 @@ width:90%
 	border: 1.5px solid black;
     padding: 4px;
     text-align: left;
-
 }
-.table tbody tr:nth-child(odd){
+table tbody tr:nth-child(odd){
 	background: #fff;
 }
-.table tbody tr:nth-child(even){
+table tbody tr:nth-child(even){
 	background: #dddddd;
-}
-
-
-table {
-  width: 100%;
-  border-collapse: collapse;
 }
 
 
