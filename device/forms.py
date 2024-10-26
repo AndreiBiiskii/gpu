@@ -1,13 +1,6 @@
-import datetime
-import re
-from cProfile import label
-
-from IPython.core.magic_arguments import defaults
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
-from django.forms import Textarea, FileInput
-from markdown_it.rules_inline import image
+from django.template.context_processors import request
 
 from device.variables import *
 from dateutil.relativedelta import relativedelta
@@ -57,8 +50,6 @@ class AddEquipmentForm(forms.Form):
             raise forms.ValidationError(message='Не указана модель.')
         if len(self.cleaned_data['model_new']) > 100:
             raise forms.ValidationError(message='Модель должен быть до 100 символов.')
-        # if self.cleaned_data['tag'] == '':
-        #     self.cleaned_data['tag'] = ' '
         if (self.cleaned_data['manufacturer'] is None) & (self.cleaned_data['manufacturer_new'] == ''):
             raise forms.ValidationError(message='Не указан производитель.')
         if len(self.cleaned_data['manufacturer_new']) > 100:
@@ -75,9 +66,6 @@ class AddEquipmentForm(forms.Form):
             raise forms.ValidationError(message='Не указан статус.')
         if (self.cleaned_data['type'] is None) & (self.cleaned_data['type_new'] == ''):
             raise forms.ValidationError(message='Не указан тип оборудования.')
-        if 100 > len(self.cleaned_data['description']) < 10:
-            raise forms.ValidationError(message='Комментарий должен быть от 10 до 100 символов.')
-
         if self.cleaned_data['type_new']:
             self.cleaned_data['type'] = self.cleaned_data['type_new']
         if self.cleaned_data['manufacturer_new']:
@@ -154,8 +142,8 @@ class AddDeviceForm(forms.Form):
                                label='Место установки:')
     tag = forms.CharField(label='Тег', widget=forms.TextInput(attrs={'class': 'type2'}), max_length=100)
     status = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=StatusAdd.objects.all(),
-                                    label='Статус')
-    status_new = forms.CharField(label='Добавить статус', max_length=10,
+                                    label='Статус', required=False)
+    status_new = forms.CharField(label='Добавить статус', max_length=255,
                                  widget=forms.TextInput(attrs={'class': 'type2'}), required=False)
     year = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Год выпуска:',
                                   queryset=Year.objects.all(), required=False)
@@ -174,8 +162,9 @@ class AddDeviceForm(forms.Form):
                                  choices=CHOICES_INTERVAL)
     min_scale = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type2"}), label='Мин. шкалы:')
     max_scale = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type2"}), label='Макс. шкалы:')
-    unit = forms.ChoiceField(widget=forms.Select(attrs={'class': 'select'}),
-                             label='Единицы измерения:', choices=CHOICES_UNIT)
+    unit = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
+                             label='Единицы измерения:', queryset=Unit.objects.all(), required=False)
+    unit_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}))
 
     def clean(self):
         if Equipment.objects.filter(serial_number=self.cleaned_data['serial_number'],
@@ -209,11 +198,6 @@ class AddDeviceForm(forms.Form):
             raise forms.ValidationError(message='Не указан тип оборудования.')
         if (self.cleaned_data['reg_number'] is None) & (self.cleaned_data['reg_number_new'] == ''):
             raise forms.ValidationError(message='Не указан регистрационный номер.')
-        if len(self.cleaned_data['reg_number_new']) < 3:
-            raise forms.ValidationError(message='Регистрационный номер должен быть не менее 5 символов.')
-        if 100 > len(self.cleaned_data['description']) < 10:
-            raise forms.ValidationError(message='Комментарий должен быть от 10 до 100 символов.')
-
         if self.cleaned_data['type_new']:
             self.cleaned_data['type'] = self.cleaned_data['type_new']
         if self.cleaned_data['manufacturer_new']:
@@ -226,6 +210,8 @@ class AddDeviceForm(forms.Form):
             self.cleaned_data['status'] = self.cleaned_data['status_new']
         if self.cleaned_data['reg_number_new']:
             self.cleaned_data['reg_number'] = self.cleaned_data['reg_number_new']
+        if self.cleaned_data['unit_new']:
+            self.cleaned_data['unit'] = self.cleaned_data['unit_new']
         if Equipment.objects.filter(
                 Q(serial_number=self.cleaned_data['serial_number']) & Q(model__name=self.cleaned_data['model'])):
             raise forms.ValidationError(message='Оборудование уже есть.')

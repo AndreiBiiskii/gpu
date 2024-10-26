@@ -80,7 +80,7 @@ def send_v(request):
                 )
         start = stop
         stop += stop
-        sleep(5)
+        sleep(15)
     sm = EmailMessage
     subject = 'all'
     body = 'all si'
@@ -324,6 +324,10 @@ class MyFilter(django_filters.FilterSet):
     }
 
     date_range = django_filters.DateRangeFilter(
+        widget=forms.TextInput(attrs=
+        {
+            'class': 'type2',
+        }),
         label='Поверка:', filters=filters, choices=choices, field_name='si__next_verification')
 
     at_date = django_filters.DateFilter(
