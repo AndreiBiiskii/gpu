@@ -22,6 +22,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale
+from device.parser import data_from_parser
 from device.variables import year
 from equipment.settings import BASE_DIR
 
@@ -324,7 +325,7 @@ class MyFilter(django_filters.FilterSet):
     }
 
     date_range = django_filters.DateRangeFilter(
-        widget=forms.TextInput(attrs=
+        widget=forms.Select(attrs=
         {
             'class': 'type2',
         }),
@@ -374,6 +375,7 @@ class MyFilterUser(django_filters.FilterSet):
         fields = ['serial_number', 'name', 'position', 'si_or', 'status', 'tag']
 
 
+
 def equipment_list(request):
     if not request.user.is_authenticated:
         redirect('/')
@@ -390,8 +392,7 @@ def equipment_list(request):
             'count': eq_filter.qs.count(),
 
         }
-        # for item in eq_filter.qs:
-        #     print(item.serial_number)
+        # data_from_parser(eq_filter)
         return render(request, 'device/equipments.html', context=data)
 
     if request.method == 'POST' and not request.user.is_staff:
