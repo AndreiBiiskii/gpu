@@ -486,7 +486,7 @@ def DeviceUpdate(request, pk):
     if not request.user.is_authenticated:
         return redirect('login')
     equipment = get_object_or_404(Equipment, pk=pk)
-    si = equipment.si.last()
+    si = Si.objects.get(equipment=equipment)
     status = StatusAdd.objects.all()
     last_status = equipment.status.last()
     positions = GP.objects.all()
@@ -507,12 +507,9 @@ def DeviceUpdate(request, pk):
         'si_or': True,
     }
     if request.method == 'POST':
-        if len(request.POST['description']) < 10:
-            data['error'] = 'Комментарий должен содержать не менее 10 символов'
-            return render(request, 'device/equipment_update.html', context=data)
         if request.POST['description'] != equipment.descriptions.last().name:
             t = Tag(equipment=equipment, name=request.POST['tag'])
-            if len(request.POST['location']) > 150:
+            if len(request.POST['location']) > 255:
                 data['error'] = 'Местоположение не может содержать более 255 символов'
                 return render(request, 'device/equipment_update.html', context=data)
             l = Location(equipment=equipment, name=request.POST['location'])
@@ -525,6 +522,8 @@ def DeviceUpdate(request, pk):
             p.save()
             d.save()
             s.save()
+            if not request.POST['previous_verification']:
+                request.POST['previous_verification'] = '1990-01-01'
             si.previous_verification = request.POST['previous_verification']
             si.next_verification = (
                                        datetime.datetime.strptime(request.POST['previous_verification'],

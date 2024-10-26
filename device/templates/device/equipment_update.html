@@ -36,10 +36,10 @@
     <textarea class="type2" rows="6" name="description">{{equipment.descriptions.last.name}}</textarea>
     {%if si_or%}
     <b>Дата предыдущей поверки:</b>
-    <input {%if not request.user.is_staff %} readonly {%endif%} class="select" type="date" name="previous_verification"
+    <input {%if not request.user.is_staff %} class="owner" {%endif%} class="select" type="date" name="previous_verification"
            value='{{equipment.si.last.previous_verification|date:"Y-m-d"}}'>
     <b>Сертификат:</b>
-    <input {%if not request.user.is_staff %} readonly {%endif%} class="type2" type="text" name="certificate" value="{{equipment.si.last.certificate}}">
+    <input {%if not request.user.is_staff %} class="owner" {%endif%} class="type2" type="text" name="certificate" value="{{equipment.si.last.certificate}}">
     <br><br>
     {%endif%}
     <button type="submit" class="button-style2"> Обновить данные</button>

@@ -3,19 +3,21 @@
 {% block content %}
 {% if user.is_authenticated %}
 <hr>
-{{messages.error}}
-<form action="{% url 'search' %}" method="POST">
-    {% csrf_token %}
-    <table>
-        {{ equipments.form.as_table }}
-    </table>
-    <button type="submit" class="button-style2">Найти</button>
-    <cite>Найдено:{{count}}</cite>
-    {%if request.user.is_staff%}<a href="{% url 'send_v' %}">Выгрузить все СИ</a>{%endif%}
-    <hr>
-</form>
-<h1 class="error">{{error}}</h1>
-<b><a href="{% url 'draft' %}" class="button-style3"> Добавить новую запись</a></b>
+<div class="owner_top">
+    {{messages.error}}
+    <form action="{% url 'search' %}" method="POST">
+        {% csrf_token %}
+        <table class="table">
+            {{ equipments.form.as_table }}
+        </table>
+        <button type="submit" class="button-style2">Найти</button>
+        <cite>Найдено:{{count}}</cite>
+        {%if request.user.is_staff%}<a href="{% url 'send_v' %}">Выгрузить все СИ</a>{%endif%}
+        <hr>
+    </form>
+    <h1 class="error">{{error}}</h1>
+    <b><a href="{% url 'draft' %}" class="button-style3"> Добавить новую запись</a></b>
+</div>
 <hr>
 <table>
     <thead>
