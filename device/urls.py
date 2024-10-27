@@ -6,6 +6,7 @@ from .views import *
 
 urlpatterns = [
     path('', equipment_list, name='search'),
+    path('send_all/<int:link>/<int:start>/<int:stop>', send_all, name='send_all'),
     path('users/', include(('users.urls', 'users'), namespace='users')),
     path('defects/', include(('defectone.urls', 'defectone'), namespace='defectone')),
     path('draft', DraftCreate.as_view(), name='draft'),

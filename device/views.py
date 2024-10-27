@@ -62,7 +62,7 @@ def send_v(request):
                 except:
                     continue
                 writer.writerow({
-                    '№':i,
+                    '№': i,
                     'position': eq.positions.last().name,
                     'location': eq.locations.last().name,
                     'teg': eq.tags.last().name,
@@ -92,6 +92,58 @@ def send_v(request):
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(f'./all_data.csv')
     # msg.send()
+    return redirect(reverse_lazy('search'))
+
+
+def send_all(request, link, start, stop):
+    if link == 1:
+        with open('./all_data.csv', 'w', encoding='utf-8'):
+            pass
+    get_all = Equipment.objects.filter(si_or=True)[start:stop]
+    with open('./all_data.csv', 'a', encoding='utf-8') as f:
+        fieldnames = ['№', 'position', 'location', 'teg', 'type', 'model', 'name', 'reg_number', 'serial_number',
+                      'min_scale', 'max_scale', 'unit', 'comment', 'interval', 'previous_verification',
+                      'next_verification', 'result', ]  #
+        writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
+        writer.writeheader()
+        for i, eq in enumerate(get_all):
+            try:
+                from_si = Si.objects.get(equipment=eq)
+            except:
+                continue
+            if link == 2:
+                i+=3000
+            if link == 3:
+                i+=6000
+            writer.writerow({
+                '№': i,
+                'position': eq.positions.last().name,
+                'location': eq.locations.last().name,
+                'teg': eq.tags.last().name,
+                'type': eq.type.name,
+                'model': eq.model.name,
+                'name': eq.name.name,
+                'reg_number': from_si.reg_number,
+                'serial_number': eq.serial_number,
+                'min_scale': from_si.scale.min_scale,
+                'max_scale': from_si.scale.max_scale,
+                'unit': from_si.unit,
+                'comment': from_si.com,
+                'interval': from_si.interval,
+                'previous_verification': from_si.previous_verification,
+                'next_verification': from_si.next_verification,
+                'result': from_si.result,
+            }
+            )
+    if link == 3:
+        sm = EmailMessage
+        subject = 'all'
+        body = 'all si'
+        from_email = request.user.email
+        to_email = 'freemail_2019@mail.ru'
+        msg = sm(subject, body, from_email, [to_email])
+        msg.attach_file(f'./all_data.csv')
+        msg.send()
     return redirect(reverse_lazy('search'))
 
 
