@@ -46,23 +46,23 @@ menu = [
 def send_v(request):
     with open('./all_data.csv', 'w', encoding='utf-8'):
         pass
-    start, stop = 0, 100
+    start, stop = 0, 1000
     get_last = Equipment.objects.last().pk
     while get_last > stop:
-        get_all = Equipment.objects.filter(si_or=True)[start:stop]
+        get_all = Equipment.objects.filter(si_or=True)  # [start:stop]
         with open('./all_data.csv', 'a', encoding='utf-8') as f:
-            fieldnames = ['position', 'location', 'teg', 'type', 'model', 'name', 'reg_number', 'serial_number',
+            fieldnames = ['№', 'position', 'location', 'teg', 'type', 'model', 'name', 'reg_number', 'serial_number',
                           'min_scale', 'max_scale', 'unit', 'comment', 'interval', 'previous_verification',
                           'next_verification', 'result', ]  #
             writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
             writer.writeheader()
-            for eq in get_all:
-                sleep(1)
+            for i, eq in enumerate(get_all):
                 try:
                     from_si = Si.objects.get(equipment=eq)
                 except:
                     continue
                 writer.writerow({
+                    '№':i,
                     'position': eq.positions.last().name,
                     'location': eq.locations.last().name,
                     'teg': eq.tags.last().name,
@@ -91,7 +91,7 @@ def send_v(request):
     to_email = 'freemail_2019@mail.ru'
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(f'./all_data.csv')
-    msg.send()
+    # msg.send()
     return redirect(reverse_lazy('search'))
 
 
