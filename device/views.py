@@ -46,7 +46,7 @@ menu = [
 def send_v(request):
     with open('./all_data.csv', 'w', encoding='utf-8'):
         pass
-    start, stop = 0, 1500
+    start, stop = 0, 500
     get_last = Equipment.objects.last().pk
     while get_last > stop:
         get_all = Equipment.objects.filter(si_or=True)[start:stop]
@@ -56,6 +56,7 @@ def send_v(request):
                           'next_verification', 'result', ]  #
             writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
             writer.writeheader()
+            sleep(1)
             for eq in get_all:
                 try:
                     from_si = Si.objects.get(equipment=eq)
@@ -81,7 +82,7 @@ def send_v(request):
                 )
         start = stop
         stop += stop
-        sleep(15)
+        sleep(5)
     sm = EmailMessage
     subject = 'all'
     body = 'all si'
