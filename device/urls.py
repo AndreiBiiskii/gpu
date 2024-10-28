@@ -7,9 +7,9 @@ from .views import *
 
 urlpatterns = [
     path('', equipment_list, name='search'),
-    # path('sample_send/', sample_send, name='sample_send'),
+    path('sample_send/', sample_send, name='sample_send'),
     # path('send_all/<int:start>/<int:end>', send_all, name='send_all'),
-    # path('send/<slug:title>', sending, name='send'),
+    path('send/<slug:title>', sending, name='send'),
     path('users/', include(('users.urls', 'users'), namespace='users')),
     path('defects/', include(('defectone.urls', 'defectone'), namespace='defectone')),
     path('draft', DraftCreate.as_view(), name='draft'),
