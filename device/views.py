@@ -21,7 +21,7 @@ from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserFo
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale
 from device.parser import data_from_parser
-from device.sending import sample_send
+# from device.sending import sample_send
 from device.variables import year
 from equipment.settings import BASE_DIR
 
@@ -339,9 +339,9 @@ def equipment_list(request):
             'count': eq_filter.qs.count(),
 
         }
-        # sample_send(eq_filter.qs)
-        # if request.POST.get('parser'):
-        #     data_from_parser(eq_filter)
+        sample_send(eq_filter.qs)
+        if request.POST.get('parser'):
+            data_from_parser(eq_filter)
         return render(request, 'device/equipments.html', context=data)
 
     if request.method == 'POST' and not request.user.is_staff:
@@ -368,7 +368,6 @@ def equipment_list(request):
         'menu': menu,
         'equipments': eq_filter,
         'count': eq_filter.qs.count(),
-
     }
     return render(request, 'device/equipments.html', context=data)
 
