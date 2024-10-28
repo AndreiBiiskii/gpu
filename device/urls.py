@@ -2,13 +2,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
-# from .sending import send_all, sending
+from .sending import  sending, sample_send
 from .views import *
 
 urlpatterns = [
     path('', equipment_list, name='search'),
-    # path('sample_send/', sample_send, name='sample_send'),
-    # path('send/<slug:title>', sending, name='send'),
+    path('sample_send/', sample_send, name='sample_send'),
+    # path('send_all/<int:start>/<int:end>', send_all, name='send_all'),
+    path('send/<slug:title>', sending, name='send'),
     path('users/', include(('users.urls', 'users'), namespace='users')),
     path('defects/', include(('defectone.urls', 'defectone'), namespace='defectone')),
     path('draft', DraftCreate.as_view(), name='draft'),
@@ -23,7 +24,6 @@ urlpatterns = [
     path('equipment_delete/<int:pk>', EquipmentDelete, name='equipment_delete'),
     path('device_add/', device_add, name='device_add'),
     path('device_update/<int:pk>', DeviceUpdate, name='device_update'),
-    # path('send_all/<int:start>/<int:end>', send_all, name='send_all'),
     # path('im/', IM, name='im'),
     # path('si_loading/<int:i>', si_loading, name='si_loading'),
     path('manufacturers/', ListCategory.as_view(model=Manufacturer, extra_context={
