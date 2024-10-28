@@ -568,6 +568,7 @@ def DeviceUpdate(request, pk):
             l = Location(equipment=equipment, name=request.POST['location'])
             if request.POST.get('position_new'):
                 poz = request.POST.get('position_new')
+                GP.objects.get_or_create(name=poz)
             else:
                 poz = request.POST['position']
             p = Position(equipment=equipment, name=poz.upper())
