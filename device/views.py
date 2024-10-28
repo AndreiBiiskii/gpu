@@ -14,7 +14,7 @@ from django import forms
 from django.db.models import Q
 from django.utils.timezone import now
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView, CreateView, ListView, DetailView
+from django.views.generic import UpdateView, CreateView, ListView, DetailView, DeleteView
 from django_filters.filters import _truncate
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm
@@ -32,7 +32,7 @@ menu = [
     {'title': 'Названия', 'url_name': 'names'},
     {'title': 'Статусы', 'url_name': 'statuses'},
     {'title': 'Года выпуска', 'url_name': 'years'},
-    {'title': 'Позиция', 'url_name': 'gps'},
+    {'title': 'Позиции', 'url_name': 'list_gp'},
     {'title': 'Поиск', 'url_name': 'search'},
     {'title': 'Подписанты', 'url_name': 'defectone:approves'},
     {'title': 'Мастера', 'url_name': 'defectone:kaits'},
@@ -510,6 +510,44 @@ def EquipmentDelete(request, pk):
 
         obj.delete()
     return redirect('/')
+
+
+class AddGp(CreateView):
+    model = GP
+    permission_classes = [IsAdminUser, ]
+    template_name = 'device/gp_add.html'
+    fields = '__all__'
+    extra_context = {
+        'menu': menu
+    }
+    success_url = '/'
+
+
+class ListGP(ListView):
+    model = GP
+    permission_classes = [IsAdminUser, ]
+    template_name = 'device/gp_list.html'
+    context_object_name = 'objects'
+
+
+class UpdateGp(UpdateView):
+    model = GP
+    permission_classes = [IsAdminUser, ]
+    template_name = 'device/gp_add.html'
+    fields = '__all__'
+    success_url = '/'
+    extra_context = {
+        'menu': menu,
+    }
+
+
+class DeleteGp(DeleteView):
+    permission_classes = [IsAdminUser, ]
+    model = GP
+    extra_context = {
+        'menu': menu,
+    }
+
 
 
 class AddCategory(CreateView):

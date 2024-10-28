@@ -1,23 +1,23 @@
 {% extends 'device/base.html' %}
 {% block content%}
 
-
+<a href="{% url 'add_gp' %}">
+    <button type="button" class="search_btn"> Add</button>
+</a>
 {% for object in objects %}
 <ul>
     <li>
         {{ object.name }}
-        <a href="{% url url_delete object.pk %}">
+        <a href="{% url 'delete_gp' object.pk %}">
             <button type="button" class="search_btn"> Delete</button>
         </a>
-        <a href="{% url url_update object.pk %}">
+        <a href="{% url 'update_gp' object.pk %}">
             <button type="button" class="search_btn"> Update</button>
         </a>
         {{objects.construction}}
     </li>
 </ul>
 {% endfor%}
-<a href="{% url url_add %}">
-    <button type="button" class="search_btn"> Add</button>
-</a>
+
 
 {% endblock %}

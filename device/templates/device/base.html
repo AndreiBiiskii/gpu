@@ -43,7 +43,7 @@
                 <ul>
                     {% for i in menu %}
                     {% for key, value in i.items %}
-                    {% if value == "Модели" or value == "Производители" or value == "Типы" or value == "Названия" or value == "Статусы" or value == "Года выпуска" or value == "Позиция" %}
+                    {% if value == "Модели" or value == "Производители" or value == "Типы" or value == "Названия" or value == "Статусы" or value == "Года выпуска" or value == "Позиции" %}
                     <a href="{% url i.url_name %}">{{i.title}}</a>
                     {%endif%}
                     {%endfor%}

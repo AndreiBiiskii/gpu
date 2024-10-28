@@ -78,16 +78,10 @@ urlpatterns = [
     path('add_status/', AddCategory.as_view(model=StatusAdd), name='add_status'),
     path('update_status/<int:pk>', UpdateCategory.as_view(model=StatusAdd), name='update_status'),
 
-    path('gps/', ListCategory.as_view(model=GP, extra_context={
-        'title': 'Позиция',
-        'menu': menu,
-        'url_delete': 'delete_gp',
-        'url_update': 'update_gp',
-        'url_add': 'add_gp'
-    }), name='gps'),
-    path('delete_gp/<int:pk>', delete_category, {'Mod': GP}, name='delete_gp'),
-    path('add_gp/', AddCategory.as_view(model=GP), name='add_gp'),
-    path('update_gp/<int:pk>', UpdateCategory.as_view(model=GP), name='update_gp'),
+    path('list_gp/', ListGP.as_view(), name='list_gp'),
+    path('delete_gp/<int:pk>', DeleteGp.as_view(), name='delete_gp'),
+    path('add_gp/', AddGp.as_view(), name='add_gp'),
+    path('update_gp/<int:pk>', UpdateGp.as_view(), name='update_gp'),
 
     path('years/', ListCategory.as_view(model=Year, extra_context={
         'title': 'Год выпуска.',
