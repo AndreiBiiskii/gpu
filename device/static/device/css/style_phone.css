@@ -455,3 +455,11 @@ header{
 width: 100%;
 background: #454547;
 }
+
+#id_username{
+    font-size:1.2em;
+}
+
+#id_password{
+    font-size:1.2em;
+}
