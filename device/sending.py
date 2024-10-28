@@ -3,12 +3,8 @@ from django.core.mail import EmailMessage
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from urllib3 import request
-
 from device.models import Equipment, Si
 
-
-#        {%if request.user.is_staff%}<a href="{% url 'send' 'sample_send' %}" class="button-style2">Выгрузить выборку</a>{%endif%}
-#         <a href="{% url 'send_all' 0 2000 %}"> Выгрузить все СИ</a>
 
 def sample_send(data):
     with open('./sample_send.csv', 'w', encoding='utf-8') as f:
