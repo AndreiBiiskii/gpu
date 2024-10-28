@@ -96,6 +96,8 @@ def send_v(request):
 
 
 def send_all(request, link, start, stop):
+    if not request.user.is_staff:
+        redirect('login')
     if link == 1:
         with open('./all_data.csv', 'w', encoding='utf-8'):
             pass
@@ -395,7 +397,7 @@ class MyFilter(django_filters.FilterSet):
     status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                               queryset=StatusAdd.objects.all(), field_name='status__name',
                                               lookup_expr='exact', label='Статус')
-    si_or = django_filters.BooleanFilter(widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
+    si_or = django_filters.BooleanFilter(field_name='si_or' ,widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
 
     class Meta:
         model = Equipment
@@ -440,7 +442,6 @@ def equipment_list(request):
         data = {
             'title': 'Поиск',
             'menu': menu,
-            'si': True,
             'equipments': eq_filter,
             'count': eq_filter.qs.count(),
 
@@ -455,7 +456,6 @@ def equipment_list(request):
         data = {
             'title': 'Поиск',
             'menu': menu,
-            'si': True,
             'equipments': eq_filter,
             'count': eq_filter.qs.count(),
 
@@ -471,7 +471,6 @@ def equipment_list(request):
     data = {
         'title': 'Поиск',
         'menu': menu,
-        'si': True,
         'equipments': eq_filter,
         'count': eq_filter.qs.count(),
 
@@ -567,7 +566,11 @@ def DeviceUpdate(request, pk):
                 data['error'] = 'Местоположение не может содержать более 255 символов'
                 return render(request, 'device/equipment_update.html', context=data)
             l = Location(equipment=equipment, name=request.POST['location'])
-            p = Position(equipment=equipment, name=request.POST['position'].lower())
+            if request.POST.get('position_new'):
+                poz = request.POST.get('position_new')
+            else:
+                poz = request.POST['position']
+            p = Position(equipment=equipment, name=poz.upper())
             d = Description(equipment=equipment, user=request.user, name=request.POST['description'])
             status = StatusAdd.objects.get(name=request.POST['status'])
             s = Status(equipment=equipment, name=status)

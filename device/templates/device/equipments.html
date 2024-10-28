@@ -16,9 +16,10 @@
         <hr>
         {% if request.user.is_staff%}
         <p>Поэтапная выгрузка всех средст измерения. Жмем по порядку</p>
-        <a href="{% url 'send_all' 1 0 3000 %}">1</a>///
-        <a href="{% url 'send_all' 2 3000 6000 %}">2</a>///
-        <a href="{% url 'send_all' 3 6000 9000 %}">3</a>///
+        <p>При нажатии на "Три" будет отправлено письмо на почту</p>
+        <a href="{% url 'send_all' 1 0 3000 %}">Один</a>///
+        <a href="{% url 'send_all' 2 3000 6000 %}">Два</a>///
+        <a href="{% url 'send_all' 3 6000 9000 %}">Три</a>///
         <hr>
         {%endif%}
     </form>
@@ -31,10 +32,11 @@
     <tr>
         <th>Серийный номер</th>
         <th>Наименование</th>
+        <th>Модель</th>
         <th>Поз. по ГП</th>
         <th>Место установки</th>
         <th>Тэг</th>
-        <th>Дата предыдущей поверки</th>
+        <th>Дата изменения</th>
         <th>Дата следующей поверки</th>
     </tr>
     </thead>
@@ -43,10 +45,11 @@
     <tr>
         <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a></td>
         <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
+        <td>{{equipment.model}}</td>
         <td>{{equipment.positions.last.name}}</td>
         <td>{{equipment.locations.last.name}}</td>
         <td>{{equipment.tags.last.name}}</td>
-        <td>{{equipment.si.last.previous_verification|date:"d-m-Y"}}</td>
+        <td>{{equipment.descriptions.last.at_date|date:"d-m-Y"}}</td>
         <td>{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
     </tr>
     {%endfor%}
