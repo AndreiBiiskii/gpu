@@ -1,10 +1,8 @@
 import csv
 import datetime
 import os
-from time import sleep
 import django_filters
 from dateutil.relativedelta import relativedelta
-from django.core.mail import EmailMessage
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
@@ -23,6 +21,7 @@ from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserFo
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale
 from device.parser import data_from_parser
+from device.sending import sample_send
 from device.variables import year
 from equipment.settings import BASE_DIR
 
@@ -41,112 +40,6 @@ menu = [
     {'title': 'Подрядчики', 'url_name': 'defectone:contractors'},
     {'title': 'Дефекты', 'url_name': 'defectone:defect_list'}
 ]
-
-
-def send_v(request):
-    with open('./all_data.csv', 'w', encoding='utf-8'):
-        pass
-    start, stop = 0, 1000
-    get_last = Equipment.objects.last().pk
-    while get_last > stop:
-        get_all = Equipment.objects.filter(si_or=True)  # [start:stop]
-        with open('./all_data.csv', 'a', encoding='utf-8') as f:
-            fieldnames = ['№', 'position', 'location', 'teg', 'type', 'model', 'name', 'reg_number', 'serial_number',
-                          'min_scale', 'max_scale', 'unit', 'comment', 'interval', 'previous_verification',
-                          'next_verification', 'result', ]  #
-            writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
-            writer.writeheader()
-            for i, eq in enumerate(get_all):
-                try:
-                    from_si = Si.objects.get(equipment=eq)
-                except:
-                    continue
-                writer.writerow({
-                    '№': i,
-                    'position': eq.positions.last().name,
-                    'location': eq.locations.last().name,
-                    'teg': eq.tags.last().name,
-                    'type': eq.type.name,
-                    'model': eq.model.name,
-                    'name': eq.name.name,
-                    'reg_number': from_si.reg_number,
-                    'serial_number': eq.serial_number,
-                    'min_scale': from_si.scale.min_scale,
-                    'max_scale': from_si.scale.max_scale,
-                    'unit': from_si.unit,
-                    'comment': from_si.com,
-                    'interval': from_si.interval,
-                    'previous_verification': from_si.previous_verification,
-                    'next_verification': from_si.next_verification,
-                    'result': from_si.result,
-                }
-                )
-        start = stop
-        stop += stop
-
-    sm = EmailMessage
-    subject = 'all'
-    body = 'all si'
-    from_email = request.user.email
-    to_email = 'freemail_2019@mail.ru'
-    msg = sm(subject, body, from_email, [to_email])
-    msg.attach_file(f'./all_data.csv')
-    # msg.send()
-    return redirect(reverse_lazy('search'))
-
-
-def send_all(request, link, start, stop):
-    if not request.user.is_staff:
-        redirect('login')
-    if link == 1:
-        with open('./all_data.csv', 'w', encoding='utf-8'):
-            pass
-    get_all = Equipment.objects.filter(si_or=True)[start:stop]
-    with open('./all_data.csv', 'a', encoding='utf-8') as f:
-        fieldnames = ['№', 'position', 'location', 'teg', 'type', 'model', 'name', 'reg_number', 'serial_number',
-                      'min_scale', 'max_scale', 'unit', 'comment', 'interval', 'previous_verification',
-                      'next_verification', 'result', ]  #
-        writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
-        writer.writeheader()
-        for i, eq in enumerate(get_all):
-            try:
-                from_si = Si.objects.get(equipment=eq)
-            except:
-                continue
-            if link == 2:
-                i+=3000
-            if link == 3:
-                i+=6000
-            writer.writerow({
-                '№': i,
-                'position': eq.positions.last().name,
-                'location': eq.locations.last().name,
-                'teg': eq.tags.last().name,
-                'type': eq.type.name,
-                'model': eq.model.name,
-                'name': eq.name.name,
-                'reg_number': from_si.reg_number,
-                'serial_number': eq.serial_number,
-                'min_scale': from_si.scale.min_scale,
-                'max_scale': from_si.scale.max_scale,
-                'unit': from_si.unit,
-                'comment': from_si.com,
-                'interval': from_si.interval,
-                'previous_verification': from_si.previous_verification,
-                'next_verification': from_si.next_verification,
-                'result': from_si.result,
-            }
-            )
-    if link == 3:
-        sm = EmailMessage
-        subject = 'all'
-        body = 'all si'
-        from_email = 'freemail_2019@mail.ru'
-        to_email = request.user.email
-        msg = sm(subject, body, from_email, [to_email])
-        msg.attach_file(f'./all_data.csv')
-        msg.send()
-    return redirect(reverse_lazy('search'))
 
 
 def si_loading(request, i):
@@ -308,8 +201,8 @@ def EquipmentUpdate(request, pk):
     if request.method == 'POST':
         if request.POST['description'] != equipment.descriptions.last().name:
             Tag.objects.create(equipment=equipment, name=request.POST['tag'])
-            if len(request.POST['location']) > 150:
-                data['error'] = 'Местоположение не может содержать более 150 символов'
+            if len(request.POST['location']) > 255:
+                data['error'] = 'Местоположение не может содержать более 255 символов'
                 return render(request, 'device/equipment_update.html', context=data)
             Location.objects.create(equipment=equipment, name=request.POST['location'])
             Position.objects.create(equipment=equipment, name=request.POST['position'])
@@ -397,7 +290,7 @@ class MyFilter(django_filters.FilterSet):
     status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                               queryset=StatusAdd.objects.all(), field_name='status__name',
                                               lookup_expr='exact', label='Статус')
-    si_or = django_filters.BooleanFilter(field_name='si_or' ,widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
+    si_or = django_filters.BooleanFilter(field_name='si_or', widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
 
     class Meta:
         model = Equipment
@@ -446,7 +339,9 @@ def equipment_list(request):
             'count': eq_filter.qs.count(),
 
         }
-        data_from_parser(eq_filter)
+        sample_send(eq_filter.qs)
+        if request.POST.get('parser'):
+            data_from_parser(eq_filter)
         return render(request, 'device/equipments.html', context=data)
 
     if request.method == 'POST' and not request.user.is_staff:
@@ -531,7 +426,6 @@ def equipment_detail(request, pk):
         'menu': menu,
         'data_eq': data_eq,
     }
-
     return render(request, 'device/equipment_detail.html', context=data)
 
 

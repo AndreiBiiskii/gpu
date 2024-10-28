@@ -14,8 +14,7 @@
 <body>
 
 <div class="shadowbox">
-    {{user}}<br>
-    <hr>
+    {{user}}
     {%if user.is_authenticated%}
     <a class="a" href="{% url 'users:logout' %}">Выйти</a> |
     <a class="a" href="{% url 'users:change_password'%}">Сменить пароль</a>

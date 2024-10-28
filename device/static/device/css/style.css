@@ -72,30 +72,23 @@ eq:active {
   box-shadow: -2px -2px 20px 20px #80C8A0, 0 -2px #80C8A0, -2px 0 #80C8A0;
   color:#80C80A;
 }
-
-.button-style:hover, .button-style:focus {
-  background: #e2e2f2;
-
-}
-
 .button-style2 {
-  display: inline-block;
-  padding: 5px 5px;
-  margin-left:10px;
-  margin-top:10px;
-  width:auto;
-  font-size:20px;
-  background: #f2f2f2;
-  border: 1px solid #1E90FF;
-  color: ##00BFFF;
-  text-decoration: none;
-  text-align: center;
-  box-shadow: -2px -2px 2px 2px #00BFFF, 0 -2px #00BFFF, -2px 0 #00BFFF;
-  color:#00BFFF;
-  width:auto;
+    padding: 5px 5px;
+    margin-left:10px;
+    margin-top:10px;
+    border: none;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    background: #0B63F6;
+
 }
-.button-style2:hover, .button-style:focus {
-  background: #e2e2f2;
+
+.button-style2:hover {
+    background: #003CC5;
+    box-shadow: none;
+    position: relative;
+
 }
 
 .button-style3 {
@@ -140,13 +133,25 @@ a {
   transition: .3s linear;
 }
 .shadowbox {
-  width: 10.2em;
+  width: auto;
   border: 1px solid #333;
   box-shadow: 8px 8px 5px #444;
   padding: 8px 12px;
   background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
   border-radius: 10px;
   float:right;
+}
+.shadowbox a{
+    color: black;
+    text-decoration: underline;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,.1);
+    transition: background-color 0.3s ease;
+    &:hover {
+        background-color: #ddd;
+    }
+
 }
 
 .footer	{

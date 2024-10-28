@@ -4,49 +4,67 @@
 
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
+
+
     <b>Серийный номер: </b><cite>{{equipment.serial_number}}</cite> <br/>
     <b>Наименование:</b><cite>{{equipment.name}}</cite><br/>
     <b>Модель: </b><cite>{{equipment.model}}</cite> <br/>
-
     <h3 class="error">{{error}}</h3>
 
-
-    <b><cite>Позиция по ГП:</cite></b>
-    <select name="position" class="select">
-        {%for position in positions%}
-        <option>{{position.name}}</option>
-        <br>
-        {%endfor%}
-        <option selected>{{equipment.positions.last.name}}</option>
-    </select><br>
-    {%if request.user.is_staff%}
-    Добавить позицию по ГП:
-        <input type="text" name="position_new" class="type2">
-    {%endif%}
-    <hr>
-    <b><cite>Место установки:</cite></b>
-    <textarea class="type2" rows="4" name="location" >{{equipment.locations.last.name}}</textarea><hr>
-    <cite><b>Тэг:</b></cite>
-    <input type="text" class="type2" name="tag" value="{{equipment.tags.last.name}}"><hr>
-    <cite><b>Статус:</b></cite>
-    <select name="status" class="select">
-        {%for stat in status%}
-        <option>{{stat}}</option>
-        {%endfor%}
-        <option selected>{{equipment.status.last.name}}</option>
-    </select>
-    <br>
-    <br>
-    <b>Комментарий</b>
-    <textarea class="type2" rows="6" name="description">{{equipment.descriptions.last.name}}</textarea>
-    {%if si_or%}
-    <b>Дата предыдущей поверки:</b>
-    <input {%if not request.user.is_staff %} class="owner" {%endif%} class="select" type="date" name="previous_verification"
-           value='{{equipment.si.last.previous_verification|date:"Y-m-d"}}'>
-    <b>Сертификат:</b>
-    <input {%if not request.user.is_staff %} class="owner" {%endif%} class="type2" type="text" name="certificate" value="{{equipment.si.last.certificate}}">
-    <br><br>
-    {%endif%}
+    <table>
+        <tr>
+            <td><b><cite>Позиция по ГП:</cite> </b></td>
+            <td>
+                <select name="position" class="select">
+                    {%for position in positions%}
+                    <option>{{position.name}}</option>
+                    <br>
+                    {%endfor%}
+                    <option selected>{{equipment.positions.last.name}}</option>
+                </select>
+        </tr>
+        <tr>
+            {%if request.user.is_staff%}
+            <td><b><cite>Добавить позицию по ГП:</cite></b></td>
+            <td><input type="text" name="position_new" class="type2"></td>
+            {%endif%}
+        </tr>
+        <tr>
+            <td><b><cite>Место установки:</cite></b></td>
+            <td><textarea class="type2" rows="4" name="location">{{equipment.locations.last.name}}</textarea></td>
+        </tr>
+        <tr>
+            <td><b><cite>Тэг:</cite></b></td>
+            <td><input type="text" class="type2" name="tag" value="{{equipment.tags.last.name}}"></td>
+        </tr>
+        <tr>
+            <td><b><cite>Статус:</cite></b></td>
+            <td><select name="status" class="select">
+                {%for stat in status%}
+                <option>{{stat}}</option>
+                {%endfor%}
+                <option selected>{{equipment.status.last.name}}</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td><b><cite>Комментарий:</cite></b></td>
+            <td><textarea class="type2" rows="6" name="description">{{equipment.descriptions.last.name}}</textarea></td>
+        </tr>
+        {%if si_or%}
+        <tr>
+            <td><b><cite>Дата предыдущей поверки:</cite></b></td>
+            <td><input {%if not request.user.is_staff %} class="owner" {%endif%} class="select" type="date"
+                       name="previous_verification"
+                       value='{{equipment.si.last.previous_verification|date:"Y-m-d"}}'></td>
+        </tr>
+        <tr>
+            <td><b><cite>Сертификат:</cite></b></td>
+            <td><input {%if not request.user.is_staff %} class="owner" {%endif%} class="type2" type="text"
+                       name="certificate"
+                       value="{{equipment.si.last.certificate}}"></td>
+            {%endif%}
+        </tr>
+    </table>
     <button type="submit" class="button-style2"> Обновить данные</button>
     <a href="{% url 'search' %}" class="button-style2">К поиску</a>
 
