@@ -2,6 +2,8 @@ import csv
 from django.core.mail import EmailMessage
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
+from urllib3 import request
+
 from device.models import Equipment, Si
 
 
@@ -109,7 +111,7 @@ def send_all(request, start, end):
         start = end
         end += 2000
         return redirect(reverse_lazy('send_all', kwargs={'start': start, 'end': end}))
-
-        # with open('./all_data.csv', 'w', encoding='utf-8'):
-        #     pass
+    sending(request, 'all_data')
+    with open('./all_data.csv', 'w', encoding='utf-8'):
+        pass
     return redirect(reverse_lazy('search'))
