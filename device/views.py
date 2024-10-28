@@ -339,7 +339,7 @@ def equipment_list(request):
             'count': eq_filter.qs.count(),
 
         }
-        sample_send(eq_filter.qs)
+        # sample_send(eq_filter.qs)
         if request.POST.get('parser'):
             data_from_parser(eq_filter)
         return render(request, 'device/equipments.html', context=data)
