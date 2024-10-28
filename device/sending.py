@@ -107,9 +107,6 @@ def send_all(request, start, end):
                 'result': from_si.result,
             }
             )
-            # if last == end:
-            #     return redirect(reverse_lazy('search'))
-
     if end < last:
         start = end
         end += 1000
