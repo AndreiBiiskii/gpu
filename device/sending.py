@@ -5,8 +5,7 @@ from django.urls import reverse_lazy
 from device.models import Equipment, Si
 
 
-#  <a href="{% url 'send_all' 0 1000 %}" class="button-style2"> Выгрузить все СИ</a>
-#{%if request.user.is_staff%}<a href="{% url 'send' 'sample_send' %}" class="button-style2">Выгрузить выборку</a>{%endif%}
+#<a href="{% url 'send_all' 0 1000 %}" class="button-style2"> Выгрузить все СИ</a>
 def sample_send(request, data):
     with open('./sample_send.csv', 'w', encoding='utf-8') as f:
         fieldnames = ['№', 'position', 'location', 'teg', 'serial_number', 'type', 'model', 'name', 'reg_number',
