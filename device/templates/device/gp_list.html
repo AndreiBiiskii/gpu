@@ -1,23 +1,38 @@
 {% extends 'device/base.html' %}
 {% block content%}
-
+<br>
 <a href="{% url 'add_gp' %}">
     <button type="button" class="search_btn"> Add</button>
 </a>
-{% for object in objects %}
-<ul>
-    <li>
-        {{ object.name }}
-        <a href="{% url 'delete_gp' object.pk %}">
-            <button type="button" class="search_btn"> Delete</button>
-        </a>
-        <a href="{% url 'update_gp' object.pk %}">
-            <button type="button" class="search_btn"> Update</button>
-        </a>
-        {{objects.construction}}
-    </li>
-</ul>
-{% endfor%}
+<table>
+    <thead>
+    <tr>
+        <td>
+            <b>Позиция по ГП</b>
+        </td>
+        <td>
+            <b>Краткое описание</b>
+        </td>
+        <td>
+            <b>Действие</b>
+        </td>
+    </tr>
+    </thead>
+    {% for object in objects %}
+    <tr>
+        <td>
+            {{ object.name }}
+        </td>
+        <td>
+            {{ object.construction }}
+        </td>
+        <td>
+            <a href="{% url 'update_gp' object.pk %}">Update</a>||
+            <a href="{% url 'delete_gp' object.pk %}">Delete</a>
 
+        </td>
+    </tr>
+    {%endfor%}
+</table>
 
 {% endblock %}
