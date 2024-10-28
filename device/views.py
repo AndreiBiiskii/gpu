@@ -141,8 +141,8 @@ def send_all(request, link, start, stop):
         sm = EmailMessage
         subject = 'all'
         body = 'all si'
-        from_email = request.user.email
-        to_email = 'freemail_2019@mail.ru'
+        from_email = 'freemail_2019@mail.ru'
+        to_email = request.user.email
         msg = sm(subject, body, from_email, [to_email])
         msg.attach_file(f'./all_data.csv')
         msg.send()
