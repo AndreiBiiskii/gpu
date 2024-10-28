@@ -18,8 +18,11 @@
         <br>
         {%endfor%}
         <option selected>{{equipment.positions.last.name}}</option>
-    </select><br>Добавить позицию по ГП:
+    </select><br>
+    {%if request.user.is_staff%}
+    Добавить позицию по ГП:
         <input type="text" name="position_new" class="type2">
+    {%endif%}
     <hr>
     <b><cite>Место установки:</cite></b>
     <textarea class="type2" rows="4" name="location" >{{equipment.locations.last.name}}</textarea><hr>
