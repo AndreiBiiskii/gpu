@@ -6,21 +6,7 @@ from urllib3 import request
 from device.models import Equipment, Si
 
 
-def sending(request, title):
-    sm = EmailMessage
-    subject = 'sample'
-    body = 'sample'
-    from_email = 'freemail_2019@mail.ru'
-    to_email = request.user.email
-    msg = sm(subject, body, from_email, [to_email])
-    msg.attach_file(f'./{title}.csv')
-    msg.send()
-    with open(f'./{title}.csv', 'w', encoding='utf-8'):
-        pass
-    return redirect(reverse_lazy('search'))
-
-
-def sample_send(data):
+def sample_send(request, data):
     with open('./sample_send.csv', 'w', encoding='utf-8') as f:
         fieldnames = ['№', 'position', 'location', 'teg', 'serial_number', 'type', 'model', 'name', 'reg_number',
                       'min_scale', 'max_scale', 'unit', 'comment', 'interval', 'previous_verification',
@@ -65,6 +51,20 @@ def sample_send(data):
                     'serial_number': eq.serial_number,
                 }
                 )
+    return redirect(reverse_lazy('search'))
+
+
+def sending(request, title):
+    sm = EmailMessage
+    subject = 'sample'
+    body = 'sample'
+    from_email = 'freemail_2019@mail.ru'
+    to_email = request.user.email
+    msg = sm(subject, body, from_email, [to_email])
+    msg.attach_file(f'./{title}.csv')
+    msg.send()
+    with open(f'./{title}.csv', 'w', encoding='utf-8'):
+        pass
     return redirect(reverse_lazy('search'))
 
 
