@@ -233,11 +233,10 @@ a {
 .shadowbox {
   width: 96%;
   font-size:1.6em;
-  height: 4em;
+  height: 2em;
   border: 1px solid #333;
   box-shadow: 5px 5px 8px 8px #444;
   text-align: center;
-
   margin:25px 25px 0 10px;
   background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
   border-radius: 10px;
