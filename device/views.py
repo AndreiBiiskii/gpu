@@ -532,6 +532,25 @@ class ListGP(FilterView):
     }
 
 
+class MyFilterModel(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='icontains')
+
+    class Meta:
+        model = EquipmentModel
+        fields = ['name']
+
+
+class ListModel(FilterView):
+    model = EquipmentModel
+    permission_classes = [IsAdminUser, ]
+    filterset_class = MyFilterModel
+    template_name = 'device/list_model.html'
+    context_object_name = 'objects'
+    extra_context = {
+        'menu': menu
+    }
+
+
 class AddGp(CreateView):
     model = GP
     permission_classes = [IsAdminUser, ]
@@ -588,13 +607,13 @@ class UpdateCategory(UpdateView):
     }
 
 
-def delete_category(request, pk, Mod):
-    if not request.user.is_staff:
-        redirect('login')
-    obj = get_object_or_404(Mod, pk=pk)
-
-    obj.delete()
-    return redirect(reverse_lazy('search'))
+# def delete_category(request, pk, Mod):
+#     if not request.user.is_staff:
+#         redirect('login')
+#     obj = get_object_or_404(Mod, pk=pk)
+#
+#     obj.delete()
+#     return redirect(reverse_lazy('search'))
 
 
 class LoginUser(LoginView):

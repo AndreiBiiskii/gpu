@@ -32,17 +32,11 @@ urlpatterns = [
         'url_update': 'update_manufacturer',
         'url_add': 'add_manufacturer'
     }), name='manufacturers'),
-    path('delete_manufacturer/<int:pk>', delete_category, {'Mod': Manufacturer}, name='delete_manufacturer'),
+    # path('delete_manufacturer/<int:pk>', delete_category, {'Mod': Manufacturer}, name='delete_manufacturer'),
     path('add_manufacturer/', AddCategory.as_view(model=Manufacturer), name='add_manufacturer'),
     path('update_manufacturer/<int:pk>', UpdateCategory.as_view(model=Manufacturer), name='update_manufacturer'),
-    path('models/', ListCategory.as_view(model=EquipmentModel, extra_context={
-        'title': 'Список моделей',
-        'menu': menu,
-        'url_delete': 'delete_model',
-        'url_update': 'update_model',
-        'url_add': 'add_model'
-    }), name='models'),
-    path('delete_model/<int:pk>', delete_category, {'Mod': EquipmentModel}, name='delete_model'),
+    path('models/', ListModel.as_view(), name='models'),
+    # path('delete_model/<int:pk>', delete_category, {'Mod': EquipmentModel}, name='delete_model'),
     path('add_model/', AddCategory.as_view(model=EquipmentModel), name='add_model'),
     path('update_model/<int:pk>', UpdateCategory.as_view(model=EquipmentModel), name='update_model'),
     path('types/', ListCategory.as_view(model=EquipmentType, extra_context={
@@ -52,7 +46,7 @@ urlpatterns = [
         'url_update': 'update_type',
         'url_add': 'add_type'
     }), name='types'),
-    path('delete_type/<int:pk>', delete_category, {'Mod': EquipmentType}, name='delete_type'),
+    # path('delete_type/<int:pk>', delete_category, {'Mod': EquipmentType}, name='delete_type'),
     path('add_type/', AddCategory.as_view(model=EquipmentType), name='add_type'),
     path('update_type/<int:pk>', UpdateCategory.as_view(model=EquipmentType), name='update_type'),
 
@@ -63,7 +57,7 @@ urlpatterns = [
         'url_update': 'update_name',
         'url_add': 'add_name'
     }), name='names'),
-    path('delete_name/<int:pk>', delete_category, {'Mod': EquipmentName}, name='delete_name'),
+    # path('delete_name/<int:pk>', delete_category, {'Mod': EquipmentName}, name='delete_name'),
     path('add_name/', AddCategory.as_view(model=EquipmentName), name='add_name'),
     path('update_name/<int:pk>', UpdateCategory.as_view(model=EquipmentName), name='update_name'),
 
@@ -74,7 +68,7 @@ urlpatterns = [
         'url_update': 'update_status',
         'url_add': 'add_status'
     }), name='statuses'),
-    path('delete_status/<int:pk>', delete_category, {'Mod': StatusAdd}, name='delete_status'),
+    # path('delete_status/<int:pk>', delete_category, {'Mod': StatusAdd}, name='delete_status'),
     path('add_status/', AddCategory.as_view(model=StatusAdd), name='add_status'),
     path('update_status/<int:pk>', UpdateCategory.as_view(model=StatusAdd), name='update_status'),
 
@@ -90,7 +84,7 @@ urlpatterns = [
         'url_update': 'update_year',
         'url_add': 'add_year'
     }), name='years'),
-    path('delete_year/<int:pk>', delete_category, {'Mod': Year}, name='delete_year'),
+    # path('delete_year/<int:pk>', delete_category, {'Mod': Year}, name='delete_year'),
     path('add_year/', AddCategory.as_view(model=Year), name='add_year'),
     path('update_year/<int:pk>', UpdateCategory.as_view(model=Year), name='update_year'),
 ]

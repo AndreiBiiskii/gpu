@@ -1,0 +1,37 @@
+{% extends 'device/base.html' %}
+{% block content%}
+<form action="" method="get">
+    <table>
+        {{ filter.form.as_table }}
+    </table>
+    <input type="submit"/>
+</form>
+<br>
+<a href="{% url 'add_model' %}">
+    <button type="button" class="search_btn"> Add</button>
+</a>
+<table>
+    <thead>
+    <tr>
+        <td>
+            <b>Модель</b>
+        </td>
+        <td>
+            <b>Действие</b>
+        </td>
+    </tr>
+    </thead>
+    {% for object in objects %}
+    <tr>
+        <td>
+            {{ object.name }}
+        </td>
+        <td>
+            <a href="{% url 'update_model' object.pk %}">Update</a>
+
+        </td>
+    </tr>
+    {%endfor%}
+</table>
+
+{% endblock %}
