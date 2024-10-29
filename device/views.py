@@ -16,6 +16,7 @@ from django.utils.timezone import now
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DetailView, DeleteView
 from django_filters.filters import _truncate
+from django_filters.views import FilterView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
@@ -512,6 +513,25 @@ def EquipmentDelete(request, pk):
     return redirect('/')
 
 
+class MyFilterGp(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='icontains')
+
+    class Meta:
+        model = GP
+        fields = ['construction']
+
+
+class ListGP(FilterView):
+    model = GP
+    permission_classes = [IsAdminUser, ]
+    filterset_class = MyFilterGp
+    template_name = 'device/gp_list.html'
+    context_object_name = 'objects'
+    extra_context = {
+        'menu': menu
+    }
+
+
 class AddGp(CreateView):
     model = GP
     permission_classes = [IsAdminUser, ]
@@ -521,13 +541,6 @@ class AddGp(CreateView):
         'menu': menu
     }
     success_url = '/'
-
-
-class ListGP(ListView):
-    model = GP
-    permission_classes = [IsAdminUser, ]
-    template_name = 'device/gp_list.html'
-    context_object_name = 'objects'
 
 
 class UpdateGp(UpdateView):
@@ -541,12 +554,10 @@ class UpdateGp(UpdateView):
     }
 
 
-class DeleteGp(DeleteView):
-    permission_classes = [IsAdminUser, ]
-    model = GP
-    extra_context = {
-        'menu': menu,
-    }
+def delete_gp(request, pk):
+    obj = get_object_or_404(GP, pk=pk)
+    obj.delete()
+    return redirect('list_gp')
 
 
 class AddCategory(CreateView):
@@ -560,7 +571,7 @@ class AddCategory(CreateView):
     success_url = '/'
 
 
-class ListCategory(ListView):
+class ListCategory(FilterView):
     permission_classes = [IsAdminUser, ]
     template_name = 'device/list_category.html'
     context_object_name = 'objects'
@@ -583,7 +594,6 @@ def delete_category(request, pk, Mod):
     obj = get_object_or_404(Mod, pk=pk)
 
     obj.delete()
-
     return redirect(reverse_lazy('search'))
 
 

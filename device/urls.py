@@ -79,7 +79,7 @@ urlpatterns = [
     path('update_status/<int:pk>', UpdateCategory.as_view(model=StatusAdd), name='update_status'),
 
     path('list_gp/', ListGP.as_view(), name='list_gp'),
-    path('delete_gp/<int:pk>', DeleteGp.as_view(), name='delete_gp'),
+    path('delete_gp/<int:pk>', delete_gp, name='delete_gp'),
     path('add_gp/', AddGp.as_view(), name='add_gp'),
     path('update_gp/<int:pk>', UpdateGp.as_view(), name='update_gp'),
 
