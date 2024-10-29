@@ -549,7 +549,6 @@ class DeleteGp(DeleteView):
     }
 
 
-
 class AddCategory(CreateView):
     permission_classes = [IsAdminUser, ]
     template_name = 'device/add_category.html'
@@ -653,6 +652,7 @@ def draft_device_add(request, pk):
         redirect('login')
     draft = Draft.objects.get(pk=pk)
     initial_dict = {
+        'serial_number': draft.serial_number_draft,
         'position': draft.poz_draft,
         'location': draft.location_draft,
         'tag': draft.tag_draft,
@@ -679,6 +679,7 @@ def draft_equipment_add(request, pk):
         redirect('login')
     draft = Draft.objects.get(pk=pk)
     initial_dict = {
+        'serial_number': draft.serial_number_draft,
         'position': draft.poz_draft,
         'location': draft.location_draft,
         'tag': draft.tag_draft,

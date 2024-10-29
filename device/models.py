@@ -183,7 +183,9 @@ class Si(models.Model):
 
 
 class Draft(models.Model):
-    poz_draft = models.ForeignKey('GP', on_delete=models.CASCADE, blank=False, null=False, verbose_name='Поз. по ГП')
+    serial_number_draft = models.CharField(max_length=100, verbose_name='Серийный номер')
+    poz_draft = models.ForeignKey('GP', on_delete=models.CASCADE, blank=True, null=True, verbose_name='Поз. по ГП')
+    poz_draft_new = models.CharField(max_length=100, verbose_name=' Поз. по ГП')
     location_draft = models.CharField(max_length=255, blank=False, null=False, verbose_name='Место установки')
     tag_draft = models.CharField(max_length=150, blank=False, null=False, verbose_name='Тэг')
     description_draft = models.TextField(blank=False, null=False, verbose_name='Описание')

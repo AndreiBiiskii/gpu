@@ -33,7 +33,9 @@ class AddEquipmentForm(forms.Form):
                                required=False)
     description = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), label='Комментарий:')
     position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
-                                      label='Поз. по ГП')
+                                      label='Поз. по ГП', required=False)
+    position_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
+                                   label='Добавить позицию по ГП:', max_length=20, required=False)
     location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), max_length=50, required=False,
                                label='Место установки:')
     tag = forms.CharField(label='Тег', widget=forms.TextInput(attrs={'class': 'type2'}), max_length=100, required=False)
@@ -78,7 +80,10 @@ class AddEquipmentForm(forms.Form):
             self.cleaned_data['model'] = self.cleaned_data['model_new']
         if self.cleaned_data['status_new']:
             self.cleaned_data['status'] = self.cleaned_data['status_new']
-
+        if self.cleaned_data['position_new']:
+            self.cleaned_data['position'] = self.cleaned_data['position_new']
+        if (self.cleaned_data['position_new'] == '') and (self.cleaned_data['position'] is None):
+            raise forms.ValidationError(message='Не указана позиция по ГП')
         if Equipment.objects.filter(
                 Q(serial_number=self.cleaned_data['serial_number']) & Q(model__name=self.cleaned_data['model'])):
             raise forms.ValidationError(message='Оборудование уже есть.')
@@ -279,8 +284,12 @@ class SearchForm(forms.Form):
 
 
 class DraftForm(forms.ModelForm):
+    serial_number_draft = forms.CharField(label='Серийный номер', max_length=100,
+                                          widget=forms.TextInput(attrs={'class': 'type2'}))
     poz_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
-                                       label='Поз. по ГП')
+                                       label='Поз. по ГП', required=False)
+    poz_draft_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
+                                    label='Добавить позицию по ГП:', max_length=20, required=False)
     location_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Расположение')
     description_draft = forms.CharField(
         widget=forms.Textarea(attrs={"class": "type2"}), label='Комментарий:')
@@ -290,9 +299,16 @@ class DraftForm(forms.ModelForm):
                                           label='Статус')
     images = forms.ImageField(widget=forms.FileInput(attrs={'class': 'select'}))
 
+    # def clean(self):
+    #     cleaned_data = super(DraftForm, self).clean()
+    #     if cleaned_data['poz_draft_new']:
+    #         cleaned_data['poz_draft'] = cleaned_data['poz_draft_new']
+    #     return cleaned_data
+
     class Meta(object):
         model = Draft
-        exclude = ('user_draft',)
+        fields = ['serial_number_draft', 'poz_draft', 'poz_draft_new', 'location_draft', 'description_draft',
+                  'tag_draft', 'status_draft', 'images']
 
 
 class DraftFormDevice(forms.Form):
