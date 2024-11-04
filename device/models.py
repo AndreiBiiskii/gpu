@@ -7,7 +7,7 @@ from django.urls import reverse
 
 
 class StatusAdd(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Статус', unique=True)
+    name = models.CharField(max_length=50, verbose_name='Статус', unique=True)
 
     def __str__(self):
         return self.name
@@ -130,8 +130,8 @@ class Tag(models.Model):
 
 
 class Equipment(models.Model):
-    serial_number = models.CharField(max_length=255, verbose_name='Серийный номер')
-    model = models.ForeignKey(EquipmentModel, on_delete=models.DO_NOTHING, related_name='model', blank=True, null=True)
+    serial_number = models.CharField(max_length=25, verbose_name='Серийный номер')
+    model = models.ForeignKey(EquipmentModel, on_delete=models.CASCADE, related_name='model', blank=True, null=True)
     at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
     defect = models.BooleanField(default=False, blank=True, null=True)
     si_or = models.BooleanField(default=True, verbose_name='Средство измерения')
@@ -160,11 +160,11 @@ class Si(models.Model):
                                   verbose_name='Средство измерения')
     previous_verification = models.DateField(verbose_name='Дата предыдущей поверки')
     next_verification = models.DateField(verbose_name='Дата следующей поверки')
-    certificate = models.CharField(max_length=255, verbose_name='Свидетельство о поверке', default='еще нет')
-    interval = models.ForeignKey(VerificationInterval, on_delete=models.DO_NOTHING, related_name='interval', blank=True,
+    certificate = models.CharField(max_length=100, verbose_name='Свидетельство о поверке', default='еще нет')
+    interval = models.ForeignKey(VerificationInterval, on_delete=models.CASCADE, related_name='interval', blank=True,
                                  null=True, verbose_name='Межповерочный интервал (мес)')
-    scale = models.ForeignKey('Scale', on_delete=models.DO_NOTHING, related_name='scale', verbose_name='Шкала датчика')
-    unit = models.ForeignKey('Unit', on_delete=models.DO_NOTHING, related_name='unit', verbose_name='Единица измерения')
+    scale = models.ForeignKey('Scale', on_delete=models.CASCADE, related_name='scale', verbose_name='Шкала датчика')
+    unit = models.ForeignKey('Unit', on_delete=models.CASCADE, related_name='unit', verbose_name='Единица измерения')
     # error_device = models.ForeignKey('Error', on_delete=models.DO_NOTHING, related_name='error_device',
     #                                  verbose_name='Погрешность', default=1)
     reg_number = models.ForeignKey('RegNumber', on_delete=models.DO_NOTHING, related_name='reg_number',
@@ -183,11 +183,11 @@ class Si(models.Model):
 
 
 class Draft(models.Model):
-    serial_number_draft = models.CharField(max_length=255, verbose_name='Серийный номер')
+    serial_number_draft = models.CharField(max_length=100, verbose_name='Серийный номер')
     poz_draft = models.ForeignKey('GP', on_delete=models.CASCADE, blank=True, null=True, verbose_name='Поз. по ГП')
-    poz_draft_new = models.CharField(max_length=255, verbose_name=' Поз. по ГП')
+    poz_draft_new = models.CharField(max_length=100, verbose_name=' Поз. по ГП')
     location_draft = models.CharField(max_length=255, blank=False, null=False, verbose_name='Место установки')
-    tag_draft = models.CharField(max_length=255, blank=False, null=False, verbose_name='Тэг')
+    tag_draft = models.CharField(max_length=150, blank=False, null=False, verbose_name='Тэг')
     description_draft = models.TextField(blank=False, null=False, verbose_name='Описание')
     status_draft = models.ForeignKey(StatusAdd, on_delete=models.CASCADE, blank=False, null=False,
                                      verbose_name='Статус')
@@ -202,8 +202,8 @@ class Draft(models.Model):
 
 
 class GP(models.Model):
-    name = models.CharField(max_length=255, blank=False, verbose_name='Позиция по ГП', unique=True)
-    construction = models.CharField(max_length=255, blank=True, verbose_name='Наименование здания, сооружения')
+    name = models.CharField(max_length=100, blank=False, verbose_name='Позиция по ГП', unique=True)
+    construction = models.CharField(max_length=100, blank=True, verbose_name='Наименование здания, сооружения')
 
     def __str__(self):
         return self.name
@@ -213,7 +213,7 @@ class GP(models.Model):
 
 
 class RegNumber(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Регистрационный номер')
+    name = models.CharField(max_length=10, verbose_name='Регистрационный номер')
 
     def __str__(self):
         return self.name
@@ -235,12 +235,12 @@ class Year(models.Model):
 
 
 class Scale(models.Model):
-    min_scale = models.CharField(max_length=255, verbose_name='Минимум шкалы')
-    max_scale = models.CharField(max_length=255, verbose_name='Максимум шкалы')
+    min_scale = models.CharField(max_length=10, verbose_name='Минимум шкалы')
+    max_scale = models.CharField(max_length=10, verbose_name='Максимум шкалы')
 
 
 class Unit(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Единицы измерения')
+    name = models.CharField(max_length=10, verbose_name='Единицы измерения')
 
     def __str__(self):
         return self.name
