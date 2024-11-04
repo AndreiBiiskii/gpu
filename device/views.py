@@ -22,7 +22,7 @@ from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserFo
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale
 from device.parser import data_from_parser
-from device.sending import sample_send
+# from device.sending import sample_send
 from device.variables import year
 from equipment.settings import BASE_DIR
 
@@ -342,7 +342,13 @@ def equipment_list(request):
             'count': eq_filter.qs.count(),
 
         }
-        sample_send(request, eq_filter.qs)
+        # sample_send(request, eq_filter.qs)
+
+
+
+        #        <a href="{% url 'send' 'sample_send' %}" class="button-style2">Выгрузить выборку</a>
+        #         <a href="{% url 'send_all' 0 1000 %}" class="button-style2"> Выгрузить все СИ</a>
+        #         <a href="{% url 'data_from_parser' %}" class="button-style2">Parsing</a>
         if request.POST.get('parser'):
             data_from_parser(eq_filter)
         return render(request, 'device/equipments.html', context=data)

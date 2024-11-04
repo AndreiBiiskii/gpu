@@ -1,4 +1,3 @@
-import random
 from datetime import datetime, timedelta
 from django import forms
 import django_filters
