@@ -170,7 +170,9 @@ def equipment_add(request):
             return redirect('/')
     else:
         form = AddEquipmentForm()
-    return render(request, 'device/equipment_add.html', {'form': form, 'menu': menu})
+    models = EquipmentModel.objects.all()
+
+    return render(request, 'device/equipment_add.html', {'form': form, 'menu': menu, 'models':models})
 
 
 def device_add(request):

@@ -25,7 +25,5 @@ bag.csv
 media/
 defectone/migrations/
 device/migrations/
-
-
-
-/static/
+defect/migrations/
+static/

@@ -1,6 +1,7 @@
 {% extends 'device/base.html' %}
 
 {% block content%}
+
 <div class="footer">
     {{ eq.model }}
     {{eq.id}}
@@ -9,12 +10,13 @@
     <img src="{{draft.images.url}}">
     {%endif%}
 
-    <form action="" method="POST" enctype="multipart/form-data" >
+    <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
             {{ form.as_table }}
         </table>
-        <button type="submit" class="button-style2"> Сохранить</button> --------------------------------
+        <button type="submit" class="button-style2"> Сохранить</button>
+        --------------------------------
         <a class="button-style2" href="{% url 'search' %}">К поиску</a>
     </form>
     <br>

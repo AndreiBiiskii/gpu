@@ -11,7 +11,7 @@ from .models import *
 
 
 class AddEquipmentForm(forms.Form):
-    serial_number = forms.CharField(label='Серийный номер', max_length=100,
+    serial_number = forms.CharField(label='Серийный номер', max_length=255,
                                     widget=forms.TextInput(attrs={'class': 'type2'}))
     model = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                    queryset=EquipmentModel.objects.all(),
@@ -20,7 +20,7 @@ class AddEquipmentForm(forms.Form):
                                 required=False)
     type = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Тип оборудования:',
                                   queryset=EquipmentType.objects.all(), required=False)
-    type_new = forms.CharField(label='Добавить тип:', max_length=15, widget=forms.TextInput(attrs={'class': 'type2'}),
+    type_new = forms.CharField(label='Добавить тип:', max_length=255, widget=forms.TextInput(attrs={'class': 'type2'}),
                                required=False)
     manufacturer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Производитель:',
                                           queryset=Manufacturer.objects.all(), required=False)
@@ -36,9 +36,9 @@ class AddEquipmentForm(forms.Form):
                                       label='Поз. по ГП', required=False)
     position_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
                                    label='Добавить позицию по ГП:', max_length=20, required=False)
-    location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), max_length=50, required=False,
+    location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), max_length=255, required=False,
                                label='Место установки:')
-    tag = forms.CharField(label='Тег', widget=forms.TextInput(attrs={'class': 'type2'}), max_length=100, required=False)
+    tag = forms.CharField(label='Тег', widget=forms.TextInput(attrs={'class': 'type2'}), max_length=255, required=False)
     status = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=StatusAdd.objects.all(),
                                     label='Статус', required=False)
     status_new = forms.CharField(label='Добавить статус', max_length=10,
@@ -52,16 +52,16 @@ class AddEquipmentForm(forms.Form):
             raise forms.ValidationError(message='Оборудование уже есть.')
         if (self.cleaned_data['model'] is None) & (self.cleaned_data['model_new'] == ''):
             raise forms.ValidationError(message='Не указана модель.')
-        if len(self.cleaned_data['model_new']) > 100:
-            raise forms.ValidationError(message='Модель должен быть до 100 символов.')
+        if len(self.cleaned_data['model_new']) > 255:
+            raise forms.ValidationError(message='Модель должен быть до 255 символов.')
         if (self.cleaned_data['manufacturer'] is None) & (self.cleaned_data['manufacturer_new'] == ''):
             raise forms.ValidationError(message='Не указан производитель.')
-        if len(self.cleaned_data['manufacturer_new']) > 100:
-            raise forms.ValidationError(message='Производитель должен быть до 100 символов.')
+        if len(self.cleaned_data['manufacturer_new']) > 255:
+            raise forms.ValidationError(message='Производитель должен быть до 255 символов.')
         if (self.cleaned_data['name'] is None) & (self.cleaned_data['name_new'] == ''):
             raise forms.ValidationError(message='Не указано наименование.')
-        if len(self.cleaned_data['name_new']) > 100:
-            raise forms.ValidationError(message='Наименование должно быть до 100 символов')
+        if len(self.cleaned_data['name_new']) > 255:
+            raise forms.ValidationError(message='Наименование должно быть до 255 символов')
         if self.cleaned_data['year'] is None:
             raise forms.ValidationError(message='Не указан год выпуска.')
         if self.cleaned_data['year'].name > datetime.datetime.now().year:
@@ -122,7 +122,7 @@ class AddEquipmentForm(forms.Form):
 
 
 class AddDeviceForm(forms.Form):
-    serial_number = forms.CharField(label='Серийный номер', max_length=100,
+    serial_number = forms.CharField(label='Серийный номер', max_length=255,
                                     widget=forms.TextInput(attrs={'class': 'type2'}))
     model = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                    queryset=EquipmentModel.objects.all(),
@@ -131,7 +131,7 @@ class AddDeviceForm(forms.Form):
                                 required=False)
     type = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Тип оборудования:',
                                   queryset=EquipmentType.objects.all(), required=False)
-    type_new = forms.CharField(label='Добавить тип:', max_length=15, widget=forms.TextInput(attrs={'class': 'type2'}),
+    type_new = forms.CharField(label='Добавить тип:', max_length=255, widget=forms.TextInput(attrs={'class': 'type2'}),
                                required=False)
     manufacturer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Производитель:',
                                           queryset=Manufacturer.objects.all(), required=False)
@@ -146,10 +146,10 @@ class AddDeviceForm(forms.Form):
     position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                       label='Поз. по ГП', required=False)
     position_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
-                                   label='Добавить позицию по ГП:', max_length=20, required=False)
+                                   label='Добавить позицию по ГП:', max_length=255, required=False)
     location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), max_length=50, required=False,
                                label='Место установки:')
-    tag = forms.CharField(label='Тег', widget=forms.TextInput(attrs={'class': 'type2'}), max_length=100)
+    tag = forms.CharField(label='Тег', widget=forms.TextInput(attrs={'class': 'type2'}), max_length=255)
     status = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=StatusAdd.objects.all(),
                                     label='Статус', required=False)
     status_new = forms.CharField(label='Добавить статус', max_length=255,
@@ -160,7 +160,7 @@ class AddDeviceForm(forms.Form):
                                         queryset=RegNumber.objects.all(),
                                         required=False)
     reg_number_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
-                                     label='Добавить регистрационный номер:', max_length=20, required=False)
+                                     label='Добавить регистрационный номер:', max_length=255, required=False)
     previous_verification = forms.DateField(label='Дата предыдущей поверки:', widget=forms.TextInput(attrs=
     {
         'type': 'date',
@@ -183,16 +183,16 @@ class AddDeviceForm(forms.Form):
             raise forms.ValidationError(message='Не указана модель.')
         if self.cleaned_data['tag'] == '':
             self.cleaned_data['tag'] = ' '
-        if len(self.cleaned_data['model_new']) > 100:
-            raise forms.ValidationError(message='Модель должен быть до 100 символов.')
+        if len(self.cleaned_data['model_new']) > 255:
+            raise forms.ValidationError(message='Модель должен быть до 255 символов.')
         if (self.cleaned_data['manufacturer'] is None) & (self.cleaned_data['manufacturer_new'] == ''):
             raise forms.ValidationError(message='Не указан производитель.')
-        if len(self.cleaned_data['manufacturer_new']) > 100:
-            raise forms.ValidationError(message='Производитель должен быть до 100 символов.')
+        if len(self.cleaned_data['manufacturer_new']) > 255:
+            raise forms.ValidationError(message='Производитель должен быть до 255 символов.')
         if (self.cleaned_data['name'] is None) & (self.cleaned_data['name_new'] == ''):
             raise forms.ValidationError(message='Не указано наименование.')
-        if len(self.cleaned_data['name_new']) > 100:
-            raise forms.ValidationError(message='Наименование должно быть до 100 символов')
+        if len(self.cleaned_data['name_new']) > 255:
+            raise forms.ValidationError(message='Наименование должно быть до 255 символов')
         if self.cleaned_data['year'] is None:
             raise forms.ValidationError(message='Не указан год выпуска.')
         if self.cleaned_data['year'].name > datetime.datetime.now().year:
@@ -284,7 +284,7 @@ class SearchForm(forms.Form):
 
 
 class DraftForm(forms.ModelForm):
-    serial_number_draft = forms.CharField(label='Серийный номер', max_length=100,
+    serial_number_draft = forms.CharField(label='Серийный номер', max_length=255,
                                           widget=forms.TextInput(attrs={'class': 'type2'}))
     poz_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                        label='Поз. по ГП', required=False)

@@ -10,9 +10,9 @@
     {%else%}
     <link rel="stylesheet" type="text/css" href="{% static 'device/css/style.css' %}">
     {%endif%}
+    <script src="{% static 'device/js/java.js' %}"></script>
 </head>
 <body>
-
 <div class="shadowbox">
     {{user}}
     {%if user.is_authenticated%}
@@ -66,6 +66,7 @@
     </nav>
 </header>
 {%endif%}
+
 {% block content %}
 {% endblock %}
 </body>
