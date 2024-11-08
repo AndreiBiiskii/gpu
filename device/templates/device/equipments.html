@@ -1,6 +1,11 @@
 {% extends 'device/base.html' %}
 
 {% block content %}
+<h3 class="error">
+    <br>
+    До 12 Ноября измените свой пароль. <br>
+    Кто не поменяет, не сможет зайти на сайт.
+</h3>
 {% if user.is_authenticated %}
 <div class="owner_top">
     {{messages.error}}
@@ -11,11 +16,10 @@
         </table>
         <button type="submit" class="button-style2">Найти</button>
         <cite>Найдено:{{count}}</cite>
+        {%if request.user.is_staff%}
         <a href="{% url 'send' 'sample_send' %}" class="button-style2">Выгрузить выборку</a>
         <br><br>
         <hr>
-        {%if request.user.is_staff%}
-
         <a href="{% url 'send_all' 0 1000 %}" class="button-style2"> Выгрузить все СИ</a>
         <a href="{% url 'data_from_parser' %}" class="button-style2">Parsing</a>
         {%endif%}
@@ -54,6 +58,4 @@
     </tbody>
 </table>
 {%endif%}
-
-
 {% endblock %}

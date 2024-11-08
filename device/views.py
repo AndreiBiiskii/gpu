@@ -1,6 +1,8 @@
 import csv
 import datetime
 import os
+from venv import create
+
 import django_filters
 from dateutil.relativedelta import relativedelta
 from django.utils.translation import gettext_lazy as _
@@ -172,7 +174,7 @@ def equipment_add(request):
         form = AddEquipmentForm()
     models = EquipmentModel.objects.all()
 
-    return render(request, 'device/equipment_add.html', {'form': form, 'menu': menu, 'models':models})
+    return render(request, 'device/equipment_add.html', {'form': form, 'menu': menu, 'models': models})
 
 
 def device_add(request):
@@ -443,6 +445,10 @@ def DeviceUpdate(request, pk):
     location = equipment.locations.last()
     description = equipment.descriptions.last()
     tag = equipment.tags.last()
+    units = Unit.objects.all()
+    min_scale = si.scale.min_scale
+    max_scale = si.scale.max_scale
+    unit = si.unit.name
     data = {
         'equipment': equipment,
         'menu': menu,
@@ -454,6 +460,10 @@ def DeviceUpdate(request, pk):
         'description': description,
         'tag': tag,
         'si_or': True,
+        'units': units,
+        'min_scale': min_scale,
+        'max_scale': max_scale,
+        'unit': unit,
     }
     if request.method == 'POST':
         if request.POST['description'] != equipment.descriptions.last().name:
@@ -471,6 +481,11 @@ def DeviceUpdate(request, pk):
             d = Description(equipment=equipment, user=request.user, name=request.POST['description'])
             status = StatusAdd.objects.get(name=request.POST['status'])
             s = Status(equipment=equipment, name=status)
+            si.unit = Unit.objects.get(name=request.POST['unit'])
+            Scale.objects.get_or_create(min_scale=request.POST['min_scale'], max_scale=request.POST['max_scale'])
+            scale = Scale.objects.get(min_scale=request.POST['min_scale'], max_scale=request.POST['max_scale'])
+            si.scale = scale
+            si.scale.max_scale = '5'
             t.save()
             l.save()
             p.save()

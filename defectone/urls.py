@@ -11,7 +11,7 @@ urlpatterns = [
     path('defect_list/', defect_list, name='defect_list'),
     path('defect_update/<int:pk>/', DefectUpdate.as_view(), name='defect_update'),
     path('send_act/<int:pk>/', send_act, name='send_act'),
-    path('send_poverka', send_poverka, name='send_poverka'),
+    # path('send_poverka', send_poverka, name='send_poverka'),
 
 ]
 urlpatterns += [path('approve/', ApproveAdd.as_view(), name='approve_add'),

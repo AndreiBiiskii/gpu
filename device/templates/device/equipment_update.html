@@ -52,17 +52,48 @@
         </tr>
         {%if si_or%}
         <tr>
-            <td {%if not request.user.is_staff %} class="owner" {%endif%}><b><cite>Дата предыдущей поверки:</cite></b></td>
+            <td {%if not request.user.is_staff %} class="owner" {%endif%}><b><cite>Дата предыдущей поверки:</cite></b>
+            </td>
             <td {%if not request.user.is_staff %} class="owner" {%endif%}><input class="select" type="date"
-                       name="previous_verification"
-                       value='{{equipment.si.last.previous_verification|date:"Y-m-d"}}'></td>
+                                                                                 name="previous_verification"
+                                                                                 value='{{equipment.si.last.previous_verification|date:"Y-m-d"}}'>
+            </td>
         </tr>
         <tr>
             <td {%if not request.user.is_staff %} class="owner" {%endif%}><b><cite>Сертификат:</cite></b></td>
-            <td {%if not request.user.is_staff %} class="owner" {%endif%}><input {%if not request.user.is_staff %} class="owner" {%endif%} class="type2" type="text"
-                       name="certificate"
-                       value="{{equipment.si.last.certificate}}"></td>
+            <td {%if not request.user.is_staff %} class="owner" {%endif%}><input {%if not request.user.is_staff %}
+                                                                                 class="owner" {%endif%} class="type2"
+                                                                                 type="text"
+                                                                                 name="certificate"
+                                                                                 value="{{equipment.si.last.certificate}}">
+            </td>
             {%endif%}
+        </tr>
+        <tr {%if not request.user.is_staff %} class="owner" {%endif%}>
+            <td><b><cite>Ед. измерения:</cite></b></td>
+            <td><select name="unit" class="select">
+                {% for unit in units %}
+                <option>{{unit}}</option>
+                {%endfor%}
+                <option selected>{{unit}}</option>
+            </select></td>
+
+        </tr>
+        <tr  {%if not request.user.is_staff %} class="owner" {%endif%}>
+
+            <td><b><cite>Минимум шкалы:</cite></b></td>
+            <td>
+                <input class="type2"
+                       name="min_scale"
+                       value='{{min_scale}}'></td>
+        </tr>
+        <tr  {%if not request.user.is_staff %} class="owner" {%endif%}>
+            <td><b><cite>Максимум шкалы:</cite></b></td>
+            <td>
+                <input class="type2"
+                       name="max_scale"
+                       value='{{max_scale}}'></td>
+
         </tr>
     </table>
     <button type="submit" class="button-style2"> Обновить данные</button>
