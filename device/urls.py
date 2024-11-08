@@ -2,6 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
+from defectone.views import send_poverka
 from .sending import sending, send_all
 from .views import *
 

@@ -1,14 +1,15 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from django import forms
 import django_filters
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect
 from django.template.context_processors import request
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
+from numpy.testing.print_coercion_tables import print_new_cast_table
 from rest_framework.reverse import reverse_lazy
 from openpyxl import load_workbook
 from defectone.models import Defect, Approve, Contractor, Kait, Worker
-from device.models import Equipment, Position, Location, Status, Description, GP, Tag
+from device.models import Equipment, Position, Location, Status, Description, GP, Tag, Si
 from device.views import menu
 from equipment.settings import BASE_DIR
 
@@ -48,6 +49,34 @@ def send_act(request, pk):
     to_email = 'freemail_2019@mail.ru'
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(f'{BASE_DIR}/act1.xlsx')
+    msg.send()
+    return redirect(reverse_lazy('defectone:defect_list'))
+
+
+def send_poverka(request):
+    wb = load_workbook(f'{BASE_DIR}/poverka.xlsx')
+    ws = wb['z']
+    count = 0
+    for row in ws:
+        try:
+            eq = Equipment.objects.get(serial_number=ws[f'G{count + 13}'].value, si_or=True)
+            ws[f'C{count + 13}'] = eq.positions.last().name
+            ws[f'D{count + 13}'] = eq.locations.last().name
+            ws[f'E{count + 13}'] = eq.tags.last().name
+            ws[f'M{count + 13}'] = Si.objects.get(equipment=eq).certificate
+            print('value')
+        except:
+            print('Error')
+        count += 1
+    wb.save(f'{BASE_DIR}/poverka.xlsx')
+    wb.close()
+    sm = EmailMessage
+    subject = 'Worker'
+    body = 'Дефектный акт был отправлен на почту.'
+    from_email = request.user.email
+    to_email = 'freemail_2019@mail.ru'
+    msg = sm(subject, body, from_email, [to_email])
+    msg.attach_file(f'{BASE_DIR}/poverka.xlsx')
     msg.send()
     return redirect(reverse_lazy('defectone:defect_list'))
 

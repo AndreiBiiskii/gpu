@@ -407,3 +407,25 @@ table tbody tr:nth-child(even){
   caret-width: 5px; /* Чем шире курсор, тем выразительнее, правда? 😃 */
 
 }
+
+
+
+
+.js-dropdown {
+  display: inline-block;
+  max-height: 400px;
+  overflow-y: auto;
+  width: auto;
+}
+
+.x-drop-down__dropped {
+  display: none;
+}
+
+.x-drop-down__dropped.active {
+  display: block;
+}
+
+.item_hide {
+  display: none;
+}
