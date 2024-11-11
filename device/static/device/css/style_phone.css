@@ -419,6 +419,7 @@ header{
  position: absolute;
  min-width: 50px;
  display: none;
+ margin-bottom: 10px;
 }
 .dws-menu li > ul li{
  border: 1px solid #c7c8ca;
@@ -463,4 +464,9 @@ background: #454547;
 
 #id_password{
     font-size:1.2em;
+}
+
+.draft{
+color:red;
+margin-top:100px;
 }
