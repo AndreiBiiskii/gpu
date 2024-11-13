@@ -3,6 +3,7 @@ import datetime
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.models import PROTECT
 from django.urls import reverse
 
 
@@ -244,3 +245,9 @@ class Unit(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class MyExam(models.Model):
+    user = models.ForeignKey(User, on_delete=PROTECT, verbose_name='Пользователь')
+    exams_ot = models.DateField(verbose_name='Экзамет по ОТ')
+    exams_eb = models.DateField(verbose_name='Экзамет по электоробезопасности')

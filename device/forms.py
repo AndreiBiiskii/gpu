@@ -1,13 +1,11 @@
-from cProfile import label
-
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
-from django.template.context_processors import request
-
+from django.forms import ModelForm
 from device.variables import *
 from dateutil.relativedelta import relativedelta
 from django import forms
 from .models import *
+
 
 
 class AddEquipmentForm(forms.Form):
@@ -328,3 +326,9 @@ class LoginUserForm(AuthenticationForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+
+class MyExamsForm(ModelForm):
+    class Meta:
+        model = MyExam
+        fields = '__all__'

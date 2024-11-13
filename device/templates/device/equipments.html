@@ -1,19 +1,18 @@
 {% extends 'device/base.html' %}
 
 {% block content %}
-<h3 class="error">
-    <br>
-    До 12 Ноября поменяйте свой пароль. <br>
-    Кто не поменяет, не сможет зайти на сайт.
-</h3>
 {% if user.is_authenticated %}
 <div class="owner_top">
+    <br>
+    <br>
     {{messages.error}}
     <form action="{% url 'search' %}" method="POST">
         {% csrf_token %}
         <table class="table">
             {{ equipments.form.as_table }}
         </table>
+        <br>
+        <br>
         <button type="submit" class="button-style2">Найти</button>
         <cite>Найдено:{{count}}</cite>
         {%if request.user.is_staff%}
@@ -29,33 +28,35 @@
     <b><a href="{% url 'draft' %}" class="button-style3"> Добавить новую запись</a></b>
 </div>
 <hr>
-<table>
-    <thead>
-    <tr>
-        <th>Серийный номер</th>
-        <th>Наименование</th>
-        <th>Модель</th>
-        <th>Поз. по ГП</th>
-        <th>Место установки</th>
-        <th>Тэг</th>
-        <th>Дата изменения</th>
-        <th>Дата следующей поверки</th>
-    </tr>
-    </thead>
-    <tbody>
-    {%for equipment in equipments.qs%}
-    <tr>
-        <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a></td>
-        <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
-        <td>{{equipment.model}}</td>
-        <td>{{equipment.positions.last.name}}</td>
-        <td>{{equipment.locations.last.name}}</td>
-        <td>{{equipment.tags.last.name}}</td>
-        <td>{{equipment.descriptions.last.at_date|date:"d-m-Y"}}</td>
-        <td>{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
-    </tr>
-    {%endfor%}
-    </tbody>
-</table>
+<div class="results">
+    <table>
+        <thead>
+        <tr>
+            <th>Серийный номер</th>
+            <th>Наименование</th>
+            <th>Модель</th>
+            <th>Поз. по ГП</th>
+            <th>Место установки</th>
+            <th>Тэг</th>
+            <th>Дата изменения</th>
+            <th>Дата следующей поверки</th>
+        </tr>
+        </thead>
+        <tbody>
+        {%for equipment in equipments.qs%}
+        <tr>
+            <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a></td>
+            <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
+            <td>{{equipment.model}}</td>
+            <td>{{equipment.positions.last.name}}</td>
+            <td>{{equipment.locations.last.name}}</td>
+            <td>{{equipment.tags.last.name}}</td>
+            <td>{{equipment.descriptions.last.at_date|date:"d-m-Y"}}</td>
+            <td>{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
+        </tr>
+        {%endfor%}
+        </tbody>
+    </table>
+</div>
 {%endif%}
 {% endblock %}

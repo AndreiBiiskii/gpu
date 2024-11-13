@@ -15,9 +15,13 @@ color:red;
 width:90%
 }
 
-owner_top{
+.owner_top{
 
 }
+.results{
+
+}
+
 table{
     width: 96%;
     border-collapse: collapse;
@@ -50,8 +54,6 @@ table tbody tr:nth-child(odd){
 table tbody tr:nth-child(even){
 	background: #dddddd;
 }
-
-
 
 .si{
 width:25px;
@@ -233,7 +235,6 @@ a {
 .shadowbox {
   width: 96%;
   font-size:1.6em;
-  height: 2em;
   border: 1px solid #333;
   box-shadow: 5px 5px 8px 8px #444;
   text-align: center;

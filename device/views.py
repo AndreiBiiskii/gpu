@@ -20,9 +20,10 @@ from django.views.generic import UpdateView, CreateView, ListView, DetailView, D
 from django_filters.filters import _truncate
 from django_filters.views import FilterView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm
+from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
-    EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale
+    EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale, \
+    MyExam
 from device.parser import data_from_parser
 from device.sending import sample_send
 from device.variables import year
@@ -253,45 +254,61 @@ class MyFilter(django_filters.FilterSet):
             'class': 'type2',
         }), label='Поверка до:',
         field_name='si__next_verification', lookup_expr='lte')
-    choices = [
-        ("today", _("Today")),
-        ("week", _("Past 7 days")),
-        ("month", _("This month")),
-    ]
-    filters = {
-        "today": lambda qs, name: qs.filter(
-            **{
-                "%s__year" % name: now().year,
-                "%s__month" % name: now().month,
-                "%s__day" % name: now().day,
-            }
-        ),
 
-        "week": lambda qs, name: qs.filter(
-            **{
-                "%s__gte" % name: _truncate(now() - timedelta(days=7)),
-                "%s__lt" % name: _truncate(now() + timedelta(days=1)),
-            }
-        ),
-        "month": lambda qs, name: qs.filter(
-            **{"%s__year" % name: now().year, "%s__month" % name: now().month}
-        ),
-    }
-
-    date_range = django_filters.DateRangeFilter(
-        widget=forms.Select(attrs=
-        {
-            'class': 'type2',
-        }),
-        label='Поверка:', filters=filters, choices=choices, field_name='si__next_verification')
-
-    at_date = django_filters.DateFilter(
+    start_date_add = django_filters.DateFilter(
         widget=forms.TextInput(attrs=
         {
             'type': 'date',
             'class': 'type2',
-        }), label='Внесено в этот день',
-        field_name='descriptions__at_date', lookup_expr='contains')
+        }), label='Внесено с:',
+        field_name='descriptions__at_date', lookup_expr='gte', )
+    end_date_add = django_filters.DateFilter(
+        widget=forms.TextInput(attrs=
+        {
+            'type': 'date',
+            'class': 'type2',
+        }), label='Внесено по:',
+        field_name='descriptions__at_date', lookup_expr='lte')
+
+    # choices = [
+    #     ("today", _("Today")),
+    #     ("week", _("Past 7 days")),
+    #     ("month", _("This month")),
+    # ]
+    # filters = {
+    #     "today": lambda qs, name: qs.filter(
+    #         **{
+    #             "%s__year" % name: now().year,
+    #             "%s__month" % name: now().month,
+    #             "%s__day" % name: now().day,
+    #         }
+    #     ),
+    #
+    #     "week": lambda qs, name: qs.filter(
+    #         **{
+    #             "%s__gte" % name: _truncate(now() - timedelta(days=7)),
+    #             "%s__lt" % name: _truncate(now() + timedelta(days=1)),
+    #         }
+    #     ),
+    #     "month": lambda qs, name: qs.filter(
+    #         **{"%s__year" % name: now().year, "%s__month" % name: now().month}
+    #     ),
+    # }
+
+    # date_range = django_filters.DateRangeFilter(
+    #     widget=forms.Select(attrs=
+    #     {
+    #         'class': 'type2',
+    #     }),
+    #     label='Поверка:', filters=filters, choices=choices, field_name='si__next_verification')
+
+    # at_date = django_filters.DateFilter(
+    #     widget=forms.TextInput(attrs=
+    #     {
+    #         'type': 'date',
+    #         'class': 'type2',
+    #     }), label='Внесено в этот день',
+    #     field_name='descriptions__at_date', lookup_expr='contains')
     status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                               queryset=StatusAdd.objects.all(), field_name='status__name',
                                               lookup_expr='exact', label='Статус')
@@ -757,3 +774,14 @@ def draft_delete(request, pk):
         return redirect(reverse_lazy('draft_list'))
     except:
         return redirect(reverse_lazy('draft_list'))
+
+
+class MyExams(CreateView):
+    model = MyExam
+    form_class = MyExamsForm
+    template_name = 'device/equipments.html'
+    context_object_name = 'obj'
+    fields = '__all__'
+
+
+

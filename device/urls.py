@@ -1,8 +1,6 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
-
-from defectone.views import send_poverka
 from .sending import sending, send_all
 from .views import *
 
@@ -10,6 +8,7 @@ urlpatterns = [
     path('', equipment_list, name='search'),
     path('send_all/<int:start>/<int:end>', send_all, name='send_all'),
     path('send/<slug:title>', sending, name='send'),
+    path('my_exams', MyExams.as_view(), name='my_exams'),
     path('data_from_parser/', data_from_parser, name='data_from_parser'),
     path('users/', include(('users.urls', 'users'), namespace='users')),
     path('defects/', include(('defectone.urls', 'defectone'), namespace='defectone')),
