@@ -251,7 +251,7 @@ class Unit(models.Model):
         return self.name
 
 
-class MyExams(models.Model):
+class MyExam(models.Model):
     user = models.ForeignKey(User, on_delete=PROTECT, verbose_name='Пользователь')
     exams_ot = models.DateField(verbose_name='Экзамет по ОТ')
     exams_eb = models.DateField(verbose_name='Экзамет по электоробезопасности')
