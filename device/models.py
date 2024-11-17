@@ -13,8 +13,8 @@ class StatusAdd(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta:
-        ordering = ['name']
+    # class Meta:
+    #     ordering = ['-name']
 
 
 class Status(models.Model):
@@ -26,7 +26,7 @@ class Status(models.Model):
         return self.equipment
 
     class Meta:
-        ordering = ['name']
+        ordering = ['id']
 
 
 class VerificationInterval(models.Model):
@@ -89,6 +89,7 @@ class Position(models.Model):
 
     class Meta:
         verbose_name_plural = 'Позиции'
+        ordering = ['id']
 
 
 class Description(models.Model):
@@ -104,6 +105,7 @@ class Description(models.Model):
 
     class Meta:
         verbose_name_plural = 'Описания оборудования'
+        ordering = ['id']
 
 
 class Location(models.Model):
@@ -116,6 +118,7 @@ class Location(models.Model):
 
     class Meta:
         verbose_name_plural = 'Места установки'
+        ordering = ['id']
 
 
 class Tag(models.Model):
@@ -128,6 +131,7 @@ class Tag(models.Model):
 
     class Meta:
         verbose_name_plural = 'Тэг'
+        ordering = ['id']
 
 
 class Equipment(models.Model):

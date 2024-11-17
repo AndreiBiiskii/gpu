@@ -363,7 +363,7 @@ def equipment_list(request):
         }
         sample_send(request, eq_filter.qs)
         if request.POST.get('parser'):
-            data_from_parser(eq_filter)
+            data_from_parser(request)
         return render(request, 'device/equipments.html', context=data)
 
     if request.method == 'POST' and not request.user.is_staff:
