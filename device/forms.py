@@ -328,7 +328,7 @@ class LoginUserForm(AuthenticationForm):
         fields = ['username', 'password']
 
 
-class MyExamsForm(ModelForm):
-    class Meta:
-        model = MyExam
-        fields = '__all__'
+# class MyExamsForm(ModelForm):
+#     class Meta:
+#         model = MyExam
+#         fields = '__all__'

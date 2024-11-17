@@ -251,8 +251,7 @@ class Unit(models.Model):
         return self.name
 
 
-class MyExam(models.Model):
-    user = models.ForeignKey(User, on_delete=PROTECT, verbose_name='Пользователь')
-    exams_ot = models.DateField(verbose_name='Экзамет по ОТ')
-    exams_eb = models.DateField(verbose_name='Экзамет по электоробезопасности')
-    at_date = models.DateField(auto_now_add=True, verbose_name='add')
+# class MyExam(models.Model):
+#     user = models.ForeignKey(User, on_delete=PROTECT, verbose_name='Пользователь')
+#     exams_ot = models.DateField(verbose_name='Экзамет по ОТ')
+#     exams_eb = models.DateField(verbose_name='Экзамет по электоробезопасности')

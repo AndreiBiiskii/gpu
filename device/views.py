@@ -20,10 +20,10 @@ from django.views.generic import UpdateView, CreateView, ListView, DetailView, D
 from django_filters.filters import _truncate
 from django_filters.views import FilterView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm
+from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm # MyExamsForm
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
-    EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale, \
-    MyExam
+    EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale
+    # MyExam
 from device.parser import data_from_parser
 from device.sending import sample_send
 from device.variables import year
@@ -776,12 +776,12 @@ def draft_delete(request, pk):
         return redirect(reverse_lazy('draft_list'))
 
 
-class MyExams(CreateView):
-    model = MyExam
-    form_class = MyExamsForm
-    template_name = 'device/equipments.html'
-    context_object_name = 'obj'
-    fields = '__all__'
+# class MyExams(CreateView):
+#     model = MyExam
+#     form_class = MyExamsForm
+#     template_name = 'device/equipments.html'
+#     context_object_name = 'obj'
+#     fields = '__all__'
 
 
 
