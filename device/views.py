@@ -783,10 +783,13 @@ def my_exams(request):
     if not request.user.is_authenticated:
         redirect('login')
     data = MyExam.objects.filter(user=request.user).last()
-    initial_dict = {
-        'exams_ot': data.exams_ot,
-        'exams_eb': data.exams_eb,
-    }
+    try:
+        initial_dict = {
+            'exams_ot': data.exams_ot,
+            'exams_eb': data.exams_eb,
+        }
+    except:
+        initial_dict = {}
     if request.method == 'POST':
         form = MyExamsForm(request.POST)
         if form.is_valid():
