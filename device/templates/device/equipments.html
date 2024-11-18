@@ -28,35 +28,34 @@
     <b><a href="{% url 'draft' %}" class="button-style3"> Добавить новую запись</a></b>
 </div>
 <hr>
-<div class="results">
     <table>
-        <thead>
-        <tr>
-            <th>Серийный номер</th>
-            <th>Наименование</th>
-            <th>Модель</th>
-            <th>Поз. по ГП</th>
-            <th>Место установки</th>
-            <th>Тэг</th>
-            <th>Дата изменения</th>
-            <th>Дата следующей поверки</th>
-        </tr>
-        </thead>
         <tbody>
+        <tr>
+            <td class="theader">Серийный номер</td>
+            <td class="theader">Наименование</td>
+            <td class="theader">Тип</td>
+            <td class="theader">Модель</td>
+            <td class="theader">Поз. по ГП</td>
+            <td class="theader">Место установки</td>
+            <td class="theader">Тэг</td>
+            <td class="theader">Дата изменения</td>
+            <td class="theader">Дата следующей поверки</td>
+        </tr>
         {%for equipment in equipments.qs%}
         <tr>
-            <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a></td>
-            <td><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
-            <td>{{equipment.model}}</td>
-            <td>{{equipment.positions.last.name}}</td>
-            <td>{{equipment.locations.last.name}}</td>
-            <td>{{equipment.tags.last.name}}</td>
-            <td>{{equipment.descriptions.last.at_date|date:"d-m-Y"}}</td>
-            <td>{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
+            <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a></td>
+            <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
+            <td class="table-td">{{equipment.type.name}}</td>
+            <td class="table-td">{{equipment.model}}</td>
+            <td class="table-td">{{equipment.positions.last.name}}</td>
+            <td class="table-td">{{equipment.locations.last.name}}</td>
+            <td class="table-td">{{equipment.tags.last.name}}</td>
+            <td class="table-td">{{equipment.descriptions.last.at_date|date:"d-m-Y"}}</td>
+            <td class="table-td">{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
         </tr>
         {%endfor%}
         </tbody>
     </table>
-</div>
+
 {%endif%}
 {% endblock %}
