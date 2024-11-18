@@ -20,6 +20,8 @@ from django.views.generic import UpdateView, CreateView, ListView, DetailView, D
 from django_filters.filters import _truncate
 from django_filters.views import FilterView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from urllib3 import request
+
 from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm  # MyExamsForm
 from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale, \
@@ -777,12 +779,20 @@ def draft_delete(request, pk):
         return redirect(reverse_lazy('draft_list'))
 
 
-class MyExams(CreateView):
-    model = MyExam
-    form_class = MyExamsForm
-    template_name = 'device/equipments.html'
-    context_object_name = 'obj'
-    fields = '__all__'
-
-
+def my_exams(request):
+    if not request.user.is_authenticated:
+        redirect('login')
+    data = MyExam.objects.filter(user=request.user).last()
+    initial_dict = {
+        'exams_ot': data.exams_ot,
+        'exams_eb': data.exams_eb,
+    }
+    if request.method == 'POST':
+        form = MyExamsForm(request.POST)
+        if form.is_valid():
+            form.save(request.user)
+            return render(request, 'device/my_exams.html', {'form': form, 'object': data})
+    else:
+        form = MyExamsForm(initial=initial_dict)
+    return render(request, 'device/my_exams.html', {'form': form, 'object': data})
 

@@ -1,11 +1,13 @@
+from IPython.utils.coloransi import value
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
 from django.forms import ModelForm
+from urllib3 import request
+
 from device.variables import *
 from dateutil.relativedelta import relativedelta
 from django import forms
 from .models import *
-
 
 
 class AddEquipmentForm(forms.Form):
@@ -321,14 +323,22 @@ class LoginUserForm(AuthenticationForm):
     username = forms.CharField(label='Логин',
                                widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'User name'}))
     password = forms.CharField(label='Пароль',
-                               widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'User name'}))
+                               widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
 
     class Meta:
         model = User
         fields = ['username', 'password']
 
 
-class MyExamsForm(ModelForm):
-    class Meta:
-        model = MyExam
-        fields = '__all__'
+class MyExamsForm(forms.Form):
+    exams_ot = forms.DateField(widget=forms.TextInput(attrs={'type': 'date',
+                                                             'class': 'type2'}), label='Охрана труда')
+    exams_eb = forms.DateField(widget=forms.TextInput(attrs={'type': 'date',
+                                                             'class': 'type2'}), label='Эл. безопасность')
+
+    def save(self, user):
+        exams = MyExam(user=user, exams_ot=self.cleaned_data['exams_ot'], exams_eb=self.cleaned_data['exams_eb'])
+        exams.save()
+        return self.cleaned_data
+
+
