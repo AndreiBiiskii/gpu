@@ -20,6 +20,34 @@
     <button type="submit" class="button-style2"> Сохранить</button>
     <a href="{% url 'search' %}" class="button-style2">К поиску</a>
 </form>
+<table>
+    <tr>
+        <td class="theader">
+            <b> Имя</b>
+        </td>
+        <td class="theader">
+            <b> Охрана труда</b>
+        </td>
+        <td class="theader">
+            <b>Эл. безопасность</b>
+        </td>
+    </tr>
+    {% for obj in objects %}
+    <tr>
+        <td>
+
+            {{obj.user.username}}
+        </td>
+        <td>
+            {{obj.exams_ot}}
+
+        </td>
+        <td>
+            {{obj.exams_eb}}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 {% if request.method == 'POST' %}
 <div class="success">Данные обновлены</div>
 {% endif %}

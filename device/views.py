@@ -17,6 +17,7 @@ from django.db.models import Q
 from django.utils.timezone import now
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DetailView, DeleteView
+from django_extensions.templatetags.widont import widont
 from django_filters.filters import _truncate
 from django_filters.views import FilterView
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -233,6 +234,10 @@ class MyFilter(django_filters.FilterSet):
     serial_number = django_filters.CharFilter(lookup_expr='icontains',
                                               widget=forms.TextInput(attrs={'class': 'type2'}),
                                               label='Серийный номер')
+    model = django_filters.CharFilter(field_name='model__name',
+                                      lookup_expr='icontains',
+                                      label='Модель:',
+                                      widget=forms.TextInput(attrs={'class': 'type2'}))
     position = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                                 queryset=GP.objects.all(),
                                                 field_name='positions__name',
@@ -782,6 +787,7 @@ def draft_delete(request, pk):
 def my_exams(request):
     if not request.user.is_authenticated:
         redirect('login')
+    objects = MyExam.objects.all()
     data = MyExam.objects.filter(user=request.user).last()
     try:
         initial_dict = {
@@ -797,5 +803,8 @@ def my_exams(request):
             return render(request, 'device/my_exams.html', {'form': form, 'object': data})
     else:
         form = MyExamsForm(initial=initial_dict)
-    return render(request, 'device/my_exams.html', {'form': form, 'object': data})
-
+    context = {
+        'form': form,
+        'object': data,
+        'objects': objects}
+    return render(request, 'device/my_exams.html', context=context)
