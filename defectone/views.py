@@ -22,11 +22,13 @@ def defect_act(request, poz, n):
 def send_act(request, pk):
     de = Defect.objects.get(pk=pk)
     eq = Equipment.objects.get(serial_number=de.serial_number)
-    wb = load_workbook(f'{BASE_DIR}/act.xlsx')
+    wb = load_workbook(f'{BASE_DIR}/act1.xlsx')
     ws = wb['act']
     ws['E9'] = de.defect_act
     ws['J5'] = de.approve.name
     ws['B5'] = de.gp
+    ws['H2'] = de.approve.job_title
+    print(de.approve.job_title)
     ws['D12'] = f'{eq.name}, {eq.type}, {eq.model}'
     ws['D18'] = de.serial_number
     ws['D19'] = eq.manufacturer.name
@@ -38,11 +40,11 @@ def send_act(request, pk):
     ws['D32'] = de.fix
     ws['D34'] = de.operating_time
     ws['A36'] = de.contractor.job_title
-    ws['K37'] = de.contractor.name
+    ws['J37'] = de.contractor.name
     ws['A40'] = de.kait.job_title
-    ws['K41'] = de.kait.name
+    ws['J41'] = de.kait.name
     ws['A43'] = de.worker.job_title
-    ws['K44'] = de.worker.name
+    ws['J44'] = de.worker.name
     wb.save(f'{BASE_DIR}/act1.xlsx')
 
     wb.close()
@@ -53,7 +55,7 @@ def send_act(request, pk):
     to_email = request.user.email
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(f'{BASE_DIR}/act1.xlsx')
-    msg.send()
+    # msg.send()
     return redirect(reverse_lazy('defectone:defect_list'))
 
 
