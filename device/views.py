@@ -788,11 +788,11 @@ def my_exams(request):
     if not request.user.is_authenticated:
         redirect('login')
     objects = MyExam.objects.all()
-    data = MyExam.objects.filter(user=request.user).last()
+    print()
     try:
         initial_dict = {
-            'exams_ot': data.exams_ot,
-            'exams_eb': data.exams_eb,
+            'exams_ot': objects.last().exams_ot,
+            'exams_eb': objects.last().exams_ot,
         }
     except:
         initial_dict = {}
@@ -800,11 +800,10 @@ def my_exams(request):
         form = MyExamsForm(request.POST)
         if form.is_valid():
             form.save(request.user)
-            return render(request, 'device/my_exams.html', {'form': form, 'object': data})
+            # return render(request, 'device/my_exams.html', context=context)
     else:
         form = MyExamsForm(initial=initial_dict)
     context = {
         'form': form,
-        'object': data,
         'objects': objects}
     return render(request, 'device/my_exams.html', context=context)

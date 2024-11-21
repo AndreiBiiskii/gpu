@@ -256,3 +256,6 @@ class MyExam(models.Model):
     exams_ot = models.DateField(verbose_name='Экзамет по ОТ')
     exams_eb = models.DateField(verbose_name='Экзамет по электоробезопасности')
     # at_date = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('id',)
