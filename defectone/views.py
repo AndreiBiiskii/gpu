@@ -36,17 +36,21 @@ def send_act(request, pk):
     ws['D26'] = de.short_description
     ws['D30'] = de.causes
     ws['D32'] = de.fix
-    ws['A36'] = de.contractor.name
-    ws['A40'] = de.kait.name
-    ws['A43'] = de.worker.name
+    ws['D34'] = de.operating_time
+    ws['A36'] = de.contractor.job_title
+    ws['K37'] = de.contractor.name
+    ws['A40'] = de.kait.job_title
+    ws['K41'] = de.kait.name
+    ws['A43'] = de.worker.job_title
+    ws['K44'] = de.worker.name
     wb.save(f'{BASE_DIR}/act1.xlsx')
 
     wb.close()
     sm = EmailMessage
     subject = 'Worker'
     body = 'Дефектный акт был отправлен на почту.'
-    from_email = request.user.email
-    to_email = 'freemail_2019@mail.ru'
+    from_email = 'freemail_2019@mail.ru'
+    to_email = request.user.email
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(f'{BASE_DIR}/act1.xlsx')
     msg.send()
