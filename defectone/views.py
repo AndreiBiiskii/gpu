@@ -46,7 +46,6 @@ def send_act(request, pk):
     ws['A43'] = de.worker.job_title
     ws['J44'] = de.worker.name
     wb.save(f'{BASE_DIR}/act1.xlsx')
-
     wb.close()
     sm = EmailMessage
     subject = 'Worker'
@@ -55,7 +54,7 @@ def send_act(request, pk):
     to_email = request.user.email
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(f'{BASE_DIR}/act1.xlsx')
-    # msg.send()
+    msg.send()
     return redirect(reverse_lazy('defectone:defect_list'))
 
 
