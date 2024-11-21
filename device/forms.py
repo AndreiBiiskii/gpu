@@ -70,6 +70,8 @@ class AddEquipmentForm(forms.Form):
             raise forms.ValidationError(message='Не указан статус.')
         if (self.cleaned_data['type'] is None) & (self.cleaned_data['type_new'] == ''):
             raise forms.ValidationError(message='Не указан тип оборудования.')
+        if len(self.cleaned_data['description']) < 5:
+            raise forms.ValidationError(message='Добавьте описание.')
         if self.cleaned_data['type_new']:
             self.cleaned_data['type'] = self.cleaned_data['type_new']
         if self.cleaned_data['manufacturer_new']:
@@ -91,8 +93,6 @@ class AddEquipmentForm(forms.Form):
 
     def save(self, user):
         description = self.cleaned_data.pop('description')
-        if len(description) < 5:
-            raise forms.ValidationError(message='Добавьте описание.')
         position = self.cleaned_data.pop('position')
         location = self.cleaned_data.pop('location')
         tag = self.cleaned_data.pop('tag')
@@ -115,6 +115,7 @@ class AddEquipmentForm(forms.Form):
         Status.objects.create(equipment=equipment, name=status)
         Tag.objects.create(equipment=equipment, name=tag)
         Location.objects.create(equipment=equipment, name=location)
+        GP.objects.get_or_create(name=position)
         Position.objects.create(equipment=equipment, name=position)
         Description.objects.create(equipment=equipment, user=user, name=description)
 
@@ -238,6 +239,7 @@ class AddDeviceForm(forms.Form):
         tag = self.cleaned_data.pop('tag')
         min_scale = self.cleaned_data.pop('min_scale')
         max_scale = self.cleaned_data.pop('max_scale')
+        position = self.cleaned_data.pop('position')
         previous_verification = self.cleaned_data.pop('previous_verification')
         certificate = self.cleaned_data.pop('certificate')
         EquipmentType.objects.get_or_create(name=self.cleaned_data['type'])
@@ -245,7 +247,7 @@ class AddDeviceForm(forms.Form):
         EquipmentName.objects.get_or_create(name=self.cleaned_data['name'])
         EquipmentModel.objects.get_or_create(name=self.cleaned_data['model'])
         StatusAdd.objects.get_or_create(name=self.cleaned_data['status'])
-        GP.objects.get_or_create(name=self.cleaned_data['position'])
+        GP.objects.get_or_create(name=position)
         equipment = Equipment.objects.create(serial_number=self.cleaned_data['serial_number'],
                                              type=EquipmentType.objects.get(name=self.cleaned_data['type']),
                                              manufacturer=Manufacturer.objects.get(
@@ -259,7 +261,8 @@ class AddDeviceForm(forms.Form):
         Status.objects.create(equipment=equipment, name=status)
         Tag.objects.create(equipment=equipment, name=tag)
         Location.objects.create(equipment=equipment, name=location)
-        Position.objects.create(equipment=equipment, name=self.cleaned_data['position'])
+        GP.objects.get_or_create(name=position)
+        Position.objects.create(equipment=equipment, name=position)
         Description.objects.create(equipment=equipment, user=user, name=description)
         VerificationInterval.objects.get_or_create(name=self.cleaned_data['interval'])
         Scale.objects.get_or_create(min_scale=min_scale, max_scale=max_scale)
