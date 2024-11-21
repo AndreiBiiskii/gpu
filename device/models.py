@@ -140,6 +140,7 @@ class Equipment(models.Model):
     at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
     defect = models.BooleanField(default=False, blank=True, null=True)
     si_or = models.BooleanField(default=True, verbose_name='Средство измерения')
+    comment = models.TextField(blank=True,  verbose_name='Комментарий')
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.DO_NOTHING, related_name='manufacturer',
                                      verbose_name='Производитель')
     type = models.ForeignKey(EquipmentType, on_delete=models.DO_NOTHING, related_name='type',
