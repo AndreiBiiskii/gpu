@@ -64,7 +64,6 @@ def data_from_parser(request):
             except:
                 print('text')
             print(get_sample(table_tr, ))
-            print('*********')
 
 
     # <a href="/fundmetrology/registry" class="btn btn-lg btn-success btn-block ng-scope"><span class="fa fa-globe"></span> Публичный портал</a>

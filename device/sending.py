@@ -76,7 +76,7 @@ def send_all(request, start, end):
     last = Equipment.objects.all().count()
     get_all = Equipment.objects.filter(si_or=True)[start:end]
     with open('./all_data.csv', 'a', encoding='utf-8') as f:
-        fieldnames = ['№', 'position', 'location', 'teg', 'type', 'model', 'name', 'reg_number', 'serial_number',
+        fieldnames = ['№', 'position', 'location', 'teg', 'type', 'model', 'name', 'reg_number', 'serial_number', 'description',
                       'min_scale', 'max_scale', 'unit', 'comment', 'interval', 'previous_verification',
                       'next_verification', 'result', ]  #
         writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
@@ -90,6 +90,7 @@ def send_all(request, start, end):
                 '№': i + start,
                 'position': eq.positions.last().name,
                 'location': eq.locations.last().name,
+                'description': eq.descriptions.last().name,
                 'teg': eq.tags.last().name,
                 'type': eq.type.name,
                 'model': eq.model.name,
@@ -99,7 +100,7 @@ def send_all(request, start, end):
                 'min_scale': from_si.scale.min_scale,
                 'max_scale': from_si.scale.max_scale,
                 'unit': from_si.unit,
-                'comment': from_si.com,
+                'comment': eq.comment,
                 'interval': from_si.interval,
                 'previous_verification': from_si.previous_verification,
                 'next_verification': from_si.next_verification,
