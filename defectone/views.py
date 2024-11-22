@@ -115,7 +115,8 @@ class DefectAdd(CreateView):
 
 class MyFilter(django_filters.FilterSet):
     serial_number = django_filters.CharFilter(lookup_expr='icontains', label='Серийный номер')
-
+    status = django_filters.CharFilter(lookup_expr='icontains', label='Серийный номер')
+    defect_act = django_filters.CharFilter(lookup_expr='icontains', label='Серийный номер')
     gp = django_filters.CharFilter(field_name='gp',
                                    lookup_expr='icontains', label='Позиция:', )
     tag = django_filters.CharFilter(field_name='tag',
@@ -130,7 +131,7 @@ class MyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Defect
-        fields = ['serial_number', 'gp', 'at_date', 'tag']
+        fields = '__all__'
 
 
 def defect_list(request):
