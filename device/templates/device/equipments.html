@@ -40,6 +40,7 @@
             <td class="theader">Тэг</td>
             <td class="theader">Дата изменения</td>
             <td class="theader">Дата следующей поверки</td>
+            <td class="theader">Комментарий</td>
         </tr>
         {%for equipment in equipments.qs%}
         <tr>
@@ -52,6 +53,7 @@
             <td class="table-td">{{equipment.tags.last.name}}</td>
             <td class="table-td">{{equipment.descriptions.last.at_date|date:"d-m-Y"}}</td>
             <td class="table-td">{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
+            <td class="table-td">{{equipment.comment}}</td>
         </tr>
         {%endfor%}
         </tbody>

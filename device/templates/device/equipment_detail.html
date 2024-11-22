@@ -26,6 +26,7 @@
             <th>МПИ</th>
             <th>Дата предыдущей поверки</th>
             <th>Дата следующей поверки</th>
+            <th>Примечание</th>
             {%endif%}
             {%endif%}
         </tr>
@@ -47,6 +48,7 @@
             <td>{{equipment.si.last.interval}}</td>
             <td>{{equipment.si.last.previous_verification|date:"d-m-Y"}}</td>
             <td>{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
+            <td>{{equipment.comment}}</td>
             {%endif%}
             {%endif%}
         </tr>

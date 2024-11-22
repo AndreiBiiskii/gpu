@@ -138,7 +138,7 @@ class Equipment(models.Model):
     serial_number = models.CharField(max_length=255, verbose_name='Серийный номер')
     model = models.ForeignKey(EquipmentModel, on_delete=models.DO_NOTHING, related_name='model', blank=True, null=True)
     at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
-    defect = models.BooleanField(default=False, blank=True, null=True)
+    defect_or = models.BooleanField(default=False, blank=True, null=True)
     si_or = models.BooleanField(default=True, verbose_name='Средство измерения')
     comment = models.TextField(blank=True,  verbose_name='Комментарий')
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.DO_NOTHING, related_name='manufacturer',

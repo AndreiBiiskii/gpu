@@ -502,6 +502,8 @@ def DeviceUpdate(request, pk):
                 GP.objects.get_or_create(name=poz)
             else:
                 poz = request.POST['position']
+            equipment.comment = request.POST['comment']
+            equipment.save()
             p = Position(equipment=equipment, name=poz.upper())
             d = Description(equipment=equipment, user=request.user, name=request.POST['description'])
             status = StatusAdd.objects.get(name=request.POST['status'])
