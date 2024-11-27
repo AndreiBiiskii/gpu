@@ -234,10 +234,10 @@ class MyFilter(django_filters.FilterSet):
     serial_number = django_filters.CharFilter(lookup_expr='icontains',
                                               widget=forms.TextInput(attrs={'class': 'type2'}),
                                               label='Серийный номер')
-    model = django_filters.CharFilter(field_name='model__name',
-                                      lookup_expr='icontains',
-                                      label='Модель:',
-                                      widget=forms.TextInput(attrs={'class': 'type2'}))
+    # model = django_filters.CharFilter(field_name='model__name',
+    #                                   lookup_expr='icontains',
+    #                                   label='Модель:',
+    #                                   widget=forms.TextInput(attrs={'class': 'type2'}))
     position = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                                 queryset=GP.objects.all(),
                                                 field_name='positions__name',
@@ -320,11 +320,14 @@ class MyFilter(django_filters.FilterSet):
     status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                               queryset=StatusAdd.objects.all(), field_name='status__name',
                                               lookup_expr='exact', label='Статус')
+    model = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
+                                              queryset=EquipmentModel.objects.all(), field_name='model__name',
+                                              lookup_expr='exact', label='Модель')
     si_or = django_filters.BooleanFilter(field_name='si_or', widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
 
     class Meta:
         model = Equipment
-        fields = ['serial_number', 'name', 'position', 'si_or', 'status', 'tag']
+        fields = '__all__'
 
 
 class MyFilterUser(django_filters.FilterSet):

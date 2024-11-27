@@ -6,10 +6,14 @@ from device.models import Equipment, Si
 
 
 def sending(request, title):
+    if not request.user.is_staff:
+        redirect('login')
     sm = EmailMessage
     subject = 'sample'
     body = 'sample'
     from_email = 'freemail_2019@mail.ru'
+    if not request.user.email:
+        return redirect(reverse_lazy('add_user'))
     to_email = request.user.email
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(f'./{title}.csv')
@@ -20,6 +24,8 @@ def sending(request, title):
 
 
 def sample_send(request, data):
+    if not request.user.is_staff:
+        redirect('login')
     with open('./sample_send.csv', 'w', encoding='Windows-1251') as f:
         fieldnames = ['№', 'position', 'location', 'teg', 'serial_number', 'type', 'model', 'name', 'reg_number',
                       'min_scale', 'max_scale', 'unit', 'comment', 'interval', 'previous_verification',
@@ -68,6 +74,8 @@ def sample_send(request, data):
 
 
 def send_all(request, start, end):
+    if not request.user.is_staff:
+        redirect('login')
     if start == 0:
         with open('./all_data.csv', 'w', encoding='Windows-1251'):
             pass

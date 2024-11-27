@@ -1,13 +1,19 @@
 from datetime import datetime
+from time import sleep
+
 from django import forms
 import django_filters
+from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.template.context_processors import request
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
+from rest_framework.permissions import IsAdminUser
 from rest_framework.reverse import reverse_lazy
 from openpyxl import load_workbook
+
+from defectone.forms import AddUserForm
 from defectone.models import Defect, Approve, Contractor, Kait, Worker
 from device.models import Equipment, Position, Location, Status, Description, GP, Tag, Si
 from device.views import menu
@@ -20,6 +26,11 @@ def defect_act(request, poz, n):
 
 
 def send_act(request, pk):
+    if not request.user.is_staff:
+        redirect('login')
+    if not request.user.email:
+        return redirect(reverse_lazy('defectone:add_email'))
+        print('++++', request.user.email)
     de = Defect.objects.get(pk=pk)
     eq = Equipment.objects.filter(Q(serial_number=de.serial_number) & Q(model__name=de.model)).first()
     wb = load_workbook(f'{BASE_DIR}/act1.xlsx')
@@ -88,8 +99,9 @@ def send_poverka(request):
 class DefectAdd(CreateView):
     model = Defect
     fields = (
-    'defect', 'model', 'serial_number', 'defect_act', 'project', 'short_description', 'causes', 'gp', 'location', 'tag',
-    'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
+        'defect', 'model', 'serial_number', 'defect_act', 'project', 'short_description', 'causes', 'gp', 'location',
+        'tag',
+        'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
     success_url = '/'
     template_name = 'defect/defect_add.html'
     extra_context = {
@@ -359,3 +371,15 @@ class WorkerUpdate(UpdateView):
         'menu': menu,
         'add': 'defectone:worker_add'
     }
+
+
+class AddEmail(CreateView):
+    model = User
+    form_class = AddUserForm
+    template_name = 'defect/approve_add.html'
+    success_message = 'Email успешно добавлен'
+
+    def form_valid(self, form):
+        user = self.request.user
+        form.save(user)
+        return redirect('defectone:defect_list')

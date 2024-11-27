@@ -3,9 +3,18 @@
 <br><br>
 <form action="" method="POST">
     {% csrf_token %}
+    <div>
+        <b>Сформировать:</b>
+        <button><a href="{% url 'defectone:send_act' object.pk %}"> Дефектный акт</a></button>
+        <button><a href="#">  Заявка в ремонт </a></button>
+    </div>
+    <hr>
+    <button type="submit"> Сохранить</button>
+    <br>
+
     <table>
         {{ form.as_table }}
     </table>
-    <button type="submit" class="search_btn"> Send</button>
+
 </form>
 {% endblock %}
