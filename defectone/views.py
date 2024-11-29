@@ -13,15 +13,15 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.reverse import reverse_lazy
 from openpyxl import load_workbook
 
-from defectone.forms import AddUserForm
+from defectone.forms import AddUserForm, DefectAddForm
 from defectone.models import Defect, Approve, Contractor, Kait, Worker
 from device.models import Equipment, Position, Location, Status, Description, GP, Tag, Si
 from device.views import menu
 from equipment.settings import BASE_DIR
 
 
-def defect_act(request, poz, n):
-    da = f'АКТ КАиТ-{poz}-{datetime.now().date()}-{n}'
+def defect_act(request, poz, n, count):
+    da = f'АКТ КАиТ-{poz}-{datetime.date(datetime.now()).strftime("%d-%m-%Y")}-{n}{count}'
     return da
 
 
@@ -30,7 +30,6 @@ def send_act(request, pk):
         redirect('login')
     if not request.user.email:
         return redirect(reverse_lazy('defectone:add_email'))
-        print('++++', request.user.email)
     de = Defect.objects.get(pk=pk)
     eq = Equipment.objects.filter(Q(serial_number=de.serial_number) & Q(model__name=de.model)).first()
     wb = load_workbook(f'{BASE_DIR}/act1.xlsx')
@@ -97,11 +96,12 @@ def send_poverka(request):
 
 
 class DefectAdd(CreateView):
-    model = Defect
-    fields = (
-        'defect', 'model', 'serial_number', 'defect_act', 'project', 'short_description', 'causes', 'gp', 'location',
-        'tag',
-        'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
+    # model = Defect
+    form_class = DefectAddForm
+    # fields = (
+    #     'defect', 'model', 'serial_number', 'defect_act', 'project', 'short_description', 'causes', 'gp', 'location',
+    #     'tag',
+    #     'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
     success_url = '/'
     template_name = 'defect/defect_add.html'
     extra_context = {
@@ -109,26 +109,44 @@ class DefectAdd(CreateView):
         'menu': menu,
     }
 
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        eq = Equipment.objects.filter(
+            Q(serial_number=instance.serial_number) & Q(model__name=instance.model)).first()
+        eq.defect_or = True
+        eq.save()
+        instance.save()
+
+        return redirect('defectone:defect_list')
+
     def get_initial(self):
         initial = super().get_initial()
         eq = Equipment.objects.get(pk=self.kwargs.get('pk'))
         initial['defect'] = eq
         initial['serial_number'] = eq.serial_number
         initial['model'] = eq.model.name
-        poz = GP.objects.get(name=Position.objects.filter(equipment=eq).last().name)
-        initial['gp'] = f'{poz.name},{poz.construction}'
+        try:
+            poz = GP.objects.get(name=Position.objects.filter(equipment=eq).last().name)
+            initial['gp'] = f'{poz.name},{poz.construction}'
+        except:
+            poz = '-'
+            initial['gp'] = poz
+
         initial['location'] = Location.objects.filter(equipment=eq).last().name
         initial['status'] = Status.objects.filter(equipment=eq).last().name
         initial['short_description'] = Description.objects.filter(equipment=eq).last().name
-        initial['defect_act'] = defect_act(request, poz.name, eq.pk)
+        if poz == '-':
+            initial['defect_act'] = defect_act(request, poz, eq.pk, Defect.objects.all().count())
+        else:
+            initial['defect_act'] = defect_act(request, poz.name, eq.pk, Defect.objects.all().count())
         initial['tag'] = Tag.objects.filter(equipment=eq).last().name
         return initial
 
 
 class MyFilter(django_filters.FilterSet):
     serial_number = django_filters.CharFilter(lookup_expr='icontains', label='Серийный номер')
-    status = django_filters.CharFilter(lookup_expr='icontains', label='Серийный номер')
-    defect_act = django_filters.CharFilter(lookup_expr='icontains', label='Серийный номер')
+    status = django_filters.CharFilter(lookup_expr='icontains', label='Статус')
+    defect_act = django_filters.CharFilter(lookup_expr='icontains', label='Дефектный акт')
     gp = django_filters.CharFilter(field_name='gp',
                                    lookup_expr='icontains', label='Позиция:', )
     tag = django_filters.CharFilter(field_name='tag',
@@ -143,7 +161,8 @@ class MyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Defect
-        fields = '__all__'
+        fields = ['serial_number', 'defect_act', 'gp', 'location', 'tag', 'status', 'invest_letter', 'approve',
+                  'contractor', 'kait', 'worker', 'at_date']
 
 
 def defect_list(request):
@@ -175,7 +194,7 @@ class DefectUpdate(UpdateView):
     model = Defect
     fields = ('serial_number', 'gp', 'location', 'tag', 'defect_act', 'project', 'short_description', 'causes',
               'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
-    success_url = reverse_lazy('defectone:defect_list')
+    # success_url = reverse_lazy('defectone:defect_list')
     template_name = 'defect/defect_update.html'
     extra_context = {
         'title': 'Изменить данные',

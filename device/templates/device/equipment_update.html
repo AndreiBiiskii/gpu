@@ -83,7 +83,7 @@
             </select></td>
 
         </tr>
-        <tr  {%if not request.user.is_staff %} class="owner" {%endif%}>
+        <tr {%if not request.user.is_staff %} class="owner" {%endif%}>
 
             <td><b><cite>Минимум шкалы:</cite></b></td>
             <td>
@@ -91,13 +91,19 @@
                        name="min_scale"
                        value='{{min_scale}}'></td>
         </tr>
-        <tr  {%if not request.user.is_staff %} class="owner" {%endif%}>
+        <tr {%if not request.user.is_staff %} class="owner" {%endif%}>
             <td><b><cite>Максимум шкалы:</cite></b></td>
             <td>
                 <input class="type2"
                        name="max_scale"
                        value='{{max_scale}}'></td>
 
+        </tr>
+        <tr {%if not request.user.is_staff %} class="owner" {%endif%}>
+            <td><b><cite>Дефек:</cite></b></td>
+            <td>
+                <input type="checkbox" name="defect_or"  {% if equipment.defect_or %} checked {%endif%}>
+            </td>
         </tr>
     </table>
     <button type="submit" class="button-style2"> Обновить данные</button>

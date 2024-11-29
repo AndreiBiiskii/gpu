@@ -3,9 +3,12 @@
 {% block content%}
 <form action="" method="POST">
     {% csrf_token %}
-    <button type="submit" class="search_btn"> Seааnd</button>
+    <br>
+    <button type="submit" class="search_btn"> Сохранить </button>
     <table>
         {{ form.as_table }}
     </table>
+    <br>
+    <button type="submit" class="search_btn"> Сохранить </button>
 </form>
 {% endblock %}

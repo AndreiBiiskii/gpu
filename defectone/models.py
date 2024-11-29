@@ -38,6 +38,7 @@ class Defect(models.Model):
 
     class Meta:
         verbose_name_plural = 'Дефекты'
+        ordering = ['-at_date']
 
 
 class DefectAct(models.Model):

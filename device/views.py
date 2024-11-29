@@ -214,6 +214,12 @@ def EquipmentUpdate(request, pk):
             if len(request.POST['location']) > 255:
                 data['error'] = 'Местоположение не может содержать более 255 символов'
                 return render(request, 'device/equipment_update.html', context=data)
+            try:
+                if request.POST['defect_or']:
+                    equipment.defect_or = True
+                    equipment.save()
+            except:
+                pass
             Location.objects.create(equipment=equipment, name=request.POST['location'])
             Position.objects.create(equipment=equipment, name=request.POST['position'])
             Description.objects.create(equipment=equipment, user=request.user, name=request.POST['description'])
@@ -321,8 +327,8 @@ class MyFilter(django_filters.FilterSet):
                                               queryset=StatusAdd.objects.all(), field_name='status__name',
                                               lookup_expr='exact', label='Статус')
     model = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
-                                              queryset=EquipmentModel.objects.all(), field_name='model__name',
-                                              lookup_expr='exact', label='Модель')
+                                             queryset=EquipmentModel.objects.all(), field_name='model__name',
+                                             lookup_expr='exact', label='Модель')
     si_or = django_filters.BooleanFilter(field_name='si_or', widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
 
     class Meta:
@@ -506,7 +512,13 @@ def DeviceUpdate(request, pk):
             else:
                 poz = request.POST['position']
             equipment.comment = request.POST['comment']
-            equipment.save()
+            try:
+                request.POST['defect_or']
+                equipment.defect_or = True
+                equipment.save()
+            except:
+                equipment.defect_or = False
+                equipment.save()
             p = Position(equipment=equipment, name=poz.upper())
             d = Description(equipment=equipment, user=request.user, name=request.POST['description'])
             status = StatusAdd.objects.get(name=request.POST['status'])
