@@ -408,9 +408,6 @@ table tbody tr:nth-child(even){
 
 }
 
-
-
-
 .js-dropdown {
   display: inline-block;
   max-height: 400px;

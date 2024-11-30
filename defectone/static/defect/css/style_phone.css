@@ -463,3 +463,24 @@ table tbody tr:nth-child(odd){
 table tbody tr:nth-child(even){
 	background: #dddddd;
 }
+
+
+.model{
+width: 98%;
+}
+#id_approve{
+width: 100%;
+}
+#id_contractor  {
+width: 100%;
+}
+#id_kait{
+width: 100%;
+}
+#id_worker{
+width: 100%;
+}
+
+#id_defect{
+display:block
+}

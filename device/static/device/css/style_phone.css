@@ -15,17 +15,27 @@ color:red;
 .text{
 width:90%
 }
-
+.theader{
+    font-size:35px;
+}
+label{
+    font-size:50px;
+}
+cite{
+    font-size: 50px;
+}
+.table-td{
+    font-size: 35px;
+}
 table{
     border-collapse: collapse;
     margin-top: 10px;
     border-spacing: 0;
-    font-size: 14px;
     overflow-x: auto;
     word-wrap: break-word;
 }
 table th {
-    font-size: 25px;
+    font-size: 35px;
     min-width:100px;`
     text-align: left;
 	padding: 5px;
@@ -33,14 +43,13 @@ table th {
 	border: 1px solid #ddddff;
 }
 table td{
-    font-size: 25px;
+    font-size: 35px;
     padding: 5px;
 	padding: 5px 10px;
 	border: 1px solid #eee;
 	text-align: left;
 	border: 1.5px solid black;
     padding: 4px;
-    text-align: left;
 }
 table tbody tr:nth-child(odd){
 	background: #fff;
@@ -296,6 +305,13 @@ padding: 15px;
 
 }
 
+.type3{
+height:50px;
+width: 90%;
+border: 5px solid;
+padding: 15px;
+}
+
 
 .search_btn{
 font-size:0.8em;
@@ -394,7 +410,7 @@ header{
  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c9c9c9', endColorstr='#757577',GradientType=0 ); /* IE6-9 */
 
  padding: 15px 30px 15px 40px;
- font-size:25px;    ;
+ font-size:28px;    ;
  color: #454547;
  text-decoration: none;
  text-transform:uppercase;
@@ -478,4 +494,25 @@ font-size:2.2em;
 font-weight:bold;
 
 
+}
+
+
+.model{
+width: 98%;
+}
+#id_approve{
+width: 100%;
+}
+#id_contractor  {
+width: 100%;
+}
+#id_kait{
+width: 100%;
+}
+#id_worker{
+width: 100%;
+}
+
+#id_defect{
+display:block
 }

@@ -102,7 +102,7 @@
         <tr {%if not request.user.is_staff %} class="owner" {%endif%}>
             <td><b><cite>Дефек:</cite></b></td>
             <td>
-                <input type="checkbox" name="defect_or"  {% if equipment.defect_or %} checked {%endif%}>
+                <input type="checkbox" name="defect_or" class="type3" {% if equipment.defect_or %} checked {%endif%}>
             </td>
         </tr>
     </table>

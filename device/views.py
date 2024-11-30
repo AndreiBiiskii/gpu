@@ -248,6 +248,9 @@ class MyFilter(django_filters.FilterSet):
                                                 queryset=GP.objects.all(),
                                                 field_name='positions__name',
                                                 lookup_expr='exact', label='Позиция:', )
+    locations = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
+                                          field_name='locations__name',
+                                          lookup_expr='icontains', label='Место установки:', )
     tag = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
                                     field_name='tags__name',
                                     lookup_expr='icontains', label='Тэг:', )
@@ -326,14 +329,20 @@ class MyFilter(django_filters.FilterSet):
     status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                               queryset=StatusAdd.objects.all(), field_name='status__name',
                                               lookup_expr='exact', label='Статус')
-    model = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
-                                             queryset=EquipmentModel.objects.all(), field_name='model__name',
-                                             lookup_expr='exact', label='Модель')
+    model = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
+                                      field_name='model__name',
+                                      lookup_expr='icontains', label='Модель')
+    manufacturer = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
+                                                    queryset=Manufacturer.objects.all(), field_name='name',
+                                                    lookup_expr='exact', label='Производитель')
     si_or = django_filters.BooleanFilter(field_name='si_or', widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
+    defect_or = django_filters.BooleanFilter(field_name='defect_or',
+                                             widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
 
     class Meta:
         model = Equipment
-        fields = '__all__'
+        fields = ['serial_number', 'name', 'type', 'model', 'position', 'locations', 'tag', 'status', 'si_or',
+                  'manufacturer', 'defect_or', ]
 
 
 class MyFilterUser(django_filters.FilterSet):
@@ -660,7 +669,7 @@ class UpdateCategory(UpdateView):
     template_name = 'device/add_category.html'
     fields = ['name']
     context_object_name = 'cats'
-    success_url = '/'
+    success_url = reverse_lazy('models')
     extra_context = {
         'menu': menu
     }
