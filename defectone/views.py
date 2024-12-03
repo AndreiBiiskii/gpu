@@ -20,8 +20,8 @@ from device.views import menu
 from equipment.settings import BASE_DIR
 
 
-def defect_act(request, poz, n, count):
-    da = f'АКТ КАиТ-{poz}-{datetime.date(datetime.now()).strftime("%d-%m-%Y")}-{n}{count}'
+def defect_act(request, poz, n):
+    da = f'АКТ КАиТ-{poz}-{datetime.date(datetime.now()).strftime("%d-%m-%Y")}-{n}'
     return da
 
 
@@ -125,6 +125,7 @@ class DefectAdd(CreateView):
         initial['defect'] = eq
         initial['serial_number'] = eq.serial_number
         initial['model'] = eq.model.name
+        initial['manufacture'] = eq.manufacturer.name
         try:
             poz = GP.objects.get(name=Position.objects.filter(equipment=eq).last().name)
             initial['gp'] = f'{poz.name},{poz.construction}'
@@ -136,9 +137,11 @@ class DefectAdd(CreateView):
         initial['status'] = Status.objects.filter(equipment=eq).last().name
         initial['short_description'] = Description.objects.filter(equipment=eq).last().name
         if poz == '-':
-            initial['defect_act'] = defect_act(request, poz, eq.pk, Defect.objects.all().count())
+            initial['defect_act'] = defect_act(request, poz,
+                                               Defect.objects.filter(gp=f'{poz.name},{poz.construction}').count() + 1)
         else:
-            initial['defect_act'] = defect_act(request, poz.name, eq.pk, Defect.objects.all().count())
+            initial['defect_act'] = defect_act(request, poz.name,
+                                               Defect.objects.filter(gp=f'{poz.name},{poz.construction}').count() + 1)
         initial['tag'] = Tag.objects.filter(equipment=eq).last().name
         return initial
 

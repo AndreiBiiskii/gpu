@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.forms import ModelForm
 
 from defectone.models import Approve, Defect, Contractor, Kait, Worker
+from device.models import Manufacturer
 
 
 class PersonForm(ModelForm):
@@ -23,13 +24,26 @@ class AddUserForm(ModelForm):
 
 
 class DefectAddForm(ModelForm):
+    manufacture = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
+                                         label='Производитель:',
+                                         queryset=Manufacturer.objects.all(), required=False)
+    manufacture_new = forms.CharField(label='Добавить производителя:', required=False)
+
+    def clean(self):
+        if self.cleaned_data['manufacture_new']:
+            self.cleaned_data['manufacture'] = self.cleaned_data['manufacture_new']
+            Manufacturer.objects.get_or_create(name=self.cleaned_data['manufacture_new'])
+
     class Meta:
         model = Defect
         fields = (
-            'defect', 'model', 'serial_number', 'defect_act', 'project', 'short_description', 'causes', 'gp',
+            'defect', 'model', 'manufacture', 'manufacture_new', 'serial_number', 'defect_act', 'project',
+            'short_description', 'causes',
+            'gp',
             'location', 'tag', 'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait',
             'worker',)
         widgets = {
+
             'defect': forms.HiddenInput(),
             'serial_number': forms.TextInput(attrs={'class': 'model'}),
             'defect_act': forms.TextInput(attrs={'class': 'model'}),
@@ -39,9 +53,8 @@ class DefectAddForm(ModelForm):
             'tag': forms.TextInput(attrs={'class': 'model'}),
             'invest_letter': forms.TextInput(attrs={'class': 'model'}),
             'model': forms.TextInput(attrs={'class': 'model'}),
+
         }
-
-
 
         labels = {
             'defect': 'Оборудование',
