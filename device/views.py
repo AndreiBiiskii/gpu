@@ -675,29 +675,29 @@ class UpdateCategory(UpdateView):
         'menu': menu
     }
 
-    def post(self, *args, **kwargs):
-        self.object = self.get_object()
-        print()
-        owner_name = EquipmentName.objects.get(name=self.object.name)
-        name = EquipmentName.objects.filter(name__icontains=self.object.name)
-        count = 0
-        for i in name:
-            count += 1
-            if count == 1:
-                continue
-            eq = Equipment.objects.filter(name=i)
-            for j in eq:
-                j.name = owner_name
-                j.save()
-            i.delete()
-
-        form = self.get_form()
-        if form.is_valid():
-            self.object = form.save(commit=False)
-            self.object.save()
-            return HttpResponseRedirect(self.get_success_url())
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
+    # def post(self, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     print()
+    #     owner_name = EquipmentName.objects.get(name=self.object.name)
+    #     name = EquipmentName.objects.filter(name__icontains=self.object.name)
+    #     count = 0
+    #     for i in name:
+    #         count += 1
+    #         if count == 1:
+    #             continue
+    #         eq = Equipment.objects.filter(name=i)
+    #         for j in eq:
+    #             j.name = owner_name
+    #             j.save()
+    #         i.delete()
+    #
+    #     form = self.get_form()
+    #     if form.is_valid():
+    #         self.object = form.save(commit=False)
+    #         self.object.save()
+    #         return HttpResponseRedirect(self.get_success_url())
+    #     else:
+    #         return self.render_to_response(self.get_context_data(form=form))
 
 
 # def delete_category(request, pk, Mod):
