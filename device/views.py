@@ -374,6 +374,15 @@ class MyFilterUser(django_filters.FilterSet):
 
 
 def equipment_list(request):
+    k = {'КУСТ 209': 'КГС 209', 'КУСТ 208': 'КГС 208', 'КУСТ 207': 'КГС 207', 'КУСТ 206': 'КГС 206',
+         'КУСТ 205': 'КГС 205', 'КУСТ 204': 'КГС 204', 'КУСТ 203': 'КГС 203', 'КУСТ 202': 'КГС 202',
+         'КУСТ 201': 'КГС 201'}
+    for key, value in k.items():
+        kgs = Position.objects.filter(name=key)
+        for i in kgs:
+            i.name = value
+            i.save()
+
     if not request.user.is_authenticated:
         redirect('/')
     if request.method == 'POST' and request.user.is_staff:
@@ -418,6 +427,9 @@ def equipment_list(request):
         'equipments': eq_filter,
         'count': eq_filter.qs.count(),
     }
+
+
+
     return render(request, 'device/equipments.html', context=data)
 
 
