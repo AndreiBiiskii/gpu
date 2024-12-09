@@ -374,12 +374,12 @@ class MyFilterUser(django_filters.FilterSet):
 
 
 def equipment_list(request):
-    none = Equipment.objects.filter(model__name='None')
-    for i in none:
-        EquipmentModel.objects.get_or_create(name=i.type)
-        m = EquipmentModel.objects.get(name=i.type)
-        i.model = m
-        i.save()
+    # none = Equipment.objects.filter(model__name='None')
+    # for i in none:
+    #     EquipmentModel.objects.get_or_create(name=i.type)
+    #     m = EquipmentModel.objects.get(name=i.type)
+    #     i.model = m
+    #     i.save()
 
     if not request.user.is_authenticated:
         redirect('/')
@@ -391,8 +391,9 @@ def equipment_list(request):
         data = {
             'title': 'Поиск',
             'menu': menu,
-            'equipments': eq_filter,
+            'equipments': set(eq_filter.qs),
             'count': eq_filter.qs.count(),
+            'forms': eq_filter,
 
         }
         sample_send(request, eq_filter.qs)
@@ -407,8 +408,9 @@ def equipment_list(request):
         data = {
             'title': 'Поиск',
             'menu': menu,
-            'equipments': eq_filter,
+            'equipments': set(eq_filter.qs),
             'count': eq_filter.qs.count(),
+            'forms': eq_filter,
 
         }
         return render(request, 'device/equipments.html', context=data)
@@ -422,10 +424,10 @@ def equipment_list(request):
     data = {
         'title': 'Поиск',
         'menu': menu,
-        'equipments': eq_filter,
+        'equipments': set(eq_filter.qs),
         'count': eq_filter.qs.count(),
+        'forms': eq_filter,
     }
-
     return render(request, 'device/equipments.html', context=data)
 
 
@@ -583,7 +585,10 @@ def EquipmentDelete(request, pk):
         (obj.tags.all()[number]).delete()
         (obj.status.all()[number]).delete()
         if obj.si_or:
-            (obj.si.all()[number]).delete()
+            try:
+                (obj.si.all()[number]).delete()
+            except:
+                pass
     else:
 
         obj.delete()
