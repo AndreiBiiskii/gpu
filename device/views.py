@@ -374,6 +374,13 @@ class MyFilterUser(django_filters.FilterSet):
 
 
 def equipment_list(request):
+    none = Equipment.objects.filter(model__name='None')
+    for i in none:
+        EquipmentModel.objects.get_or_create(name=i.type)
+        m = EquipmentModel.objects.get(name=i.type)
+        i.model = m
+        i.save()
+
     if not request.user.is_authenticated:
         redirect('/')
     if request.method == 'POST' and request.user.is_staff:
@@ -418,8 +425,6 @@ def equipment_list(request):
         'equipments': eq_filter,
         'count': eq_filter.qs.count(),
     }
-
-
 
     return render(request, 'device/equipments.html', context=data)
 
