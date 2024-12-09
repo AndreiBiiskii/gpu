@@ -9,7 +9,7 @@
     <form action="{% url 'search' %}" method="POST">
         {% csrf_token %}
         <table class="table">
-            {{ equipments.form.as_table }}
+            {{ forms.form.as_table }}
         </table>
         <br>
         <br>
@@ -42,7 +42,7 @@
             <td class="theader">Дата следующей поверки</td>
             <td class="theader">Комментарий</td>
         </tr>
-        {%for equipment in equipments.qs%}
+        {%for equipment in equipments%}
         <tr>
             <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a></td>
             <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
