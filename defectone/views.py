@@ -6,6 +6,7 @@ import django_filters
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.db.models import Q
+from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.template.context_processors import request
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
@@ -32,7 +33,9 @@ def send_act(request, pk):
         return redirect(reverse_lazy('defectone:add_email'))
     de = Defect.objects.get(pk=pk)
     eq = Equipment.objects.filter(Q(serial_number=de.serial_number) & Q(model__name=de.model)).first()
-    wb = load_workbook(f'{BASE_DIR}/act1.xlsx')
+    if not eq:
+        return redirect(reverse_lazy('defectone:defect_list'))
+    wb = load_workbook(f'{BASE_DIR}/files/defect_files/act1.xlsx')
     ws = wb['act']
     ws['E9'] = de.defect_act
     ws['J5'] = de.approve.name
@@ -54,7 +57,7 @@ def send_act(request, pk):
     ws['J41'] = de.kait.name
     ws['A43'] = de.worker.job_title
     ws['J44'] = de.worker.name
-    wb.save(f'{BASE_DIR}/files/{de.defect_act}.xlsx')
+    wb.save(f'{BASE_DIR}/files/defect_files/{de.defect_act}.xlsx')
     wb.close()
     sm = EmailMessage
     subject = 'Worker'
@@ -62,7 +65,7 @@ def send_act(request, pk):
     from_email = 'freemail_2019@mail.ru'
     to_email = request.user.email
     msg = sm(subject, body, from_email, [to_email])
-    msg.attach_file(f'{BASE_DIR}/files/{de.defect_act}.xlsx')
+    msg.attach_file(f'{BASE_DIR}/files/defect_files/{de.defect_act}.xlsx')
     msg.send()
     return redirect(reverse_lazy('defectone:defect_list'))
 
@@ -96,12 +99,7 @@ def send_poverka(request):
 
 
 class DefectAdd(CreateView):
-    # model = Defect
     form_class = DefectAddForm
-    # fields = (
-    #     'defect', 'model', 'serial_number', 'defect_act', 'project', 'short_description', 'causes', 'gp', 'location',
-    #     'tag',
-    #     'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
     success_url = '/'
     template_name = 'defect/defect_add.html'
     extra_context = {
@@ -405,3 +403,8 @@ class AddEmail(CreateView):
         user = self.request.user
         form.save(user)
         return redirect('defectone:defect_list')
+
+
+def bid(request):
+    print()
+    return redirect('/')

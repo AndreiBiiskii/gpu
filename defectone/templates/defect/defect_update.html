@@ -1,20 +1,16 @@
 {% extends 'defect/base.html' %}
 {% block content%}
 <br><br>
-<form action="" method="POST">
-    {% csrf_token %}
-    <div>
-        <b>Сформировать:</b>
+<div class="order">
+    <form action="" method="POST">
+        {% csrf_token %}
         <button><a href="{% url 'defectone:send_act' object.pk %}"> Дефектный акт</a></button>
-        <button><a href="#">  Заявка в ремонт </a></button>
-    </div>
-    <hr>
-    <button type="submit"> Сохранить</button>
-    <br>
-
-    <table>
-        {{ form.as_table }}
-    </table>
-
-</form>
+        <hr>
+        <button type="submit"> Сохранить</button>
+        <br>
+        <table>
+            {{ form.as_table }}
+        </table>
+    </form>
+</div>
 {% endblock %}

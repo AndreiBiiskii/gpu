@@ -577,13 +577,7 @@ def EquipmentDelete(request, pk):
         (obj.locations.all()[number]).delete()
         (obj.tags.all()[number]).delete()
         (obj.status.all()[number]).delete()
-        if obj.si_or:
-            try:
-                (obj.si.all()[number]).delete()
-            except:
-                pass
     else:
-
         obj.delete()
     return redirect('/')
 
