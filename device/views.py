@@ -677,24 +677,36 @@ class UpdateCategory(UpdateView):
 
     def post(self, *args, **kwargs):
         self.object = self.get_object()
-        owner_model = EquipmentModel.objects.get(name=self.object.name)
-        name = EquipmentModel.objects.filter(name__icontains=self.object.name)
-        count = 0
-        for i in name:
-            count += 1
-            if count == 1:
-                continue
-            eq = Equipment.objects.filter(model=i)
-            for j in eq:
-                try:
-                    j.model = owner_model
+        with open('./im.csv', encoding='utf-8') as f:
+            reader = csv.DictReader(f, delimiter=';')
+            rem = Equipment.objects.filter(type__name='РэмТэк')
+            for row in reader:
+                rem1 = rem.filter(serial_number=row['serial_number'])
+                EquipmentModel.objects.get_or_create(name=row['model'])
+                m2 = EquipmentModel.objects.get(name=row['model'])
+                for j in rem1:
+                    j.model = m2
                     j.save()
-                except:
-                    pass
-            try:
-                i.delete()
-            except:
-                pass
+                # rem1.save()
+        # owner_model = EquipmentModel.objects.get(name=self.object.name)
+        # name = EquipmentModel.objects.filter(name__icontains=self.object.name)
+        #
+        # count = 0
+        # for i in name:
+        #     count += 1
+        #     if count == 1:
+        #         continue
+        #     eq = Equipment.objects.filter(model=i)
+        #     for j in eq:
+        #         try:
+        #             j.model = owner_model
+        #             j.save()
+        #         except:
+        #             pass
+        #     try:
+        #         i.delete()
+        #     except:
+        #         pass
 
         form = self.get_form()
         if form.is_valid():
