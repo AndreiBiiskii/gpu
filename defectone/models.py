@@ -42,14 +42,22 @@ class Defect(models.Model):
         ordering = ['-at_date']
 
 
-class DefectAct(models.Model):
-    defect_act = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='acts')
+class Bid(models.Model):
+    bid = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='bids')
+    model = models.CharField(max_length=255, verbose_name='Модель')
+    manufacture = models.CharField(max_length=255, verbose_name='Производитель')
+    serial_number = models.CharField(max_length=100, verbose_name='Серийный номер')
+    short_description = models.TextField(verbose_name='Краткое описание деффекта')
+
+
+# class DefectAct(models.Model):
+#     defect_act = models.ForeignKey(Equipment, on_delete=models.DO_NOTHING, related_name='acts')
 
 
 class Projects(models.Model):
     name = models.CharField(max_length=100, verbose_name='Наименование проекта')
     gp = models.CharField(max_length=100, verbose_name='ГП')
-    year = models.DateField(auto_now_add=False, blank=True)
+    year = models.DateField(blank=True)
 
     def __str__(self):
         return self.name
@@ -119,4 +127,3 @@ class Worker(models.Model):
 
     class Meta:
         verbose_name_plural = 'Слесарь'
-

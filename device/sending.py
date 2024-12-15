@@ -60,7 +60,7 @@ def sample_send(request, data):
                     }
                     )
                 except:
-                    pass
+                    continue
             if not eq.si_or:
                 writer.writerow({
                     '№': i + 1,
