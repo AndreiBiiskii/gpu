@@ -388,7 +388,7 @@ def equipment_list(request):
             'forms': eq_filter,
 
         }
-        sample_send(request, eq_filter.qs)
+        # sample_send(request, eq_filter.qs)
         if request.POST.get('parser'):
             data_from_parser(request)
         return render(request, 'device/equipments.html', context=data)
