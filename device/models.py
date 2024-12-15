@@ -224,6 +224,9 @@ class RegNumber(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name', ]
+
 
 # class Error(models.Model):
 #     name = models.CharField(max_length=10, verbose_name='Погрешность')
