@@ -373,12 +373,6 @@ class MyFilterUser(django_filters.FilterSet):
 
 
 def equipment_list(request):
-    mod = EquipmentModel.objects.all()
-    for i in mod:
-        eq2 = Equipment.objects.filter(model__name=i.name)
-        if not eq2:
-            i.delete()
-
     if not request.user.is_authenticated:
         redirect('/')
     if request.method == 'POST' and request.user.is_staff:
