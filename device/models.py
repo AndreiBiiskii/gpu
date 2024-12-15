@@ -47,15 +47,15 @@ class Manufacturer(models.Model):
         ordering = ['name']
 
 
-class EquipmentType(models.Model):
-    name = models.CharField(max_length=255, verbose_name='Тип оборудования', unique=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = 'Типы оборудования'
-        ordering = ['name']
+# class EquipmentType(models.Model):
+#     name = models.CharField(max_length=255, verbose_name='Тип оборудования', unique=True)
+#
+#     def __str__(self):
+#         return self.name
+#
+#     class Meta:
+#         verbose_name_plural = 'Типы оборудования'
+#         ordering = ['name']
 
 
 class EquipmentModel(models.Model):
@@ -143,8 +143,8 @@ class Equipment(models.Model):
     comment = models.TextField(blank=True,  verbose_name='Комментарий')
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.DO_NOTHING, related_name='manufacturer',
                                      verbose_name='Производитель')
-    type = models.ForeignKey(EquipmentType, on_delete=models.DO_NOTHING, related_name='type',
-                             verbose_name='Тип', default=None, null=True)
+    # type = models.ForeignKey(EquipmentType, on_delete=models.DO_NOTHING, related_name='type',
+    #                          verbose_name='Тип', default=None, null=True)
     name = models.ForeignKey(EquipmentName, on_delete=models.DO_NOTHING, related_name='n',
                              verbose_name='Наименование оборудования')
     year = models.ForeignKey('Year', on_delete=models.DO_NOTHING, related_name='years', verbose_name='Год выпуска')

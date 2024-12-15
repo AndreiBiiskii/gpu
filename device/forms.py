@@ -18,10 +18,10 @@ class AddEquipmentForm(forms.Form):
                                    label='Модель', required=False)
     model_new = forms.CharField(label='Добавить модель:', widget=forms.TextInput(attrs={'class': 'type2'}),
                                 required=False)
-    type = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Тип оборудования:',
-                                  queryset=EquipmentType.objects.all(), required=False)
-    type_new = forms.CharField(label='Добавить тип:', max_length=255, widget=forms.TextInput(attrs={'class': 'type2'}),
-                               required=False)
+    # type = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Тип оборудования:',
+    #                               queryset=EquipmentType.objects.all(), required=False)
+    # type_new = forms.CharField(label='Добавить тип:', max_length=255, widget=forms.TextInput(attrs={'class': 'type2'}),
+    #                            required=False)
     manufacturer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Производитель:',
                                           queryset=Manufacturer.objects.all(), required=False)
     manufacturer_new = forms.CharField(label='Добавить производителя:',
@@ -68,12 +68,12 @@ class AddEquipmentForm(forms.Form):
             raise forms.ValidationError(message='Год выпуска не может быть больше текущего')
         if (self.cleaned_data['status'] is None) & (self.cleaned_data['status_new'] == ''):
             raise forms.ValidationError(message='Не указан статус.')
-        if (self.cleaned_data['type'] is None) & (self.cleaned_data['type_new'] == ''):
-            raise forms.ValidationError(message='Не указан тип оборудования.')
+        # if (self.cleaned_data['type'] is None) & (self.cleaned_data['type_new'] == ''):
+        #     raise forms.ValidationError(message='Не указан тип оборудования.')
         if len(self.cleaned_data['description']) < 5:
             raise forms.ValidationError(message='Добавьте описание.')
-        if self.cleaned_data['type_new']:
-            self.cleaned_data['type'] = self.cleaned_data['type_new']
+        # if self.cleaned_data['type_new']:
+        #     self.cleaned_data['type'] = self.cleaned_data['type_new']
         if self.cleaned_data['manufacturer_new']:
             self.cleaned_data['manufacturer'] = self.cleaned_data['manufacturer_new']
         if self.cleaned_data['name_new']:
@@ -97,13 +97,13 @@ class AddEquipmentForm(forms.Form):
         location = self.cleaned_data.pop('location')
         tag = self.cleaned_data.pop('tag')
         self.cleaned_data['si_or'] = False
-        EquipmentType.objects.get_or_create(name=self.cleaned_data['type'])
+        # EquipmentType.objects.get_or_create(name=self.cleaned_data['type'])
         Manufacturer.objects.get_or_create(name=self.cleaned_data['manufacturer'])
         EquipmentName.objects.get_or_create(name=self.cleaned_data['name'])
         EquipmentModel.objects.get_or_create(name=self.cleaned_data['model'])
         StatusAdd.objects.get_or_create(name=self.cleaned_data['status'])
         equipment = Equipment.objects.create(serial_number=self.cleaned_data['serial_number'],
-                                             type=EquipmentType.objects.get(name=self.cleaned_data['type']),
+                                             # type=EquipmentType.objects.get(name=self.cleaned_data['type']),
                                              manufacturer=Manufacturer.objects.get(
                                                  name=self.cleaned_data['manufacturer']),
                                              name=EquipmentName.objects.get(name=self.cleaned_data['name']),
@@ -130,10 +130,10 @@ class AddDeviceForm(forms.Form):
                                    label='Модель', required=False, )
     model_new = forms.CharField(label='Добавить модель:', widget=forms.TextInput(attrs={'class': 'type2'}),
                                 required=False)
-    type = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Тип оборудования:',
-                                  queryset=EquipmentType.objects.all(), required=False)
-    type_new = forms.CharField(label='Добавить тип:', max_length=255, widget=forms.TextInput(attrs={'class': 'type2'}),
-                               required=False)
+    # type = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Тип оборудования:',
+    #                               queryset=EquipmentType.objects.all(), required=False)
+    # type_new = forms.CharField(label='Добавить тип:', max_length=255, widget=forms.TextInput(attrs={'class': 'type2'}),
+    #                            required=False)
     manufacturer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Производитель:',
                                           queryset=Manufacturer.objects.all(), required=False)
     manufacturer_new = forms.CharField(label='Добавить производителя:',
@@ -205,12 +205,12 @@ class AddDeviceForm(forms.Form):
         #     raise forms.ValidationError(message='Не указана погрешность.')
         if (self.cleaned_data['name'] is None) & (self.cleaned_data['name_new'] == ''):
             raise forms.ValidationError(message='Не указано наименование.')
-        if (self.cleaned_data['type'] is None) & (self.cleaned_data['type_new'] == ''):
-            raise forms.ValidationError(message='Не указан тип оборудования.')
+        # if (self.cleaned_data['type'] is None) & (self.cleaned_data['type_new'] == ''):
+        #     raise forms.ValidationError(message='Не указан тип оборудования.')
         if (self.cleaned_data['reg_number'] is None) & (self.cleaned_data['reg_number_new'] == ''):
             raise forms.ValidationError(message='Не указан регистрационный номер.')
-        if self.cleaned_data['type_new']:
-            self.cleaned_data['type'] = self.cleaned_data['type_new']
+        # if self.cleaned_data['type_new']:
+        #     self.cleaned_data['type'] = self.cleaned_data['type_new']
         if self.cleaned_data['manufacturer_new']:
             self.cleaned_data['manufacturer'] = self.cleaned_data['manufacturer_new']
         if self.cleaned_data['name_new']:
@@ -243,14 +243,14 @@ class AddDeviceForm(forms.Form):
         position = self.cleaned_data.pop('position')
         previous_verification = self.cleaned_data.pop('previous_verification')
         certificate = self.cleaned_data.pop('certificate')
-        EquipmentType.objects.get_or_create(name=self.cleaned_data['type'])
+        # EquipmentType.objects.get_or_create(name=self.cleaned_data['type'])
         Manufacturer.objects.get_or_create(name=self.cleaned_data['manufacturer'])
         EquipmentName.objects.get_or_create(name=self.cleaned_data['name'])
         EquipmentModel.objects.get_or_create(name=self.cleaned_data['model'])
         StatusAdd.objects.get_or_create(name=self.cleaned_data['status'])
         GP.objects.get_or_create(name=position)
         equipment = Equipment.objects.create(serial_number=self.cleaned_data['serial_number'],
-                                             type=EquipmentType.objects.get(name=self.cleaned_data['type']),
+                                             # type=EquipmentType.objects.get(name=self.cleaned_data['type']),
                                              manufacturer=Manufacturer.objects.get(
                                                  name=self.cleaned_data['manufacturer']),
                                              name=EquipmentName.objects.get(name=self.cleaned_data['name']),
@@ -319,8 +319,8 @@ class DraftFormDevice(forms.Form):
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': '4', 'cols': '80'}))
 
 
-class FormFilter(forms.Form):
-    search = forms.ModelChoiceField(queryset=EquipmentType.objects.all())
+# class FormFilter(forms.Form):
+#     search = forms.ModelChoiceField(queryset=EquipmentType.objects.all())
 
 
 class LoginUserForm(AuthenticationForm):

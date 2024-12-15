@@ -40,16 +40,16 @@ urlpatterns = [
     # path('delete_model/<int:pk>', delete_category, {'Mod': EquipmentModel}, name='delete_model'),
     path('add_model/', AddCategory.as_view(model=EquipmentModel), name='add_model'),
     path('update_model/<int:pk>', UpdateCategory.as_view(model=EquipmentModel), name='update_model'),
-    path('types/', ListCategory.as_view(model=EquipmentType, extra_context={
-        'title': 'Список типов',
-        'menu': menu,
-        'url_delete': 'delete_type',
-        'url_update': 'update_type',
-        'url_add': 'add_type'
-    }), name='types'),
-    # path('delete_type/<int:pk>', delete_category, {'Mod': EquipmentType}, name='delete_type'),
-    path('add_type/', AddCategory.as_view(model=EquipmentType), name='add_type'),
-    path('update_type/<int:pk>', UpdateCategory.as_view(model=EquipmentType), name='update_type'),
+    # path('types/', ListCategory.as_view(model=EquipmentType, extra_context={
+    #     'title': 'Список типов',
+    #     'menu': menu,
+    #     'url_delete': 'delete_type',
+    #     'url_update': 'update_type',
+    #     'url_add': 'add_type'
+    # }), name='types'),
+    # # path('delete_type/<int:pk>', delete_category, {'Mod': EquipmentType}, name='delete_type'),
+    # path('add_type/', AddCategory.as_view(model=EquipmentType), name='add_type'),
+    # path('update_type/<int:pk>', UpdateCategory.as_view(model=EquipmentType), name='update_type'),
 
     path('names/', ListCategory.as_view(model=EquipmentName, extra_context={
         'title': 'Наименование оборудования',

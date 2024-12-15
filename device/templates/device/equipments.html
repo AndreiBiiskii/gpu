@@ -33,7 +33,6 @@
         <tr>
             <td class="theader">Серийный номер</td>
             <td class="theader">Наименование</td>
-            <td class="theader">Тип</td>
             <td class="theader">Модель</td>
             <td class="theader">Поз. по ГП</td>
             <td class="theader">Место установки</td>
@@ -46,7 +45,6 @@
         <tr>
             <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a></td>
             <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
-            <td class="table-td">{{equipment.type.name}}</td>
             <td class="table-td">{{equipment.model}}</td>
             <td class="table-td">{{equipment.positions.last.name}}</td>
             <td class="table-td">{{equipment.locations.last.name}}</td>

@@ -25,7 +25,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from urllib3 import request
 
 from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm  # MyExamsForm
-from device.models import Equipment, GP, Si, EquipmentType, EquipmentModel, Manufacturer, Status, Position, \
+from device.models import Equipment, GP, Si, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale, \
     MyExam
 # MyExam
@@ -37,7 +37,6 @@ from equipment.settings import BASE_DIR
 menu = [
     {'title': 'Модели', 'url_name': 'models'},
     {'title': 'Производители', 'url_name': 'manufacturers'},
-    {'title': 'Типы', 'url_name': 'types'},
     {'title': 'Названия', 'url_name': 'names'},
     {'title': 'Статусы', 'url_name': 'statuses'},
     {'title': 'Года выпуска', 'url_name': 'years'},
@@ -71,8 +70,8 @@ def si_loading(request, i):
                 months=+(int(row['interval'])))
             EquipmentModel.objects.get_or_create(name=row['model'].strip().capitalize())
             m = EquipmentModel.objects.get(name=row['model'].strip().capitalize())
-            EquipmentType.objects.get_or_create(name=row['type'].strip().capitalize())
-            t = EquipmentType.objects.get(name=row['type'].strip().capitalize())
+            # EquipmentType.objects.get_or_create(name=row['type'].strip().capitalize())
+            # t = EquipmentType.objects.get(name=row['type'].strip().capitalize())
             EquipmentName.objects.get_or_create(name=row['name'].strip().capitalize())
             n = EquipmentName.objects.get(name=row['name'].strip().capitalize())
             Year.objects.get_or_create(name=row['year'])
@@ -87,7 +86,7 @@ def si_loading(request, i):
                     model=m,
                     si_or=True,
                     manufacturer=man,
-                    type=t,
+                    # type=t,
                     name=n,
                     year=y,
                 )
@@ -134,8 +133,8 @@ def IM(request):
         for i, row in enumerate(readers):
             EquipmentModel.objects.get_or_create(name=row['model'])
             m = EquipmentModel.objects.get(name=row['model'])
-            EquipmentType.objects.get_or_create(name=row['type'])
-            t = EquipmentType.objects.get(name=row['type'])
+            # EquipmentType.objects.get_or_create(name=row['type'])
+            # t = EquipmentType.objects.get(name=row['type'])
             EquipmentName.objects.get_or_create(name=row['name'].capitalize())
             n = EquipmentName.objects.get(name=row['name'])
             if (row['type'] == 'РэмТэк') and (len(row['serial_number']) > 4):
@@ -152,7 +151,7 @@ def IM(request):
                     model=m,
                     si_or=False,
                     manufacturer=man,
-                    type=t,
+                    # type=t,
                     name=n,
                     year=y,
                 )
@@ -234,10 +233,10 @@ def EquipmentUpdate(request, pk):
 
 
 class MyFilter(django_filters.FilterSet):
-    type = django_filters.CharFilter(field_name='type__name',
-                                     lookup_expr='icontains',
-                                     label='Тип:',
-                                     widget=forms.TextInput(attrs={'class': 'type2'}))
+    # type = django_filters.CharFilter(field_name='type__name',
+    #                                  lookup_expr='icontains',
+    #                                  label='Тип:',
+    #                                  widget=forms.TextInput(attrs={'class': 'type2'}))
     serial_number = django_filters.CharFilter(lookup_expr='icontains',
                                               widget=forms.TextInput(attrs={'class': 'type2'}),
                                               label='Серийный номер')
@@ -342,15 +341,15 @@ class MyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Equipment
-        fields = ['serial_number', 'name', 'type', 'model', 'position', 'locations', 'tag', 'status', 'si_or',
+        fields = ['serial_number', 'name', 'model', 'position', 'locations', 'tag', 'status', 'si_or',
                   'manufacturer', 'defect_or', ]
 
 
 class MyFilterUser(django_filters.FilterSet):
-    type = django_filters.CharFilter(field_name='type__name',
-                                     lookup_expr='icontains',
-                                     label='Тип:',
-                                     widget=forms.TextInput(attrs={'class': 'type2'}))
+    # type = django_filters.CharFilter(field_name='type__name',
+    #                                  lookup_expr='icontains',
+    #                                  label='Тип:',
+    #                                  widget=forms.TextInput(attrs={'class': 'type2'}))
     serial_number = django_filters.CharFilter(lookup_expr='icontains',
                                               widget=forms.TextInput(attrs={'class': 'type2'}),
                                               label='Серийный номер')
@@ -374,8 +373,11 @@ class MyFilterUser(django_filters.FilterSet):
 
 
 def equipment_list(request):
-
-    eq2 = Equipment.objects.filter(type__name='РэмТэк')
+    mod = EquipmentModel.objects.all()
+    for i in mod:
+        eq2 = Equipment.objects.filter(model__name=i.name)
+        if not eq2:
+            i.delete()
 
     if not request.user.is_authenticated:
         redirect('/')
@@ -680,16 +682,16 @@ class UpdateCategory(UpdateView):
 
     def post(self, *args, **kwargs):
         self.object = self.get_object()
-        with open('./im.csv', encoding='utf-8') as f:
-            reader = csv.DictReader(f, delimiter=';')
-            rem = Equipment.objects.filter(type__name='РэмТэк')
-            for row in reader:
-                rem1 = rem.filter(serial_number=row['serial_number'])
-                EquipmentModel.objects.get_or_create(name=f'РэмТэк {row["model"]}')
-                m2 = EquipmentModel.objects.get(name=f'РэмТэк {row["model"]}')
-                for j in rem1:
-                    j.model = m2
-                    j.save()
+        # with open('./im.csv', encoding='utf-8') as f:
+        #     reader = csv.DictReader(f, delimiter=';')
+        #     rem = Equipment.objects.filter(type__name='РэмТэк')
+        #     for row in reader:
+        #         rem1 = rem.filter(serial_number=row['serial_number'])
+        #         EquipmentModel.objects.get_or_create(name=f'РэмТэк {row["model"]}')
+        #         m2 = EquipmentModel.objects.get(name=f'РэмТэк {row["model"]}')
+        #         for j in rem1:
+        #             j.model = m2
+        #             j.save()
         # owner_model = EquipmentModel.objects.get(name=self.object.name)
         # name = EquipmentModel.objects.filter(name__icontains=self.object.name)
         #
