@@ -374,6 +374,9 @@ class MyFilterUser(django_filters.FilterSet):
 
 
 def equipment_list(request):
+
+    eq2 = Equipment.objects.filter(type__name='РэмТэк')
+
     if not request.user.is_authenticated:
         redirect('/')
     if request.method == 'POST' and request.user.is_staff:
@@ -682,12 +685,11 @@ class UpdateCategory(UpdateView):
             rem = Equipment.objects.filter(type__name='РэмТэк')
             for row in reader:
                 rem1 = rem.filter(serial_number=row['serial_number'])
-                EquipmentModel.objects.get_or_create(name=row['model'])
-                m2 = EquipmentModel.objects.get(name=row['model'])
+                EquipmentModel.objects.get_or_create(name=f'РэмТэк {row["model"]}')
+                m2 = EquipmentModel.objects.get(name=f'РэмТэк {row["model"]}')
                 for j in rem1:
                     j.model = m2
                     j.save()
-                # rem1.save()
         # owner_model = EquipmentModel.objects.get(name=self.object.name)
         # name = EquipmentModel.objects.filter(name__icontains=self.object.name)
         #
