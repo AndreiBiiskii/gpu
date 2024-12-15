@@ -563,22 +563,23 @@ def DeviceUpdate(request, pk):
     return render(request, 'device/equipment_update.html', context=data)
 
 
-def EquipmentDelete(request, pk):
-    if not request.user.is_staff:
-        redirect('login')
-    obj = get_object_or_404(Equipment,
-                            pk=pk)
-    if request.GET.get('number'):
-        number = int(request.GET.get('number')) - 1
-
-        (obj.descriptions.all()[number]).delete()
-        (obj.positions.all()[number]).delete()
-        (obj.locations.all()[number]).delete()
-        (obj.tags.all()[number]).delete()
-        (obj.status.all()[number]).delete()
-    else:
-        obj.delete()
-    return redirect('/')
+# def EquipmentDelete(request, pk):
+#     if not request.user.is_staff:
+#         redirect('login')
+#     obj = get_object_or_404(Equipment,
+#                             pk=pk)
+#     if request.GET.get('number'):
+#         number = int(request.GET.get('number')) - 1
+#
+#         (obj.descriptions.all()[number]).delete()
+#         (obj.positions.all()[number]).delete()
+#         (obj.locations.all()[number]).delete()
+#         (obj.tags.all()[number]).delete()
+#         (obj.status.all()[number]).delete()
+#     else:
+#         obj.delete()
+#         obj.save()
+#     return redirect('/')
 
 
 class MyFilterGp(django_filters.FilterSet):
