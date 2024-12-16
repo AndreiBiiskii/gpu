@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from defectone.views import DefectAdd, ApproveAdd, ApproveList, ApproveDelete, ApproveUpdate, ContractorAdd, \
     ContractorList, ContractorDelete, ContractorUpdate, KaitAdd, KaitList, KaitDelete, \
     KaitUpdate, WorkerAdd, WorkerList, WorkerDelete, WorkerUpdate, defect_list, defect_list, DefectUpdate, send_act, \
-    send_poverka, AddEmail
+    send_poverka, AddEmail, bid
 
 urlpatterns = [
     path('defect_add/<int:pk>/', DefectAdd.as_view(), name='defect_add'),
@@ -13,6 +13,7 @@ urlpatterns = [
     path('send_act/<int:pk>/', send_act, name='send_act'),
     path('add_email', AddEmail.as_view(), name='add_email'),
     # path('send_poverka', send_poverka, name='send_poverka'),
+    path('bid', bid, name='bid'),
 
 ]
 urlpatterns += [path('approve/', ApproveAdd.as_view(), name='approve_add'),

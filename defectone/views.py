@@ -32,18 +32,18 @@ def send_act(request, pk):
     if not request.user.email:
         return redirect(reverse_lazy('defectone:add_email'))
     de = Defect.objects.get(pk=pk)
-    eq = Equipment.objects.filter(Q(serial_number=de.serial_number) & Q(model__name=de.model)).first()
-    if not eq:
-        return redirect(reverse_lazy('defectone:defect_list'))
+    # eq = Equipment.objects.filter(Q(serial_number=de.serial_number) & Q(model__name=de.model)).first()
+    # if not eq:
+    #     return redirect(reverse_lazy('defectone:defect_list'))
     wb = load_workbook(f'{BASE_DIR}/files/defect_files/act1.xlsx')
     ws = wb['act']
     ws['E9'] = de.defect_act
     ws['J5'] = de.approve.name
     ws['B5'] = de.gp
     ws['H2'] = de.approve.job_title
-    ws['D12'] = f'{eq.name}, {eq.type}, {eq.model}'
+    ws['D12'] = f'{de.name}, {de.model}'
     ws['D18'] = de.serial_number
-    ws['D19'] = eq.manufacturer.name
+    ws['D19'] = de.manufacture
     ws['D21'] = de.project
     ws['D23'] = de.location
     ws['D25'] = datetime.date(datetime.now()).strftime('%d-%m-%Y')
@@ -123,6 +123,7 @@ class DefectAdd(CreateView):
         initial['defect'] = eq
         initial['serial_number'] = eq.serial_number
         initial['model'] = eq.model.name
+        initial['name'] = eq.name.name
         initial['manufacture'] = eq.manufacturer.name
         try:
             poz = GP.objects.get(name=Position.objects.filter(equipment=eq).last().name)
@@ -193,9 +194,10 @@ def defect_list(request):
 
 class DefectUpdate(UpdateView):
     model = Defect
-    fields = ('serial_number', 'gp', 'location', 'tag', 'defect_act', 'project', 'short_description', 'causes',
-              'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
-    # success_url = reverse_lazy('defectone:defect_list')
+    fields = (
+    'name', 'model', 'serial_number', 'gp', 'location', 'tag', 'defect_act', 'project', 'short_description', 'causes',
+    'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
+    success_url = reverse_lazy('defectone:defect_list')
     template_name = 'defect/defect_update.html'
     extra_context = {
         'title': 'Изменить данные',
