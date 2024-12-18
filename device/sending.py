@@ -52,18 +52,31 @@ def sample_send(request, data):
         ws[f'H{i + 2}'] = eq.year.name
         ws[f'I{i + 2}'] = eq.descriptions.last().name
         if eq.si_or:
+            from_si = Si.objects.get(equipment=eq)
             try:
-                from_si = Si.objects.get(equipment=eq)
+                ws[f'J{i + 2}'] = from_si.reg_number.name
             except:
-                from_si = None
-            if not from_si:
                 ws[f'J{i + 2}'] = 'регистрационного номера нет'
-            ws[f'J{i + 2}'] = from_si.reg_number.name
-            ws[f'K{i + 2}'] = '..'.join([from_si.scale.min_scale, from_si.scale.max_scale])
-            ws[f'L{i + 2}'] = from_si.unit.name
-            ws[f'M{i + 2}'] = from_si.interval.name
-            ws[f'N{i + 2}'] = from_si.certificate
-            ws[f'O{i + 2}'] = from_si.previous_verification
+            try:
+                ws[f'K{i + 2}'] = '..'.join([from_si.scale.min_scale, from_si.scale.max_scale])
+            except:
+                ws[f'K{i + 2}'] = 'шкалы нет'
+            try:
+                ws[f'L{i + 2}'] = from_si.unit.name
+            except:
+                ws[f'L{i + 2}'] = 'нет единиц измерения'
+            try:
+                ws[f'M{i + 2}'] = from_si.interval.name
+            except:
+                ws[f'M{i + 2}'] = 'интервалы нет'
+            try:
+                ws[f'N{i + 2}'] = from_si.certificate
+            except:
+                ws[f'N{i + 2}'] = 'сертификата нет'
+            try:
+                ws[f'O{i + 2}'] = from_si.previous_verification
+            except:
+                ws[f'O{i + 2}'] = 'предыдущая проверка нет'
     wb.save(f'{BASE_DIR}/from sending.xlsx')
     wb.close()
     # sm = EmailMessage
