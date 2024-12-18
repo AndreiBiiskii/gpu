@@ -52,7 +52,10 @@ def sample_send(request, data):
         ws[f'H{i + 2}'] = eq.year.name
         ws[f'I{i + 2}'] = eq.descriptions.last().name
         if eq.si_or:
-            from_si = Si.objects.get(equipment=eq)
+            try:
+                from_si = Si.objects.get(equipment=eq)
+            except:
+                continue
             try:
                 ws[f'J{i + 2}'] = from_si.reg_number.name
             except:
