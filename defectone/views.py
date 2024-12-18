@@ -10,9 +10,10 @@ from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.template.context_processors import request
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
+from openpyxl import load_workbook
 from rest_framework.permissions import IsAdminUser
 from rest_framework.reverse import reverse_lazy
-from openpyxl import load_workbook
+
 
 from defectone.forms import AddUserForm, DefectAddForm
 from defectone.models import Defect, Approve, Contractor, Kait, Worker

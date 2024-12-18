@@ -254,7 +254,7 @@ class MyFilter(django_filters.FilterSet):
     tag = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
                                     field_name='tags__name',
                                     lookup_expr='icontains', label='Тэг:', )
-    name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Название:',
+    name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Наименование:',
                                      widget=forms.TextInput(attrs={'class': 'type2'}))
 
     start_date = django_filters.DateFilter(
@@ -357,7 +357,7 @@ class MyFilterUser(django_filters.FilterSet):
                                                 queryset=GP.objects.all(),
                                                 field_name='positions__name',
                                                 lookup_expr='exact', label='Позиция:', )
-    name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Название:',
+    name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Наименование:',
                                      widget=forms.TextInput(attrs={'class': 'type2'}))
     status = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
                                               queryset=StatusAdd.objects.all(), field_name='status__name',
@@ -388,7 +388,7 @@ def equipment_list(request):
             'forms': eq_filter,
 
         }
-        # sample_send(request, eq_filter.qs)
+        sample_send(request, eq_filter.qs)
         if request.POST.get('parser'):
             data_from_parser(request)
         return render(request, 'device/equipments.html', context=data)
