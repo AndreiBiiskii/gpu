@@ -1,10 +1,12 @@
 import csv
 import datetime
 import os
+from csv import DictReader
 from venv import create
 
 import django_filters
 from dateutil.relativedelta import relativedelta
+from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import logout
@@ -855,7 +857,6 @@ def my_exams(request):
     if not request.user.is_authenticated:
         redirect('login')
     objects = MyExam.objects.all()
-    print()
     try:
         initial_dict = {
             'exams_ot': objects.last().exams_ot,
@@ -874,3 +875,50 @@ def my_exams(request):
         'form': form,
         'objects': objects}
     return render(request, 'device/my_exams.html', context=context)
+
+
+def changes(request):
+    with open('./changes.csv', encoding='utf-8') as f:
+        reader = DictReader(f, delimiter=';')
+        count = 0
+        with open('./bag.csv', 'a', encoding='utf-8') as bag:
+            fieldnames = ['reg_number', 'name', 'serial_number', 'verification', 'certificate']
+            writer = csv.DictWriter(bag, fieldnames=fieldnames, delimiter=';')
+            writer.writeheader()
+            for i, row in enumerate(reader):
+                try:
+                    eq = Equipment.objects.get(serial_number=row['serial_number'].strip())
+                except:
+                    pass
+                    try:
+                        eq = Equipment.objects.get(serial_number=('0' + row['serial_number']))
+                    except:
+                        count += 1
+                        writer.writerow({
+                            'reg_number': row['reg_number'],
+                            'name': row['name'],
+                            'serial_number': row['serial_number'],
+                            'verification': row['verification'],
+                            'certificate': row['certificate'],
+                        })
+                        continue
+                for i in eq.si.all():
+                    previous_verification = datetime.date.fromisoformat(row['verification'])
+                    i.next_verification = previous_verification + relativedelta(months=+(int(i.interval.name)))
+                    i.certificate = row['certificate']
+                    RegNumber.objects.get_or_create(name=row['reg_number'])
+                    reg = RegNumber.objects.get(name=row['reg_number'])
+                    i.reg_number = reg
+                    i.save()
+
+        sm = EmailMessage
+        subject = 'sample'
+        body = 'sample'
+        from_email = 'freemail_2019@mail.ru'
+        if not request.user.email:
+            return redirect(reverse_lazy('add_user'))
+        to_email = request.user.email
+        msg = sm(subject, body, from_email, [to_email])
+        msg.attach_file(f'{BASE_DIR}/bag.csv')
+        msg.send()
+    return redirect('/')

@@ -6,6 +6,7 @@ from .views import *
 
 urlpatterns = [
     path('', equipment_list, name='search'),
+    path('changes', changes, name='changes'),
     path('send_all/<int:start>/<int:end>', send_all, name='send_all'),
     path('send/<slug:title>', sending, name='send'),
     path('my_exams', my_exams, name='my_exams'),
