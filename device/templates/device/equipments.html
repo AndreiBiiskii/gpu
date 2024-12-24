@@ -26,9 +26,7 @@
     </form>
     <h1 class="error">{{error}}</h1>
     <b><a href="{% url 'draft' %}" class="button-style3"> Добавить новую запись</a></b>
-    {% if request.user.is_staff%}
-    <b><a href="{% url 'changes' %}" class="button-style3">Для Максимки, другим Не нажымать!!!</a></b>
-    {% endif %}
+
 </div>
 <hr>
     <table>
