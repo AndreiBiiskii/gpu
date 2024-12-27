@@ -916,7 +916,7 @@ def changes(request):
         body = 'sample'
         from_email = 'freemail_2019@mail.ru'
         if not request.user.email:
-            return redirect(reverse_lazy('add_user'))
+            return redirect(reverse_lazy('add_email'))
         to_email = request.user.email
         msg = sm(subject, body, from_email, [to_email])
         msg.attach_file(f'{BASE_DIR}/bag.csv')
