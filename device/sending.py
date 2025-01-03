@@ -44,9 +44,18 @@ def sample_send(request, data):
     for i, eq in enumerate(data):
         ws[f'A{i + 2}'] = i + 1
         ws[f'B{i + 2}'] = eq.serial_number
-        ws[f'C{i + 2}'] = eq.positions.last().name
-        ws[f'D{i + 2}'] = eq.locations.last().name
-        ws[f'E{i + 2}'] = eq.tags.last().name
+        try:
+            ws[f'C{i + 2}'] = eq.positions.last().name
+        except:
+            ws[f'C{i + 2}'] = '-'
+        try:
+            ws[f'D{i + 2}'] = eq.locations.last().name
+        except:
+            ws[f'D{i + 2}'] = '-'
+        try:
+            ws[f'E{i + 2}'] = eq.tags.last().name
+        except:
+            ws[f'E{i + 2}'] = '-'
         ws[f'F{i + 2}'] = eq.name.name
         ws[f'G{i + 2}'] = eq.model.name
         ws[f'H{i + 2}'] = eq.year.name
