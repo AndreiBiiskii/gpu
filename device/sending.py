@@ -1,6 +1,7 @@
 import csv
 import os
 from base64 import decode
+from csv import excel
 from datetime import datetime
 
 from django.core.mail import EmailMessage
@@ -59,7 +60,10 @@ def sample_send(request, data):
         ws[f'F{i + 2}'] = eq.name.name
         ws[f'G{i + 2}'] = eq.model.name
         ws[f'H{i + 2}'] = eq.year.name
-        ws[f'I{i + 2}'] = eq.descriptions.last().name
+        try:
+            ws[f'I{i + 2}'] = eq.descriptions.last().name
+        except:
+            ws[f'I{i + 2}'] = '-'
         if eq.si_or:
             try:
                 from_si = Si.objects.get(equipment=eq)
