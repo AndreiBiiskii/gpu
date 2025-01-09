@@ -71,7 +71,7 @@
                                                                                  name="certificate"
                                                                                  value="{{equipment.si.last.certificate}}">
             </td>
-            {%endif%}
+
         </tr>
         <tr {%if not request.user.is_staff %} class="owner" {%endif%}>
             <td><b><cite>Ед. измерения:</cite></b></td>
@@ -99,6 +99,7 @@
                        value='{{max_scale}}'></td>
 
         </tr>
+        {%endif%}
         <tr {%if not request.user.is_staff %} class="owner" {%endif%}>
             <td><b><cite>Дефек:</cite></b></td>
             <td>
