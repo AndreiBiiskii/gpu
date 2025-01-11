@@ -29,34 +29,42 @@
 
 </div>
 <hr>
-    <table>
-        <tbody>
-        <tr>
-            <td class="theader">Серийный номер</td>
-            <td class="theader">Наименование</td>
-            <td class="theader">Модель</td>
-            <td class="theader">Поз. по ГП</td>
-            <td class="theader">Место установки</td>
-            <td class="theader">Тэг</td>
-            <td class="theader">Дата изменения</td>
-            <td class="theader">Дата следующей поверки</td>
-            <td class="theader">Комментарий</td>
-        </tr>
-        {%for equipment in equipments%}
-        <tr>
-            <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a></td>
-            <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a></td>
-            <td class="table-td">{{equipment.model}}</td>
-            <td class="table-td">{{equipment.positions.last.name}}</td>
-            <td class="table-td">{{equipment.locations.last.name}}</td>
-            <td class="table-td">{{equipment.tags.last.name}}</td>
-            <td class="table-td">{{equipment.descriptions.last.at_date|date:"d-m-Y"}}</td>
-            <td class="table-td">{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
-            <td class="table-td">{{equipment.comment}}</td>
-        </tr>
-        {%endfor%}
-        </tbody>
-    </table>
+<table>
+    <tbody>
+    <tr>
+        <td class="theader">Серийный номер</td>
+        <td class="theader">Наименование</td>
+        <td class="theader">Модель</td>
+        <td class="theader">Поз. по ГП</td>
+        <td class="theader">Место установки</td>
+        <td class="theader">Тэг</td>
+        <td class="theader">Дата изменения</td>
+        {% if request.user.is_staff %}
+        <td> Кто внес изменения</td>
+        {% endif %}
+        <td class="theader">Дата следующей поверки</td>
+        <td class="theader">Комментарий</td>
+    </tr>
+    {%for equipment in equipments%}
+    <tr>
+        <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a>
+        </td>
+        <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a>
+        </td>
+        <td class="table-td">{{equipment.model}}</td>
+        <td class="table-td">{{equipment.positions.last.name}}</td>
+        <td class="table-td">{{equipment.locations.last.name}}</td>
+        <td class="table-td">{{equipment.tags.last.name}}</td>
+        <td class="table-td">{{equipment.descriptions.last.at_date|date:"d-m-Y"}}</td>
+        {% if request.user.is_staff %}
+        <td class="table-td">{{equipment.descriptions.last.user}}</td>
+        {%endif%}
+        <td class="table-td">{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
+        <td class="table-td">{{equipment.comment}}</td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
 
 {%endif%}
 {% endblock %}
