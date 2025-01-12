@@ -381,11 +381,11 @@ def equipment_list(request):
         eq_filter = MyFilter(request.POST,
                              queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
                                                                          'tags').all().order_by(
-                                 '-si__next_verification'))
+                                 'name'))
         data = {
             'title': 'Поиск',
             'menu': menu,
-            'equipments': set(eq_filter.qs),
+            'equipments': eq_filter.qs,
             'count': eq_filter.qs.count(),
             'forms': eq_filter,
 
@@ -398,11 +398,11 @@ def equipment_list(request):
     if request.method == 'POST' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,
                                  queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
-                                                                             'tags').all())
+                                                                             'tags').all().order_by('name'))
         data = {
             'title': 'Поиск',
             'menu': menu,
-            'equipments': set(eq_filter.qs),
+            'equipments': eq_filter.qs,
             'count': eq_filter.qs.count(),
             'forms': eq_filter,
 
