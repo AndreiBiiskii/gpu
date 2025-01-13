@@ -422,7 +422,7 @@ top:25px;
 
 
 .shadowbox {
-  width: 10.2em;
+  width: auto;
   border: 1px solid #333;
   box-shadow: 8px 8px 5px #444;
   padding: 8px 12px;
@@ -481,4 +481,8 @@ width: 100%;
 
 #id_defect{
 display:block
+}
+
+.order{
+float:left;
 }
