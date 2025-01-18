@@ -2,11 +2,13 @@ import csv
 import re
 from datetime import datetime
 from time import sleep
-
 from django.shortcuts import redirect
+from openpyxl import load_workbook
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
+
+from equipment.settings import BASE_DIR
 
 
 def get_sample(table_tr):
@@ -27,54 +29,52 @@ def get_sample(table_tr):
     return sample_data
 
 
-def data_from_parser(request):
-    # "/home/andrei/chrome-linux64/"
+def data_from_parser(data):
+    "/home/andrei/chrome-linux64/"
     driver = webdriver.Chrome()
     driver.get("https://fgis.gost.ru/fundmetrology/cm/results?activeYear=%D0%92%D1%81%D0%B5")
     data_ = driver.find_element(By.CLASS_NAME, 'modal-footer')
     button = data_.find_element(By.TAG_NAME, 'button')
     button.send_keys(Keys.ENTER)
     stop = 0
-    with open('./sample_send.csv', encoding='utf-8') as f:
-        reader = csv.DictReader(f, delimiter=';')
-        for row in reader:
-            # stop += 1
-            # if stop == 2:
-            #     break
-            try:
-                button = driver.find_elements(By.CLASS_NAME, 'btn')
-                button[1].send_keys(Keys.ENTER)
-                sleep(3)
-                type_model = driver.find_element(By.ID, 'filter_mi_modification')
-                type_name = driver.find_element(By.ID, 'filter_mi_mititle')
-                type_sn = driver.find_element(By.ID, 'filter_mi_number')
-                my_string = ''.join(i for i in row['serial_number'] if not i.isalpha())
-                type_sn.clear()
-                type_sn.send_keys(my_string)
-                type_name.clear()
-                type_name.send_keys(row['name'][0:5])
-                type_model.clear()
-                type_model.send_keys(row['model'][0:2])
-                sleep(5)
-                btn = driver.find_elements(By.CLASS_NAME, 'btn-primary')
-                btn[0].send_keys(Keys.ENTER)
-                sleep(5)
-                table_div = driver.find_element(By.CLASS_NAME, 'sticky-spinner-wrap')
-                table_tr = table_div.find_elements(By.TAG_NAME, 'tr')
-            except:
-                print('text')
-            print(get_sample(table_tr, ))
+    wb = load_workbook(f'{BASE_DIR}/from sending.xlsx')
+    ws = wb['l1']
+    for i, eq in enumerate(ws):
+        stop += 1
+        if stop == 2:
+            break
+        try:
+            button = driver.find_elements(By.CLASS_NAME, 'btn')
+            button[1].send_keys(Keys.ENTER)
+            sleep(3)
+            name = driver.find_element(By.ID, 'filter_mi_mititle')
+            serial_number = driver.find_element(By.ID, 'filter_mi_number')
+            org = driver.find_element(By.ID, 'filter_org_title')
+            org.clear()
+            sleep(2)
+            org.send_keys('ИРКУТСКИЙ')
+            sleep(2)
+            serial_number.clear()
+            sleep(2)
+            serial_number.send_keys(ws[f'B{i + 2}'].value)
+            sleep(2)
+            name.clear()
+            sleep(2)
+            name.send_keys(ws[f'F{i + 2}'].value[0:4])
+            sleep(5)
+            btn = driver.find_elements(By.CLASS_NAME, 'btn-primary')
+            btn[0].send_keys(Keys.ENTER)
+            sleep(5)
+            table_div = driver.find_element(By.CLASS_NAME, 'sticky-spinner-wrap')
+            table_tr = table_div.find_elements(By.TAG_NAME, 'tr')
+            sleep(5)
+            for row in table_tr:
+                table_td = row.find_elements(By.TAG_NAME, 'td')
+                print(table_td[2].text)
 
+                # print('row text', row.text)
 
-    # <a href="/fundmetrology/registry" class="btn btn-lg btn-success btn-block ng-scope"><span class="fa fa-globe"></span> Публичный портал</a>
-    # <div data-v-10e5d5a7="" class="col"><input data-v-10e5d5a7="" type="checkbox" id="hide-forever"> <label data-v-10e5d5a7="" for="hide-forever">Больше не показывать</label></div>
-    # driver.close()
-    #
-    # with open('./sample_send.csv', encoding='utf-8') as f:
-    #     reader = csv.DictReader(f, delimiter=';')
-    # for row in reader:
-    # print(row['serial_number'], row['type'], row['model'])
-
-    # УКПГ-2 КГКМ ООО Газпром добыча Иркутск
+        except:
+            print('error', ws[f'B{i + 2}'].value)
 
     return redirect('/')

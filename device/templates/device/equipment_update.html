@@ -63,16 +63,7 @@
                                                                                  value='{{equipment.si.last.previous_verification|date:"Y-m-d"}}'>
             </td>
         </tr>
-        <tr>
-            <td {%if not request.user.is_staff %} class="owner" {%endif%}><b><cite>Сертификат:</cite></b></td>
-            <td {%if not request.user.is_staff %} class="owner" {%endif%}><input {%if not request.user.is_staff %}
-                                                                                 class="owner" {%endif%} class="type2"
-                                                                                 type="text"
-                                                                                 name="certificate"
-                                                                                 value="{{equipment.si.last.certificate}}">
-            </td>
 
-        </tr>
         <tr {%if not request.user.is_staff %} class="owner" {%endif%}>
             <td><b><cite>Ед. измерения:</cite></b></td>
             <td><select name="unit" class="select">

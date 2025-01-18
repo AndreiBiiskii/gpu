@@ -116,7 +116,7 @@ def si_loading(request, i):
                 equipment=eq,
                 previous_verification=previous_verification,
                 next_verification=next_verification,
-                certificate=row['certificate'],
+                # certificate=row['certificate'],
                 interval=interval,
                 scale=scale,
                 unit=unit,
@@ -391,10 +391,7 @@ def equipment_list(request):
 
         }
         sample_send(request, eq_filter.qs)
-        if request.POST.get('parser'):
-            data_from_parser(request)
         return render(request, 'device/equipments.html', context=data)
-
     if request.method == 'POST' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,
                                  queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
@@ -554,10 +551,10 @@ def DeviceUpdate(request, pk):
                                        datetime.datetime.strptime(request.POST['previous_verification'],
                                                                   '%Y-%m-%d').date()) + relativedelta(
                 months=+int(si.interval.name))
-            try:
-                si.certificate = request.POST['certificate']
-            except:
-                si.certificate = '999999999'
+            # try:
+            #     si.certificate = request.POST['certificate']
+            # except:
+            #     si.certificate = '999999999'
             si.save()
             return redirect('search')
         else:
@@ -882,7 +879,7 @@ def changes(request):
         reader = DictReader(f, delimiter=';')
         count = 0
         with open('./bag.csv', 'a', encoding='utf-8') as bag:
-            fieldnames = ['reg_number', 'name', 'serial_number', 'verification', 'certificate']
+            fieldnames = ['reg_number', 'name', 'serial_number', 'verification']
             writer = csv.DictWriter(bag, fieldnames=fieldnames, delimiter=';')
             writer.writeheader()
             for i, row in enumerate(reader):
@@ -899,13 +896,13 @@ def changes(request):
                             'name': row['name'],
                             'serial_number': row['serial_number'],
                             'verification': row['verification'],
-                            'certificate': row['certificate'],
+                            # 'certificate': row['certificate'],
                         })
                         continue
                 for i in eq.si.all():
                     previous_verification = datetime.date.fromisoformat(row['verification'])
                     i.next_verification = previous_verification + relativedelta(months=+(int(i.interval.name)))
-                    i.certificate = row['certificate']
+                    # i.certificate = row['certificate']
                     RegNumber.objects.get_or_create(name=row['reg_number'])
                     reg = RegNumber.objects.get(name=row['reg_number'])
                     i.reg_number = reg

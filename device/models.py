@@ -166,7 +166,7 @@ class Si(models.Model):
                                   verbose_name='Средство измерения')
     previous_verification = models.DateField(verbose_name='Дата предыдущей поверки')
     next_verification = models.DateField(verbose_name='Дата следующей поверки')
-    certificate = models.CharField(max_length=255, verbose_name='Свидетельство о поверке', default='еще нет')
+    # certificate = models.CharField(max_length=255, verbose_name='Свидетельство о поверке', default='еще нет')
     interval = models.ForeignKey(VerificationInterval, on_delete=models.DO_NOTHING, related_name='interval', blank=True,
                                  null=True, verbose_name='Межповерочный интервал (мес)')
     scale = models.ForeignKey('Scale', on_delete=models.DO_NOTHING, related_name='scale', verbose_name='Шкала датчика')

@@ -168,7 +168,7 @@ class AddDeviceForm(forms.Form):
         'type': 'date',
         'class': 'type2',
     }))
-    certificate = forms.CharField(widget=forms.TextInput(attrs={"class": "type2"}), label='Сертификат:')
+    # certificate = forms.CharField(widget=forms.TextInput(attrs={"class": "type2"}), label='Сертификат:')
     interval = forms.ChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Межповерочный интервал:',
                                  choices=CHOICES_INTERVAL)
     min_scale = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type2"}), label='Мин. шкалы:')
@@ -242,7 +242,7 @@ class AddDeviceForm(forms.Form):
         max_scale = self.cleaned_data.pop('max_scale')
         position = self.cleaned_data.pop('position')
         previous_verification = self.cleaned_data.pop('previous_verification')
-        certificate = self.cleaned_data.pop('certificate')
+        # certificate = self.cleaned_data.pop('certificate')
         # EquipmentType.objects.get_or_create(name=self.cleaned_data['type'])
         Manufacturer.objects.get_or_create(name=self.cleaned_data['manufacturer'])
         EquipmentName.objects.get_or_create(name=self.cleaned_data['name'])
@@ -274,7 +274,7 @@ class AddDeviceForm(forms.Form):
                           previous_verification=previous_verification,
                           next_verification=previous_verification + relativedelta(
                               months=+(int(self.cleaned_data['interval']))),
-                          certificate=certificate,
+                          # certificate=certificate,
                           interval=VerificationInterval.objects.get(name=self.cleaned_data['interval']),
                           scale=Scale.objects.get(min_scale=min_scale, max_scale=max_scale),
                           unit=Unit.objects.get(name=self.cleaned_data['unit']),
