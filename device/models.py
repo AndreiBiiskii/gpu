@@ -140,7 +140,7 @@ class Equipment(models.Model):
     at_date = models.DateTimeField(auto_now=True, verbose_name='Дата добавления')
     defect_or = models.BooleanField(default=False, blank=True, null=True, verbose_name='Дефектное')
     si_or = models.BooleanField(default=True, verbose_name='Средство измерения')
-    comment = models.TextField(blank=True,  verbose_name='Комментарий')
+    comment = models.TextField(blank=True, verbose_name='Комментарий')
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.DO_NOTHING, related_name='manufacturer',
                                      verbose_name='Производитель')
     # type = models.ForeignKey(EquipmentType, on_delete=models.DO_NOTHING, related_name='type',
@@ -190,8 +190,14 @@ class Si(models.Model):
 
 class Draft(models.Model):
     serial_number_draft = models.CharField(max_length=255, verbose_name='Серийный номер')
+    model_draft = models.ForeignKey(EquipmentModel, on_delete=models.CASCADE, blank=False, null=False,
+                                    verbose_name='Модель')
+    manufacturer_draft = models.ForeignKey(Manufacturer, on_delete=models.CASCADE, blank=False, null=False,
+                                           verbose_name='Производитель')
+    name_draft = models.ForeignKey(EquipmentName, on_delete=models.CASCADE, blank=False, null=False,
+                                   verbose_name='Наименование')
     poz_draft = models.ForeignKey('GP', on_delete=models.CASCADE, blank=True, null=True, verbose_name='Поз. по ГП')
-    poz_draft_new = models.CharField(max_length=255, verbose_name=' Поз. по ГП')
+    # poz_draft_new = models.CharField(max_length=255, verbose_name=' Новая позиция по ГП')
     location_draft = models.CharField(max_length=255, blank=False, null=False, verbose_name='Место установки')
     tag_draft = models.CharField(max_length=255, blank=False, null=False, verbose_name='Тэг')
     description_draft = models.TextField(blank=False, null=False, verbose_name='Описание')
@@ -199,6 +205,10 @@ class Draft(models.Model):
                                      verbose_name='Статус')
     images = models.ImageField(blank=False, null=False, verbose_name='Фото', upload_to='images')
     user_draft = models.ForeignKey(User, on_delete=models.CASCADE)
+    min_scale_draft = models.CharField(max_length=255, verbose_name='Минимум шкалы')
+    max_scale_draft = models.CharField(max_length=255, verbose_name='Максимум шкалы')
+    unit_draft = models.ForeignKey('Unit', on_delete=models.CASCADE, verbose_name='Единица измерения')
+    year_draft = models.ForeignKey('Year', on_delete=models.CASCADE, verbose_name='Год выпуска')
 
     def __str__(self):
         return self.poz_draft.name
@@ -219,7 +229,7 @@ class GP(models.Model):
 
 
 class RegNumber(models.Model):
-    name = models.CharField(max_length=255, unique=True,verbose_name='Регистрационный номер')
+    name = models.CharField(max_length=255, unique=True, verbose_name='Регистрационный номер')
 
     def __str__(self):
         return self.name
@@ -259,6 +269,7 @@ class MyExam(models.Model):
     user = models.ForeignKey(User, on_delete=PROTECT, verbose_name='Пользователь')
     exams_ot = models.DateField(verbose_name='Экзамет по ОТ')
     exams_eb = models.DateField(verbose_name='Экзамет по электоробезопасности')
+
     # at_date = models.DateField(auto_now_add=True)
 
     class Meta:

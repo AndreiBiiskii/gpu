@@ -791,10 +791,17 @@ def draft_device_add(request, pk):
     initial_dict = {
         'serial_number': draft.serial_number_draft,
         'position': draft.poz_draft,
+        'model': draft.model_draft,
+        'name': draft.name_draft,
+        'manufacturer': draft.manufacturer_draft,
         'location': draft.location_draft,
         'tag': draft.tag_draft,
         'description': draft.description_draft,
         'status': draft.status_draft,
+        'min_scale' : draft.min_scale_draft,
+        'max_scale' : draft.max_scale_draft,
+        'year': draft.year_draft,
+        'unit' : draft.unit_draft,
 
     }
     if request.method == 'POST':
@@ -818,10 +825,14 @@ def draft_equipment_add(request, pk):
     initial_dict = {
         'serial_number': draft.serial_number_draft,
         'position': draft.poz_draft,
+        'model': draft.model_draft,
+        'name': draft.name_draft,
+        'manufacturer': draft.manufacturer_draft,
         'location': draft.location_draft,
         'tag': draft.tag_draft,
         'description': draft.description_draft,
         'status': draft.status_draft,
+        'year': draft.year_draft,
 
     }
 

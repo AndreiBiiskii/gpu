@@ -85,10 +85,10 @@ def sample_send(request, data):
                 ws[f'M{i + 2}'] = from_si.interval.name
             except:
                 ws[f'M{i + 2}'] = 'интервалы нет'
-            try:
-                ws[f'N{i + 2}'] = from_si.certificate
-            except:
-                ws[f'N{i + 2}'] = 'сертификата нет'
+            # try:
+            #     ws[f'N{i + 2}'] = from_si.certificate
+            # except:
+            #     ws[f'N{i + 2}'] = 'сертификата нет'
             try:
                 ws[f'O{i + 2}'] = from_si.previous_verification
             except:

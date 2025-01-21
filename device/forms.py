@@ -290,14 +290,30 @@ class SearchForm(forms.Form):
 class DraftForm(forms.ModelForm):
     serial_number_draft = forms.CharField(label='Серийный номер', max_length=255,
                                           widget=forms.TextInput(attrs={'class': 'type2'}))
+    model_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
+                                         queryset=EquipmentModel.objects.all(),
+                                         label='Модель')
+    name_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
+                                        queryset=EquipmentName.objects.all(),
+                                        label='Наименование')
+    min_scale_draft = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type2"}), label='Мин. шкалы:')
+    max_scale_draft = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type2"}), label='Макс. шкалы:')
+    year_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Год выпуска:',
+                                  queryset=Year.objects.all())
+    unit_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
+                                        queryset=Unit.objects.all(),
+                                        label='Единица измерения')
+    manufacturer_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
+                                                queryset=Manufacturer.objects.all(),
+                                                label='Производитель')
     poz_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
-                                       label='Поз. по ГП', required=False)
-    poz_draft_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
-                                    label='Добавить позицию по ГП:', max_length=20, required=False)
+                                       label='Поз. по ГП', required=True)
+    # poz_draft_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
+    #                                 label='Добавить позицию по ГП:', max_length=20, required=False)
     location_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Расположение')
     description_draft = forms.CharField(
         widget=forms.Textarea(attrs={"class": "type2"}), label='Комментарий:')
-    tag_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Тэг:', required=False)
+    tag_draft = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), label='Тэг:', required=True)
     status_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                           queryset=StatusAdd.objects.all(),
                                           label='Статус')
@@ -306,13 +322,19 @@ class DraftForm(forms.ModelForm):
     # def clean(self):
     #     cleaned_data = super(DraftForm, self).clean()
     #     if cleaned_data['poz_draft_new']:
-    #         cleaned_data['poz_draft'] = cleaned_data['poz_draft_new']
+    #         cleaned_data['poz_draft'] = cleaned_data['']
     #     return cleaned_data
+    # def clean(self):
+    # if self.cleaned_data['poz_draft_new']:
+    #     self.cleaned_data['poz_draft'] = self.cleaned_data['poz_draft_new']
+    # if (self.cleaned_data['poz_draft_new'] == '') and (self.cleaned_data['poz_draft'] is None):
+    #     raise forms.ValidationError(message='Не указана позиция по ГП')
 
     class Meta(object):
         model = Draft
-        fields = ['serial_number_draft', 'poz_draft', 'poz_draft_new', 'location_draft', 'description_draft',
-                  'tag_draft', 'status_draft', 'images']
+        fields = ['serial_number_draft', 'model_draft', 'name_draft', 'manufacturer_draft', 'poz_draft',
+                  'location_draft', 'description_draft', 'tag_draft', 'year_draft', 'status_draft', 'min_scale_draft',
+                  'max_scale_draft', 'unit_draft', 'images']
 
 
 class DraftFormDevice(forms.Form):
@@ -344,5 +366,3 @@ class MyExamsForm(forms.Form):
         exams = MyExam(user=user, exams_ot=self.cleaned_data['exams_ot'], exams_eb=self.cleaned_data['exams_eb'])
         exams.save()
         return self.cleaned_data
-
-
