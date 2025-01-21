@@ -173,8 +173,8 @@ class Si(models.Model):
     unit = models.ForeignKey('Unit', on_delete=models.DO_NOTHING, related_name='unit', verbose_name='Единица измерения')
     # error_device = models.ForeignKey('Error', on_delete=models.DO_NOTHING, related_name='error_device',
     #                                  verbose_name='Погрешность', default=1)
-    reg_number = models.ForeignKey('RegNumber', on_delete=models.DO_NOTHING, related_name='reg_number',
-                                   verbose_name='Регистрационный номер')
+    # reg_number = models.ForeignKey('RegNumber', on_delete=models.DO_NOTHING, related_name='reg_number',
+    #                                verbose_name='Регистрационный номер')
     result = models.BooleanField(default=True, )
     com = models.TextField(verbose_name='Комментарий', default='none')
 
@@ -228,14 +228,14 @@ class GP(models.Model):
         ordering = ['name', ]
 
 
-class RegNumber(models.Model):
-    name = models.CharField(max_length=255, unique=True, verbose_name='Регистрационный номер')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        ordering = ['name', ]
+# class RegNumber(models.Model):
+#     name = models.CharField(max_length=255, unique=True, verbose_name='Регистрационный номер')
+#
+#     def __str__(self):
+#         return self.name
+#
+#     class Meta:
+#         ordering = ['name', ]
 
 
 # class Error(models.Model):

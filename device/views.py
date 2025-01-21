@@ -28,7 +28,7 @@ from urllib3 import request
 
 from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm  # MyExamsForm
 from device.models import Equipment, GP, Si, EquipmentModel, Manufacturer, Status, Position, \
-    EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, RegNumber, Scale, \
+    EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, Scale, \
     MyExam
 # MyExam
 from device.parser import data_from_parser
@@ -106,8 +106,8 @@ def si_loading(request, i):
             scale = Scale.objects.get(min_scale=row['min_scale'], max_scale=row['max_scale'])
             Unit.objects.get_or_create(name=row['unit'])
             unit = Unit.objects.get(name=row['unit'])
-            RegNumber.objects.get_or_create(name=row['reg_number'])
-            reg_number = RegNumber.objects.get(name=row['reg_number'])
+            # RegNumber.objects.get_or_create(name=row['reg_number'])
+            # reg_number = RegNumber.objects.get(name=row['reg_number'])
             if row['result'] == 'Годен':
                 rezult = True
             else:
@@ -120,7 +120,7 @@ def si_loading(request, i):
                 interval=interval,
                 scale=scale,
                 unit=unit,
-                reg_number=reg_number,
+                # reg_number=reg_number,
                 result=rezult,
                 com=row['comment']
             )
@@ -890,7 +890,7 @@ def changes(request):
         reader = DictReader(f, delimiter=';')
         count = 0
         with open('./bag.csv', 'a', encoding='utf-8') as bag:
-            fieldnames = ['reg_number', 'name', 'serial_number', 'verification']
+            fieldnames = ['name', 'serial_number', 'verification']
             writer = csv.DictWriter(bag, fieldnames=fieldnames, delimiter=';')
             writer.writeheader()
             for i, row in enumerate(reader):
@@ -903,7 +903,7 @@ def changes(request):
                     except:
                         count += 1
                         writer.writerow({
-                            'reg_number': row['reg_number'],
+                            # 'reg_number': row['reg_number'],
                             'name': row['name'],
                             'serial_number': row['serial_number'],
                             'verification': row['verification'],
@@ -914,9 +914,9 @@ def changes(request):
                     previous_verification = datetime.date.fromisoformat(row['verification'])
                     i.next_verification = previous_verification + relativedelta(months=+(int(i.interval.name)))
                     # i.certificate = row['certificate']
-                    RegNumber.objects.get_or_create(name=row['reg_number'])
-                    reg = RegNumber.objects.get(name=row['reg_number'])
-                    i.reg_number = reg
+                    # RegNumber.objects.get_or_create(name=row['reg_number'])
+                    # reg = RegNumber.objects.get(name=row['reg_number'])
+                    # i.reg_number = reg
                     i.save()
 
         sm = EmailMessage

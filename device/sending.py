@@ -69,10 +69,10 @@ def sample_send(request, data):
                 from_si = Si.objects.get(equipment=eq)
             except:
                 continue
-            try:
-                ws[f'J{i + 2}'] = from_si.reg_number.name
-            except:
-                ws[f'J{i + 2}'] = 'регистрационного номера нет'
+            # try:
+            #     ws[f'J{i + 2}'] = from_si.reg_number.name
+            # except:
+            #     ws[f'J{i + 2}'] = 'регистрационного номера нет'
             try:
                 ws[f'K{i + 2}'] = '..'.join([from_si.scale.min_scale, from_si.scale.max_scale])
             except:
@@ -116,7 +116,7 @@ def send_all(request, start, end):
     last = Equipment.objects.all().count()
     get_all = Equipment.objects.filter(si_or=True)[start:end]
     with open('./all_data.csv', 'a', encoding='utf-8') as f:
-        fieldnames = ['№', 'position', 'location', 'teg', 'model', 'name', 'reg_number', 'serial_number', 'description',
+        fieldnames = ['№', 'position', 'location', 'teg', 'model', 'name', 'serial_number', 'description',
                       'min_scale', 'max_scale', 'comment', 'interval', 'previous_verification',
                       'next_verification', 'result', ]  #
         writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=';')
@@ -136,7 +136,7 @@ def send_all(request, start, end):
                     # 'type': eq.type.name,
                     'model': eq.model.name,
                     'name': eq.name.name,
-                    'reg_number': from_si.reg_number,
+                    # 'reg_number': from_si.reg_number,
                     'serial_number': eq.serial_number,
                     'min_scale': from_si.scale.min_scale,
                     'max_scale': from_si.scale.max_scale,
@@ -154,5 +154,12 @@ def send_all(request, start, end):
         start = end
         end += 1000
         return redirect(reverse_lazy('send_all', kwargs={'start': start, 'end': end}))
-    sending(request, 'all_data')
+    sm = EmailMessage
+    subject = 'all'
+    body = 'Выборка отправлена на почту.'
+    from_email = 'freemail_2019@mail.ru'
+    to_email = request.user.email
+    msg = sm(subject, body, from_email, [to_email])
+    msg.attach_file('./all_data.csv')
+    msg.send()
     return redirect(reverse_lazy('search'))

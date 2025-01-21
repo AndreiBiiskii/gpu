@@ -158,11 +158,11 @@ class AddDeviceForm(forms.Form):
                                  widget=forms.TextInput(attrs={'class': 'type2'}), required=False)
     year = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Год выпуска:',
                                   queryset=Year.objects.all(), required=False)
-    reg_number = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Регистрационный номер:',
-                                        queryset=RegNumber.objects.all(),
-                                        required=False)
-    reg_number_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
-                                     label='Добавить регистрационный номер:', max_length=255, required=False)
+    # reg_number = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Регистрационный номер:',
+    #                                     queryset=RegNumber.objects.all(),
+    #                                     required=False)
+    # reg_number_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
+    #                                  label='Добавить регистрационный номер:', max_length=255, required=False)
     previous_verification = forms.DateField(label='Дата предыдущей поверки:', widget=forms.TextInput(attrs=
     {
         'type': 'date',
@@ -207,8 +207,8 @@ class AddDeviceForm(forms.Form):
             raise forms.ValidationError(message='Не указано наименование.')
         # if (self.cleaned_data['type'] is None) & (self.cleaned_data['type_new'] == ''):
         #     raise forms.ValidationError(message='Не указан тип оборудования.')
-        if (self.cleaned_data['reg_number'] is None) & (self.cleaned_data['reg_number_new'] == ''):
-            raise forms.ValidationError(message='Не указан регистрационный номер.')
+        # if (self.cleaned_data['reg_number'] is None) & (self.cleaned_data['reg_number_new'] == ''):
+        #     raise forms.ValidationError(message='Не указан регистрационный номер.')
         # if self.cleaned_data['type_new']:
         #     self.cleaned_data['type'] = self.cleaned_data['type_new']
         if self.cleaned_data['manufacturer_new']:
@@ -219,8 +219,8 @@ class AddDeviceForm(forms.Form):
             self.cleaned_data['model'] = self.cleaned_data['model_new']
         if self.cleaned_data['status_new']:
             self.cleaned_data['status'] = self.cleaned_data['status_new']
-        if self.cleaned_data['reg_number_new']:
-            self.cleaned_data['reg_number'] = self.cleaned_data['reg_number_new']
+        # if self.cleaned_data['reg_number_new']:
+        #     self.cleaned_data['reg_number'] = self.cleaned_data['reg_number_new']
         if self.cleaned_data['unit_new']:
             self.cleaned_data['unit'] = self.cleaned_data['unit_new']
         if (self.cleaned_data['unit_new'] == '') and (self.cleaned_data['unit'] is None):
@@ -268,7 +268,7 @@ class AddDeviceForm(forms.Form):
         VerificationInterval.objects.get_or_create(name=self.cleaned_data['interval'])
         Scale.objects.get_or_create(min_scale=min_scale, max_scale=max_scale)
         # Error.objects.get_or_create(name=self.cleaned_data['error'])
-        RegNumber.objects.get_or_create(name=self.cleaned_data['reg_number'])
+        # RegNumber.objects.get_or_create(name=self.cleaned_data['reg_number'])
         Unit.objects.get_or_create(name=self.cleaned_data['unit'])
         Si.objects.create(equipment=equipment,
                           previous_verification=previous_verification,
@@ -277,9 +277,9 @@ class AddDeviceForm(forms.Form):
                           # certificate=certificate,
                           interval=VerificationInterval.objects.get(name=self.cleaned_data['interval']),
                           scale=Scale.objects.get(min_scale=min_scale, max_scale=max_scale),
-                          unit=Unit.objects.get(name=self.cleaned_data['unit']),
+                          unit=Unit.objects.get(name=self.cleaned_data['unit']))
                           # error_device=Error.objects.get(name=self.cleaned_data['error']),
-                          reg_number=RegNumber.objects.get(name=self.cleaned_data['reg_number']))
+                          # reg_number=RegNumber.objects.get(name=self.cleaned_data['reg_number']))
         return self.cleaned_data
 
 
