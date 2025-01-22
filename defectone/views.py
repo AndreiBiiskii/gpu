@@ -234,7 +234,7 @@ class ApproveList(ListView):
 class ApproveDelete(DeleteView):
     model = Approve
     success_url = reverse_lazy('defectone:approves')
-    template_name = 'defect/approve_delete.html'
+    template_name = 'defect/equipment_delete.html'
     context_object_name = 'object'
     extra_context = {
         'title': 'Удалить подписанта',
@@ -281,7 +281,7 @@ class ContractorList(ListView):
 class ContractorDelete(DeleteView):
     model = Contractor
     success_url = reverse_lazy('defectone:contractors')
-    template_name = 'defect/approve_delete.html'
+    template_name = 'defect/equipment_delete.html'
     context_object_name = 'object'
     extra_context = {
         'title': 'Удалить подрядчика',
@@ -328,7 +328,7 @@ class KaitList(ListView):
 class KaitDelete(DeleteView):
     model = Kait
     success_url = reverse_lazy('defectone:kaits')
-    template_name = 'defect/approve_delete.html'
+    template_name = 'defect/equipment_delete.html'
     context_object_name = 'object'
     extra_context = {
         'title': 'Удалить мастера по КАиТ',
@@ -376,7 +376,7 @@ class WorkerList(ListView):
 class WorkerDelete(DeleteView):
     model = Worker
     success_url = reverse_lazy('defectone:workers')
-    template_name = 'defect/approve_delete.html'
+    template_name = 'defect/equipment_delete.html'
     context_object_name = 'object'
     extra_context = {
         'title': 'Удалить мастера по цеху',

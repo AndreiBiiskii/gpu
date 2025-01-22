@@ -3,13 +3,20 @@
 {% block content %}
 
 <div class="detail">
-    <cite>
+    {% if request.user.is_staff %}
+    <a href="{% url 'equipment_delete' equipment.pk %}" class="button-style3">Удалить</a>
+    {%endif%}
 
+
+    <cite>
         <h2>{{ equipment.serial_number }} / {{ equipment.name }} / {{ equipment.type }} / {{ equipment.model}} /
             {{equipment.manufacturer}} / {{equipment.si.get.reg_number.name}}</h2>
     </cite>
 </div>
 <div>
+    <br>
+    <br>
+    <br>
     <table class="table">
         <thead>
         <tr>
