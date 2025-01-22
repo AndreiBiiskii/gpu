@@ -563,28 +563,32 @@ def DeviceUpdate(request, pk):
 
 
 def EquipmentDelete(request, pk):
-    if not request.user.is_staff:
-        redirect('login')
-    if request.method == 'GET':
-        data = {
-            'equipment': get_object_or_404(Equipment, pk=pk),
-            'menu': menu,
-        }
-        return render(request, 'device/equipment_delete.html', context=data)
-    obj = get_object_or_404(Equipment, pk=pk)
-    for d in obj.descriptions.all():
-        d.delete()
-    for p in obj.positions.all():
-        p.delete()
-    for l in obj.locations.all():
-        l.delete()
-    for t in obj.tags.all():
-        t.delete()
-    for s in obj.status.all():
-        s.delete()
-    for i in obj.si.all():
-        i.delete()
-    obj.delete()
+    # if not request.user.is_staff:
+    #     redirect('login')
+    # if request.method == 'GET':
+    #     data = {
+    #         'equipment': get_object_or_404(Equipment, pk=pk),
+    #         'menu': menu,
+    #     }
+    #     return render(request, 'device/equipment_delete.html', context=data)
+
+    # obj = get_object_or_404(Equipment, pk=pk)
+    m = EquipmentModel.objects.get(name='Гильза защитна')
+    o = Equipment.objects.filter(model=m)
+    for obj in o:
+        for d in obj.descriptions.all():
+            d.delete()
+        for p in obj.positions.all():
+            p.delete()
+        for l in obj.locations.all():
+            l.delete()
+        for t in obj.tags.all():
+            t.delete()
+        for s in obj.status.all():
+            s.delete()
+        for i in obj.si.all():
+            i.delete()
+        obj.delete()
     return redirect('/')
 
 
