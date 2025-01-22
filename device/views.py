@@ -573,7 +573,7 @@ def EquipmentDelete(request, pk):
     #     return render(request, 'device/equipment_delete.html', context=data)
 
     # obj = get_object_or_404(Equipment, pk=pk)
-    m = EquipmentModel.objects.get(name='Гильза защитная L120')
+    m = EquipmentModel.objects.get(name='Гильза защитная')
     o = Equipment.objects.filter(model=m)
     for obj in o:
         for d in obj.descriptions.all():
