@@ -879,9 +879,12 @@ def my_exams(request):
             # return render(request, 'device/my_exams.html', context=context)
     else:
         form = MyExamsForm(initial=initial_dict)
+    print()
     context = {
         'form': form,
-        'objects': objects}
+        'objects': objects,
+        # 'alarm': alarm
+    }
     return render(request, 'device/my_exams.html', context=context)
 
 
