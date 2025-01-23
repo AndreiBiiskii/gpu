@@ -10,6 +10,7 @@ from django import forms
 from .models import *
 
 
+
 class AddEquipmentForm(forms.Form):
     serial_number = forms.CharField(label='Серийный номер', max_length=255,
                                     widget=forms.TextInput(attrs={'class': 'type2'}))
@@ -363,6 +364,13 @@ class MyExamsForm(forms.Form):
                                                              'class': 'type2'}), label='Эл. безопасность')
 
     def save(self, user):
-        exams = MyExam(user=user, exams_ot=self.cleaned_data['exams_ot'], exams_eb=self.cleaned_data['exams_eb'])
-        exams.save()
+        my_exam = MyExam.objects.filter(user=user)
+        if not my_exam:
+            exams = MyExam(user=user, exams_ot=self.cleaned_data['exams_ot'], exams_eb=self.cleaned_data['exams_eb'])
+            exams.save()
+        else:
+            exams = MyExam.objects.get(user=user)
+            exams.exams_ot = self.cleaned_data['exams_ot']
+            exams.exams_eb = self.cleaned_data['exams_eb']
+            exams.save()
         return self.cleaned_data

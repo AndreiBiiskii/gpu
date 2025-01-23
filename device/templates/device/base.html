@@ -18,7 +18,14 @@
     {%if user.is_authenticated%}
     <a class="a" href="{% url 'users:logout' %}">Выйти</a> |
     <a class="a" href="{% url 'users:change_password'%}">Сменить пароль</a> <br><br>
-    <a href="{% url 'my_exams' %}"><cite><b>МОИ ЭКЗАМЕНЫ</b></cite></a>
+    {{error_user}}
+    {{error_staff}}
+    {% if not request.user.is_staff %}
+        <a href="{% url 'my_exams' %}"><cite {%if error_user %} class="error"{%endif%}><b>МОИ ЭКЗАМЕНЫ</b></cite></a>
+    {%endif%}
+    {% if request.user.is_staff %}
+      <a href="{% url 'my_exams' %}" ><cite {% if error_staff %} class="error" {%endif%}><b>МОИ ЭКЗАМЕНЫ</b></cite></a>
+    {%endif%}
     {%else%}
     <a class="a" href="{% url 'users:login' %}">Войти</a>
     {%endif%}
@@ -26,49 +33,49 @@
 
 {% if user.is_staff %}
 <div class="navbar">
-<header>
-    <nav class="dws-menu">
-        <input type="checkbox" name="toggle" id="menu" class="toggleMenu">
-        <ul>
-            <li>
-                <a><i class="fa fa-shopping-cart"></i>Добавить информацию</a>
-                <ul>
-                    <a href="{%url 'draft_list'%}">Черновик</a>
-                    <a href="{% url 'equipment_add' %}">Добавить оборудование</a>
-                    <a href="{% url 'device_add' %}">Добавить прибор (СИ)</a>
-                    <a href="{% url 'search' %}">найти</a>
-                </ul>
-            </li>
-            <li>
-                <a><i class="fa fa-shopping-cart"></i>Оборудование</a>
-                <ul>
-                    {% for i in menu %}
-                    {% for key, value in i.items %}
-                    {% if value == "Модели" or value == "Производители" or value == "Типы" or value == "Названия" or value == "Статусы" or value == "Года выпуска" or value == "Позиции" %}
-                    <a href="{% url i.url_name %}">{{i.title}}</a>
-                    {% endif %}
-                    {%endfor%}
-                    {%endfor%}
+    <header>
+        <nav class="dws-menu">
+            <input type="checkbox" name="toggle" id="menu" class="toggleMenu">
+            <ul>
+                <li>
+                    <a><i class="fa fa-shopping-cart"></i>Добавить информацию</a>
+                    <ul>
+                        <a href="{%url 'draft_list'%}">Черновик</a>
+                        <a href="{% url 'equipment_add' %}">Добавить оборудование</a>
+                        <a href="{% url 'device_add' %}">Добавить прибор (СИ)</a>
+                        <a href="{% url 'search' %}">найти</a>
+                    </ul>
+                </li>
+                <li>
+                    <a><i class="fa fa-shopping-cart"></i>Оборудование</a>
+                    <ul>
+                        {% for i in menu %}
+                        {% for key, value in i.items %}
+                        {% if value == "Модели" or value == "Производители" or value == "Типы" or value == "Названия" or value == "Статусы" or value == "Года выпуска" or value == "Позиции" %}
+                        <a href="{% url i.url_name %}">{{i.title}}</a>
+                        {% endif %}
+                        {%endfor%}
+                        {%endfor%}
 
-                </ul>
-            </li>
-            <li>
-                <a><i class="fa fa-shopping-cart"></i>Для акта</a>
-                <ul>
-                    {% for i in menu %}
-                    {% for key, value in i.items %}
-                    {% if value == "Дефекты" or value == "Подписанты" or value == "Подрядчики" or value == "Мастера" or value == "Мастера по цеху" %}
-                    <a href="{% url i.url_name %}">{{i.title}}</a>
-                    {% endif %}
-                    {%endfor%}
-                    {%endfor%}
-                </ul>
-            </li>
-        </ul>
-    </nav>
-</header>
-    </div>
-    <br>
+                    </ul>
+                </li>
+                <li>
+                    <a><i class="fa fa-shopping-cart"></i>Для акта</a>
+                    <ul>
+                        {% for i in menu %}
+                        {% for key, value in i.items %}
+                        {% if value == "Дефекты" or value == "Подписанты" or value == "Подрядчики" or value == "Мастера" or value == "Мастера по цеху" %}
+                        <a href="{% url i.url_name %}">{{i.title}}</a>
+                        {% endif %}
+                        {%endfor%}
+                        {%endfor%}
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+</div>
+<br>
 
 {%endif%}
 

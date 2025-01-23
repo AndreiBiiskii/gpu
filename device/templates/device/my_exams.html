@@ -20,11 +20,14 @@
     <button type="submit" class="button-style2"> Сохранить</button>
     <a href="{% url 'search' %}" class="button-style2">К поиску</a>
 </form>
+{{request.user.username}}
 <table>
     <tr>
+        {% if request.user.is_staff %}
         <td class="theader">
-            <b> Имя</b>
+            <b> Имя </b>
         </td>
+        {% endif %}
         <td class="theader">
             <b> Охрана труда</b>
         </td>
@@ -32,21 +35,52 @@
             <b>Эл. безопасность</b>
         </td>
     </tr>
-    {% for obj in objects %}
+    {% if not request.user.is_staff %}
+    {% for obj in object %}
     <tr>
+        {% if obj.exams_ot < now_date %}
+        <td class="error">
+            {% else %}
         <td>
-
-            {{obj.user.username}}
-        </td>
-        <td>
+            {% endif %}
             {{obj.exams_ot}}
-
         </td>
+         {% if obj.exams_eb < now_date %}
+        <td class="error">
+            {% else %}
         <td>
+            {% endif %}
             {{obj.exams_eb}}
         </td>
     </tr>
     {% endfor %}
+    {% endif %}
+
+    {% if request.user.is_staff %}
+    {% for obj in objects %}
+    <tr>
+        <td>
+            {{obj.user.username}}
+        </td>
+        {% if obj.exams_ot < now_date %}
+        <td class="error">
+            {% else %}
+        <td>
+            {% endif %}
+            {{obj.exams_ot}}
+
+        </td>
+        <{% if obj.exams_eb < now_date %}
+        <td class="error">
+            {% else %}
+        <td>
+            {% endif %}
+            {{obj.exams_eb}}
+        </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+
 </table>
 {% if request.method == 'POST' %}
 <div class="success">Данные обновлены</div>

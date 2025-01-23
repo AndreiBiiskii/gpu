@@ -2,6 +2,7 @@ import csv
 import datetime
 import os
 from csv import DictReader
+from select import error
 from venv import create
 
 import django_filters
@@ -382,7 +383,20 @@ def equipment_list(request):
                              queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
                                                                          'tags').all().order_by(
                                  'name'))
+        error_user = False
+        error_staff = False
+        object = MyExam.objects.get(user=request.user)
+        objects = MyExam.objects.all()
+        now_date = datetime.date.today() - relativedelta(months=2)
+
+        if (object.exams_eb < now_date) or (object.exams_ot < now_date) and (not request.user.is_staff):
+            error_user = True
+        for obj in objects:
+            if (obj.exams_eb < now_date) or (obj.exams_ot < now_date) and request.user.is_staff:
+                error_staff = True
         data = {
+            'error_user': error_user,
+            'error_staff': error_staff,
             'title': 'Поиск',
             'menu': menu,
             'equipments': eq_filter.qs,
@@ -871,11 +885,12 @@ def draft_delete(request, pk):
 def my_exams(request):
     if not request.user.is_authenticated:
         redirect('login')
+    object = MyExam.objects.filter(user=request.user)
     objects = MyExam.objects.all()
     try:
         initial_dict = {
-            'exams_ot': objects.last().exams_ot,
-            'exams_eb': objects.last().exams_ot,
+            'exams_ot': object.exams_ot,
+            'exams_eb': object.exams_eb,
         }
     except:
         initial_dict = {}
@@ -886,11 +901,12 @@ def my_exams(request):
             # return render(request, 'device/my_exams.html', context=context)
     else:
         form = MyExamsForm(initial=initial_dict)
-    print()
+    now_date = datetime.date.today() - relativedelta(months=2)
     context = {
         'form': form,
         'objects': objects,
-        # 'alarm': alarm
+        'object': object,
+        'now_date': now_date
     }
     return render(request, 'device/my_exams.html', context=context)
 
