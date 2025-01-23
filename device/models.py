@@ -158,6 +158,7 @@ class Equipment(models.Model):
     class Meta:
         unique_together = ('serial_number', 'model')
         verbose_name_plural = 'Оборудование'
+        ordering = ['-name']
 
 
 class Si(models.Model):
@@ -252,6 +253,9 @@ class Year(models.Model):
     def __str__(self):
         return str(self.name)
 
+    class Meta:
+        ordering = ['-name']
+
 
 class Scale(models.Model):
     min_scale = models.CharField(max_length=255, verbose_name='Минимум шкалы')
@@ -263,6 +267,9 @@ class Unit(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['name']
 
 
 class MyExam(models.Model):
