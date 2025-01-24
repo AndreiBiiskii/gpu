@@ -385,15 +385,17 @@ def equipment_list(request):
                                  'name'))
         error_user = False
         error_staff = False
-        object = MyExam.objects.get(user=request.user)
-        objects = MyExam.objects.all()
-        now_date = datetime.date.today() - relativedelta(months=2)
-
-        if (object.exams_eb < now_date) or (object.exams_ot < now_date) and (not request.user.is_staff):
-            error_user = True
-        for obj in objects:
-            if (obj.exams_eb < now_date) or (obj.exams_ot < now_date) and request.user.is_staff:
-                error_staff = True
+        try:
+            object = MyExam.objects.get(user=request.user)
+            objects = MyExam.objects.all()
+            now_date = datetime.date.today() - relativedelta(months=14)
+            if (object.exams_eb < now_date) or (object.exams_ot < now_date) and (not request.user.is_staff):
+                error_user = True
+            for obj in objects:
+                if (obj.exams_eb < now_date) or (obj.exams_ot < now_date) and request.user.is_staff:
+                    error_staff = True
+        except:
+            pass
         data = {
             'error_user': error_user,
             'error_staff': error_staff,
@@ -885,7 +887,10 @@ def draft_delete(request, pk):
 def my_exams(request):
     if not request.user.is_authenticated:
         redirect('login')
-    object = MyExam.objects.filter(user=request.user)
+    try:
+        object = MyExam.objects.get(user=request.user)
+    except:
+        pass
     objects = MyExam.objects.all()
     try:
         initial_dict = {
@@ -901,7 +906,8 @@ def my_exams(request):
             # return render(request, 'device/my_exams.html', context=context)
     else:
         form = MyExamsForm(initial=initial_dict)
-    now_date = datetime.date.today() - relativedelta(months=2)
+    now_date = datetime.date.today() - relativedelta(months=10)
+    # print(datetime.date.today(), object.exams_ot-relativedelta(months=2), now_date)
     context = {
         'form': form,
         'objects': objects,
