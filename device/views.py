@@ -336,7 +336,7 @@ class MyFilter(django_filters.FilterSet):
                                       field_name='model__name',
                                       lookup_expr='icontains', label='Модель')
     manufacturer = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
-                                                    queryset=Manufacturer.objects.all(), field_name='name',
+                                                    queryset=Manufacturer.objects.all(), field_name='manufacturer__name',
                                                     lookup_expr='exact', label='Производитель')
     si_or = django_filters.BooleanFilter(field_name='si_or', widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
     defect_or = django_filters.BooleanFilter(field_name='defect_or',
@@ -381,7 +381,7 @@ def equipment_list(request):
     if request.method == 'POST' and request.user.is_staff:
         eq_filter = MyFilter(request.POST,
                              queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
-                                                                         'tags').all().order_by(
+                                                                         'tags',).all().order_by(
                                  'name'))
         error_user = False
         error_staff = False
