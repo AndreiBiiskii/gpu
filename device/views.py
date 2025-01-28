@@ -917,7 +917,7 @@ def my_exams(request):
         'form': form,
         'objects': objects,
         'object': object,
-        'now_date': now_date
+        'now_date': now_date,
     }
     return render(request, 'device/my_exams.html', context=context)
 
