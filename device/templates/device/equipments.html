@@ -35,6 +35,8 @@
         <td class="theader">Серийный номер</td>
         <td class="theader">Наименование</td>
         <td class="theader">Модель</td>
+        <td class="theader">Шкала</td>
+        <td class="theader">Ед. измерения</td>
         <td class="theader">Поз. по ГП</td>
         <td class="theader">Место установки</td>
         <td class="theader">Тэг</td>
@@ -52,6 +54,8 @@
         <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a>
         </td>
         <td class="table-td">{{equipment.model}}</td>
+        <td>{{equipment.si.last.scale.min_scale}}..{{equipment.si.last.scale.max_scale}}</td>
+        <td>{{equipment.si.last.unit}}</td>
         <td class="table-td">{{equipment.positions.last.name}}</td>
         <td class="table-td">{{equipment.locations.last.name}}</td>
         <td class="table-td">{{equipment.tags.last.name}}</td>
