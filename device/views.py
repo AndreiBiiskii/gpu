@@ -223,8 +223,13 @@ def EquipmentUpdate(request, pk):
                     equipment.save()
             except:
                 pass
+            if request.POST.get('position_new'):
+                poz = request.POST.get('position_new')
+                GP.objects.get_or_create(name=poz)
+            else:
+                poz = request.POST['position']
             Location.objects.create(equipment=equipment, name=request.POST['location'])
-            Position.objects.create(equipment=equipment, name=request.POST['position'])
+            Position.objects.create(equipment=equipment, name=poz.upper())
             Description.objects.create(equipment=equipment, user=request.user, name=request.POST['description'])
             status = StatusAdd.objects.get(name=request.POST['status'])
             Status.objects.create(equipment=equipment, name=status)
