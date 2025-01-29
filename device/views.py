@@ -984,7 +984,7 @@ def send_bid(request, pk):
     ws['C11'] = f'{de.name.name}, {poz.construction}, (поз.{poz.name})'
     ws['C14'] = f'{de.descriptions.all().last()}'
     ws['C12'] = f'{de.name.name} {de.model}, зав.№{de.serial_number} - 1 шт., ({de.year} г.в.)'
-    ws['B17'] = f'Заказчик:_____________{request.user.first_name}'
+    ws['B17'] = f'Заказчик:__________{request.user.first_name}'
     wb.save(f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
     wb.close()
     sm = EmailMessage
