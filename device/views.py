@@ -24,6 +24,7 @@ from django.views.generic import UpdateView, CreateView, ListView, DetailView, D
 from django_extensions.templatetags.widont import widont
 from django_filters.filters import _truncate
 from django_filters.views import FilterView
+from openpyxl.reader.excel import load_workbook
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from urllib3 import request
 
@@ -341,7 +342,8 @@ class MyFilter(django_filters.FilterSet):
                                       field_name='model__name',
                                       lookup_expr='icontains', label='Модель')
     manufacturer = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
-                                                    queryset=Manufacturer.objects.all(), field_name='manufacturer__name',
+                                                    queryset=Manufacturer.objects.all(),
+                                                    field_name='manufacturer__name',
                                                     lookup_expr='exact', label='Производитель')
     si_or = django_filters.BooleanFilter(field_name='si_or', widget=forms.NullBooleanSelect(attrs={'class': 'select'}))
     defect_or = django_filters.BooleanFilter(field_name='defect_or',
@@ -386,7 +388,7 @@ def equipment_list(request):
     if request.method == 'POST' and request.user.is_staff:
         eq_filter = MyFilter(request.POST,
                              queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
-                                                                         'tags',).all().order_by(
+                                                                         'tags', ).all().order_by(
                                  'name'))
         error_user = False
         error_staff = False
@@ -967,3 +969,30 @@ def changes(request):
         msg.attach_file(f'{BASE_DIR}/bag.csv')
         msg.send()
     return redirect('/')
+
+
+def send_bid(request, pk):
+    if not request.user.is_staff:
+        redirect('login')
+    if not request.user.email:
+        return redirect(reverse_lazy('defectone:add_email'))
+    de = Equipment.objects.get(pk=pk)
+    poz = GP.objects.get(name=de.positions.all().last())
+    wb = load_workbook(f'{BASE_DIR}/files/bid_files/bid.xlsx')
+    ws = wb['z']
+    ws['C9'] = request.user.last_name
+    ws['C11'] = f'{de.name.name}, {poz.construction}, (поз.{poz.name})'
+    ws['C14'] = f'{de.descriptions.all().last()}'
+    ws['C12'] = f'{de.name.name} {de.model}, зав.№{de.serial_number} - 1 шт., ({de.year} г.в.)'
+    ws['B17'] = f'Заказчик:_____________{request.user.first_name}'
+    wb.save(f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
+    wb.close()
+    sm = EmailMessage
+    subject = 'bid'
+    body = 'Заявка отправлена на почту.'
+    from_email = 'freemail_2019@mail.ru'
+    to_email = request.user.email
+    msg = sm(subject, body, from_email, [to_email])
+    msg.attach_file(f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
+    msg.send()
+    return redirect(reverse_lazy('search'))

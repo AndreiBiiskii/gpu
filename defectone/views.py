@@ -14,7 +14,6 @@ from openpyxl import load_workbook
 from rest_framework.permissions import IsAdminUser
 from rest_framework.reverse import reverse_lazy
 
-
 from defectone.forms import AddUserForm, DefectAddForm
 from defectone.models import Defect, Approve, Contractor, Kait, Worker
 from device.models import Equipment, Position, Location, Status, Description, GP, Tag, Si
@@ -196,8 +195,9 @@ def defect_list(request):
 class DefectUpdate(UpdateView):
     model = Defect
     fields = (
-    'name', 'model', 'serial_number', 'gp', 'location', 'tag', 'defect_act', 'project', 'short_description', 'causes',
-    'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
+        'name', 'model', 'serial_number', 'gp', 'location', 'tag', 'defect_act', 'project', 'short_description',
+        'causes',
+        'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait', 'worker',)
     success_url = reverse_lazy('defectone:defect_list')
     template_name = 'defect/defect_update.html'
     extra_context = {

@@ -50,6 +50,7 @@
     {%for equipment in equipments%}
     <tr>
         <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.serial_number}}</a>
+            <a class="a-serial-number" href="{% url 'send_bid' equipment.pk %}"> Рем. </a>
         </td>
         <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a>
         </td>
