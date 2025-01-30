@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
+
 from .sending import sending, send_all
 from .views import *
 
@@ -26,6 +27,11 @@ urlpatterns = [
     path('device_add/', device_add, name='device_add'),
     path('device_update/<int:pk>', DeviceUpdate, name='device_update'),
     path('send_bid/<int:pk>/', send_bid, name='send_bid'),
+    # path('ppr_list/', PprList.as_view(), name='ppr_list'),
+    # path('ppr_add', PprAdd.as_view(), name='ppr_add'),
+    # path('ppr_detail/<int:pk>', PprDetail.as_view(), name='ppr_detail'),
+    # path('ppr_update/<int:pk>', PprUpdate.as_view(), name='ppr_update'),
+    # path('ppr_delete/<int:pk>', PprDelete.as_view(), name='ppr_delete'),
     # path('im/', IM, name='im'),
     # path('si_loading/<int:i>', si_loading, name='si_loading'),
     path('manufacturers/', ListCategory.as_view(model=Manufacturer, extra_context={

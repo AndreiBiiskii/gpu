@@ -42,7 +42,8 @@
                     <ul>
                         <a href="{%url 'draft_list'%}">Черновик</a>
                         <a href="{% url 'equipment_add' %}">Добавить оборудование</a>
-                        <a href="{% url 'device_add' %}">Добавить прибор (СИ)</a>
+                        <a href="{% url 'device_add' %}">Добавить средство измерения</a>
+
                         <a href="{% url 'search' %}">найти</a>
                     </ul>
                 </li>
@@ -76,9 +77,7 @@
     </header>
 </div>
 <br>
-
 {%endif%}
-
 {% block content %}
 {% endblock %}
 </body>

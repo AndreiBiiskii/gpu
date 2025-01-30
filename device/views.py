@@ -1040,3 +1040,7 @@ def send_bid(request, pk):
 #         instance.user = self.request.user
 #         instance.save()
 #         return redirect('/')
+
+
+
+# <a href="{% url 'ppr_list' %}" > ППР </a>
