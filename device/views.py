@@ -29,8 +29,8 @@ from openpyxl.reader.excel import load_workbook
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from urllib3 import request
 
-from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm, \
-    PprForm, PprUpdateForm, PprDateForm  # MyExamsForm
+from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm
+    # PprForm, PprUpdateForm, PprDateForm   MyExamsForm
 from device.models import Equipment, GP, Si, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, Scale, \
     MyExam, Ppr
