@@ -8,6 +8,7 @@ from venv import create
 import django_filters
 from dateutil.relativedelta import relativedelta
 from django.core.mail import EmailMessage
+from django.forms import DateInput
 from django.http import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import logout
@@ -28,10 +29,11 @@ from openpyxl.reader.excel import load_workbook
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from urllib3 import request
 
-from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm  # MyExamsForm
+from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm, \
+    PprForm, PprUpdateForm, PprDateForm  # MyExamsForm
 from device.models import Equipment, GP, Si, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, Scale, \
-    MyExam
+    MyExam, Ppr
 # MyExam
 from device.parser import data_from_parser
 from device.sending import sample_send
@@ -413,7 +415,7 @@ def equipment_list(request):
             'forms': eq_filter,
 
         }
-        sample_send(request, eq_filter.qs)
+        # sample_send(request, eq_filter.qs)
         return render(request, 'device/equipments.html', context=data)
     if request.method == 'POST' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,
@@ -789,9 +791,8 @@ class DraftCreate(CreateView):
     }
 
     def form_valid(self, form):
-        instance = form.save(commit=False)
-        instance.user_draft = self.request.user
-        instance.save()
+        user = self.request.user
+        form.save(user)
         return redirect('/')
 
 
@@ -985,7 +986,8 @@ def send_bid(request, pk):
     ws['C14'] = f'{de.descriptions.all().last()}'
     ws['C12'] = f'{de.name.name} {de.model}, зав.№{de.serial_number} - 1 шт., ({de.year} г.в.)'
     ws['B17'] = f'Заказчик:__________{request.user.first_name}'
-    wb.save(f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
+    wb.save(
+        f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
     wb.close()
     sm = EmailMessage
     subject = 'bid'
@@ -993,6 +995,48 @@ def send_bid(request, pk):
     from_email = 'freemail_2019@mail.ru'
     to_email = request.user.email
     msg = sm(subject, body, from_email, [to_email])
-    msg.attach_file(f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
+    msg.attach_file(
+        f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
     msg.send()
     return redirect(reverse_lazy('search'))
+
+
+# class PprList(FilterView):
+#     model = Ppr
+#     form_class = PprForm
+#     permission_classes = [IsAdminUser, ]
+#     template_name = 'device/ppr_list.html'
+#     context_object_name = 'objects'
+#
+#
+# class PprAdd(CreateView):
+#     permission_classes = [IsAdminUser, ]
+#     template_name = 'device/ppr_add.html'
+#     success_url = reverse_lazy('ppr_list')
+#     form_class = PprForm
+#     extra_context = {
+#         'menu': menu
+#     }
+#
+#     def form_valid(self, form):
+#         instance = form.save(commit=False)
+#         instance.user = self.request.user
+#         instance.save()
+#         return redirect('/')
+#
+#
+# class PprUpdate(UpdateView):
+#     form_class = PprForm
+#     permission_classes = [IsAdminUser, ]
+#     template_name = 'device/ppr_add.html'
+#     success_url = reverse_lazy('ppr_list')
+#
+#     # context_object_name = 'object'
+#     def get_object(self, queryset=None):
+#         return get_object_or_404(Ppr, pk=self.kwargs.get('pk'))
+#
+#     def form_valid(self, form):
+#         instance = form.save(commit=False)
+#         instance.user = self.request.user
+#         instance.save()
+#         return redirect('/')
