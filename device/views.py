@@ -33,7 +33,7 @@ from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserFo
     # PprForm, PprUpdateForm, PprDateForm   MyExamsForm
 from device.models import Equipment, GP, Si, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, Scale, \
-    MyExam, Ppr
+    MyExam
 # MyExam
 from device.parser import data_from_parser
 from device.sending import sample_send
