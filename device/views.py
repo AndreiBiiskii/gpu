@@ -392,6 +392,10 @@ def equipment_list(request):
                              queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
                                                                          'tags', ).all().order_by(
                                  'name'))
+        s = set(eq_filter.qs)
+        for i in s:
+            print(i)
+        print(type(s))
         error_user = False
         error_staff = False
         try:
@@ -410,8 +414,8 @@ def equipment_list(request):
             'error_staff': error_staff,
             'title': 'Поиск',
             'menu': menu,
-            'equipments': eq_filter.qs,
-            'count': eq_filter.qs.count(),
+            'equipments': s,
+            'count': len(s),
             'forms': eq_filter,
 
         }
