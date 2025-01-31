@@ -57,6 +57,10 @@ def sample_send(request, data):
             ws[f'E{i + 2}'] = eq.tags.last().name
         except:
             ws[f'E{i + 2}'] = '-'
+        try:
+            ws[f'J{i + 2}'] = str(eq.descriptions.last().at_date)
+        except:
+            ws[f'J{i + 2}'] = '-'
         ws[f'F{i + 2}'] = eq.name.name
         ws[f'G{i + 2}'] = eq.model.name
         ws[f'H{i + 2}'] = eq.year.name
@@ -90,7 +94,7 @@ def sample_send(request, data):
             # except:
             #     ws[f'N{i + 2}'] = 'сертификата нет'
             try:
-                ws[f'O{i + 2}'] = from_si.previous_verification
+                ws[f'O{i + 2}'] = from_si.next_verification
             except:
                 ws[f'O{i + 2}'] = 'предыдущая проверка нет'
     wb.save(f'{BASE_DIR}/from sending.xlsx')
