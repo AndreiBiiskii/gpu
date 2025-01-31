@@ -795,8 +795,9 @@ class DraftCreate(CreateView):
     }
 
     def form_valid(self, form):
-        user = self.request.user
-        form.save(user)
+        instance = form.save(commit=False)
+        instance.user_draft = self.request.user
+        instance.save()
         return redirect('/')
 
 
