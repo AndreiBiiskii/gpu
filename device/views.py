@@ -29,11 +29,10 @@ from openpyxl.reader.excel import load_workbook
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from urllib3 import request
 
-from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm
-    # PprForm, PprUpdateForm, PprDateForm   MyExamsForm
+from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm, PprForm
 from device.models import Equipment, GP, Si, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, Scale, \
-    MyExam
+    MyExam, PprDate, PprPlan
 # MyExam
 from device.parser import data_from_parser
 from device.sending import sample_send
@@ -1006,46 +1005,87 @@ def send_bid(request, pk):
     return redirect(reverse_lazy('search'))
 
 
-# class PprList(FilterView):
-#     model = Ppr
-#     form_class = PprForm
-#     permission_classes = [IsAdminUser, ]
-#     template_name = 'device/ppr_list.html'
-#     context_object_name = 'objects'
-#
-#
-# class PprAdd(CreateView):
-#     permission_classes = [IsAdminUser, ]
-#     template_name = 'device/ppr_add.html'
-#     success_url = reverse_lazy('ppr_list')
-#     form_class = PprForm
-#     extra_context = {
-#         'menu': menu
-#     }
-#
-#     def form_valid(self, form):
-#         instance = form.save(commit=False)
-#         instance.user = self.request.user
-#         instance.save()
-#         return redirect('/')
-#
-#
-# class PprUpdate(UpdateView):
-#     form_class = PprForm
-#     permission_classes = [IsAdminUser, ]
-#     template_name = 'device/ppr_add.html'
-#     success_url = reverse_lazy('ppr_list')
-#
-#     # context_object_name = 'object'
-#     def get_object(self, queryset=None):
-#         return get_object_or_404(Ppr, pk=self.kwargs.get('pk'))
-#
-#     def form_valid(self, form):
-#         instance = form.save(commit=False)
-#         instance.user = self.request.user
-#         instance.save()
-#         return redirect('/')
+class PprDateCreate(CreateView):
+    permission_classes = [IsAdminUser, ]
+    model = PprDate
+    fields = '__all__'
+    template_name = 'device/ppr_date_create.html'
+    success_url = reverse_lazy('ppr_date_list')
+    extra_context = {
+        'menu': menu
+    }
 
 
+class PprDateList(ListView):
+    permission_classes = [IsAdminUser, ]
+    model = PprDate
+    context_object_name = 'dates'
+    template_name = 'device/ppr_date_list.html'
+    extra_context = {
+        'menu': menu
+    }
+
+
+class PprDateUpdate(UpdateView):
+    permission_classes = [IsAdminUser,]
+    model = PprDate
+    fields = '__all__'
+    template_name = 'device/ppr_date_create.html'
+    success_url = reverse_lazy('ppr_date_list')
+    extra_context = {
+        'menu': menu
+    }
+
+
+def get_ppr_list(request, pk):
+    ppr_date = get_object_or_404(PprDate, pk=pk)
+    ppr_plan = PprPlan.objects.filter(ppr=ppr_date)
+    context = {
+        'ppr_date': ppr_date,
+        'ppr_plan': ppr_plan,
+        'menu': menu
+    }
+    return render(request, 'device/ppr_list.html', context=context)
+
+
+def ppr_create(request, pk):
+    if not request.user.is_staff:
+        redirect('login')
+    ppr_date = PprDate.objects.get(pk=pk)
+    ppr_plan = PprPlan.objects.filter(ppr=ppr_date)
+    initial_dict = {
+        'ppr': ppr_date,
+    }
+    if request.method == 'POST':
+        form = PprForm(request.POST)
+        if form.is_valid():
+            form.save(request.user, pk)
+            return redirect(reverse_lazy(f'ppr_date_list'))
+    else:
+        form = PprForm(initial=initial_dict)
+    return render(request,
+                  'device/ppr_add.html',
+                  {'form': form, 'menu': menu,
+                   'ppr_date': ppr_date,
+                   'title': 'ППР'})
+
+
+#
+class PprUpdate(UpdateView):
+    model = PprPlan
+    fields = ['ppr', 'name', 'description', 'required_materials']
+    permission_classes = [IsAdminUser, ]
+    template_name = 'device/ppr_add.html'
+    success_url = reverse_lazy('ppr_list')
+
+    # context_object_name = 'object'
+    # def get_object(self, queryset=None):
+    #     return get_object_or_404(Ppr, pk=self.kwargs.get('pk'))
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.user = self.request.user
+        instance.save()
+        return redirect('ppr_date_list')
 
 # <a href="{% url 'ppr_list' %}" > ППР </a>

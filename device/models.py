@@ -281,3 +281,37 @@ class MyExam(models.Model):
 
     class Meta:
         ordering = ('id',)
+
+
+class PprPlan(models.Model):
+    ppr = models.ForeignKey('PprDate', related_name='ppr', on_delete=models.CASCADE, verbose_name='Период проведения')
+    name = models.ForeignKey('GP', on_delete=models.CASCADE, null=False, blank=False, verbose_name='Поз. по ГП')
+    description = models.TextField(verbose_name='Характер работ')
+    user = models.ForeignKey(User, on_delete=PROTECT, verbose_name='Кто внес изменения')
+    required_materials = models.TextField(verbose_name='Необходимые материалы', null=True, blank=True)
+    at_date = models.DateField(auto_now_add=True, verbose_name='Дата добавления')
+
+    def __str__(self):
+        return self.name.name
+
+    def get_absolute_url(self):
+        return reverse('ppr_update', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name_plural = 'Проектные планы работ'
+        ordering = ['-at_date']
+
+
+class PprDate(models.Model):
+    ppr_date = models.CharField(max_length=255, verbose_name='Период проведения', unique=True)
+    at_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.ppr_date
+
+    def get_absolute_url(self):
+        return reverse('ppr_date_update', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name_plural = 'Даты проведения ППР'
+        ordering = ['-at_date']

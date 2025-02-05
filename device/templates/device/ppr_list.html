@@ -1,0 +1,45 @@
+{% extends 'device/base.html' %}
+
+{% block content%}
+<a href="{% url 'ppr_date_list' %}" class="button-style2"> Периоды проведения ППР </a><br><br>
+<a href="{% url 'ppr_add' ppr_date.pk %}"  class="button-style2"> Добавить работу на ППР: {{ ppr_date }} </a>
+<table>
+    <tr>
+        <th>
+            <b>Поз. по ГП</b>
+        </th>
+        <th>
+            <b>Характер работ</b>
+        </th>
+        <th>
+            <b> Необходимые материалы </b>
+        </th>
+        <th>
+            <b>Кто внес изменения</b>
+        </th>
+        <th>
+            <b>Дата добавления</b>
+        </th>
+    </tr>
+    {% for obj in ppr_plan %}
+    <tr>
+        <td>
+            <a href="{{ obj.get_absolute_url }}"> {{ obj.name }} </a>
+        </td>
+        <td>
+            {{ obj.description }}
+        </td>
+        <td>
+            {{obj.required_materials}}
+        </td>
+        <td>
+            {{obj.user}}
+        </td>
+        <td>
+            {{obj.at_date}}
+        </td>
+    </tr>
+    {%endfor%}
+</table>
+
+{% endblock %}

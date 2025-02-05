@@ -1,0 +1,27 @@
+{% extends 'device/base.html' %}
+
+{% block content%}
+<a href="{% url 'ppr_date_add' %}" class="button-style2">Добавить периоды проведения ППР </a>
+
+<table>
+    <tr>
+        <th>
+            <b>Дата ППР</b>
+        </th>
+        <th>
+            <b> Действие </b>
+        </th>
+    </tr>
+    {% for date in dates %}
+    <tr>
+        <td>
+            <a href="{% url 'ppr_list' date.pk  %}"> {{ date.ppr_date }}</a>
+        </td>
+        <td>
+            <a href="{{ date.get_absolute_url }}">Update</a>
+        </td>
+    </tr>
+    {%endfor%}
+</table>
+
+{% endblock %}

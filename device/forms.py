@@ -10,7 +10,6 @@ from django import forms
 from .models import *
 
 
-
 class AddEquipmentForm(forms.Form):
     serial_number = forms.CharField(label='Серийный номер', max_length=255,
                                     widget=forms.TextInput(attrs={'class': 'type2'}))
@@ -279,8 +278,8 @@ class AddDeviceForm(forms.Form):
                           interval=VerificationInterval.objects.get(name=self.cleaned_data['interval']),
                           scale=Scale.objects.get(min_scale=min_scale, max_scale=max_scale),
                           unit=Unit.objects.get(name=self.cleaned_data['unit']))
-                          # error_device=Error.objects.get(name=self.cleaned_data['error']),
-                          # reg_number=RegNumber.objects.get(name=self.cleaned_data['reg_number']))
+        # error_device=Error.objects.get(name=self.cleaned_data['error']),
+        # reg_number=RegNumber.objects.get(name=self.cleaned_data['reg_number']))
         return self.cleaned_data
 
 
@@ -300,7 +299,7 @@ class DraftForm(forms.ModelForm):
     min_scale_draft = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type2"}), label='Мин. шкалы:')
     max_scale_draft = forms.DecimalField(widget=forms.TextInput(attrs={"class": "type2"}), label='Макс. шкалы:')
     year_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Год выпуска:',
-                                  queryset=Year.objects.all())
+                                        queryset=Year.objects.all())
     unit_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                         queryset=Unit.objects.all(),
                                         label='Единица измерения')
@@ -374,3 +373,46 @@ class MyExamsForm(forms.Form):
             exams.exams_eb = self.cleaned_data['exams_eb']
             exams.save()
         return self.cleaned_data
+
+
+#
+class PprForm(forms.Form):
+    name = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
+                                  queryset=GP.objects.all(),
+                                  label='Поз. по гп')
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), label='Характер работ')
+    required_materials = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), label='Необходимые материалы')
+
+    class Meta(object):
+        model = PprPlan
+        fields = ['name', 'description', 'required_materials', ]
+
+    def save(self, user, pk):
+        pp = PprDate.objects.get(pk=pk)
+        PprPlan.objects.create(ppr=pp,
+                               name=self.cleaned_data['name'],
+                               description=self.cleaned_data['description'],
+                               required_materials=self.cleaned_data['required_materials'],
+                               user=user
+                               )
+        return self.cleaned_data
+
+#
+# class PprUpdateForm(forms.ModelForm):
+#     date_start = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}))
+#
+#     class Meta:
+#         model = Ppr
+#         fields = ['date_start','name', 'description', 'required_materials', ]
+#
+#
+# class PprDateForm(PprUpdateForm):
+#     date_ppr = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}))
+#     name = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
+#                                   queryset=GP.objects.all())
+#     description = forms.CharField(widget=forms.Textarea(attrs={'rows': '4', 'cols': '80'}))
+#     required_materials = forms.CharField(widget=forms.Textarea(attrs={'rows': '4', 'cols': '80'}))
+#
+#     class Meta():
+#         model = PprDate
+#         fields = ['name', 'description', 'required_materials', 'date_start']

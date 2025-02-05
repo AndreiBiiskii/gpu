@@ -1,0 +1,12 @@
+{% extends 'device/base.html' %}
+
+{% block content%}
+ <cite> <h2> Добавить работу на ППР: {{ppr_date}}</h2></cite>
+<form method="post">
+    {% csrf_token %}
+  <table>
+    {{ form.as_table }}
+    </table>
+    <button type="submit" class="search_btn"> Send </button>
+</form>
+{% endblock %}
