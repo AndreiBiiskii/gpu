@@ -2,12 +2,16 @@ import csv
 import re
 from datetime import datetime
 from time import sleep
+
+from django.core.mail import EmailMessage
+from django.db.models import Q
 from django.shortcuts import redirect
 from openpyxl import load_workbook
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
+from device.models import Equipment, Si
 from equipment.settings import BASE_DIR
 
 
@@ -29,52 +33,76 @@ def get_sample(table_tr):
     return sample_data
 
 
-def data_from_parser(data):
-    "/home/andrei/chrome-linux64/"
+def data_from_parser(request):
     driver = webdriver.Chrome()
     driver.get("https://fgis.gost.ru/fundmetrology/cm/results?activeYear=%D0%92%D1%81%D0%B5")
     data_ = driver.find_element(By.CLASS_NAME, 'modal-footer')
     button = data_.find_element(By.TAG_NAME, 'button')
     button.send_keys(Keys.ENTER)
-    stop = 0
     wb = load_workbook(f'{BASE_DIR}/from sending.xlsx')
     ws = wb['l1']
+    wb_schema = load_workbook(f'{BASE_DIR}/schema.xlsm')
+    ws_schema = wb_schema['Лист1']
     for i, eq in enumerate(ws):
-        stop += 1
-        if stop == 2:
-            break
         try:
             button = driver.find_elements(By.CLASS_NAME, 'btn')
             button[1].send_keys(Keys.ENTER)
-            sleep(3)
+            sleep(1)
             name = driver.find_element(By.ID, 'filter_mi_mititle')
             serial_number = driver.find_element(By.ID, 'filter_mi_number')
-            org = driver.find_element(By.ID, 'filter_org_title')
-            org.clear()
-            sleep(2)
-            org.send_keys('ИРКУТСКИЙ')
-            sleep(2)
+            sleep(1)
             serial_number.clear()
-            sleep(2)
+            sleep(1)
             serial_number.send_keys(ws[f'B{i + 2}'].value)
-            sleep(2)
+            sleep(1)
             name.clear()
-            sleep(2)
+            sleep(1)
             name.send_keys(ws[f'F{i + 2}'].value[0:4])
-            sleep(5)
+            sleep(1)
             btn = driver.find_elements(By.CLASS_NAME, 'btn-primary')
             btn[0].send_keys(Keys.ENTER)
-            sleep(5)
+            sleep(10)
             table_div = driver.find_element(By.CLASS_NAME, 'sticky-spinner-wrap')
             table_tr = table_div.find_elements(By.TAG_NAME, 'tr')
-            sleep(5)
-            for row in table_tr:
-                table_td = row.find_elements(By.TAG_NAME, 'td')
-                print(table_td[2].text)
-
-                # print('row text', row.text)
-
+            if table_tr:
+                for row in table_tr:
+                    table_td = row.find_elements(By.TAG_NAME, 'td')
+                    if not table_td:
+                        continue
+                    if table_td[5].text == ws[f'B{i + 2}'].value:
+                        eq = Equipment.objects.filter(
+                            Q(serial_number=ws[f'B{i + 2}'].value) & Q(
+                                model__name=ws[f'G{i + 2}'].value))
+                        for j in eq:
+                            for r in j.si.all():
+                                ws_schema[f'J{i + 2}'] = j.year.name
+                                ws_schema[f'AP{i + 2}'] = r.interval.name
+                                ws_schema[f'AK{i + 2}'] = r.interval.name
+                                ws_schema[f'AU{i + 2}'] = r.interval.name
+                                ws_schema[f'L{i + 2}'] = r.scale.min_scale
+                                ws_schema[f'O{i + 2}'] = r.scale.max_scale
+                                ws_schema[f'N{i + 2}'] = r.unit.name
+                                ws_schema[f'Q{i + 2}'] = r.unit.name
+                    ws_schema[f'A{i + 2}'] = table_td[3].text
+                    ws_schema[f'B{i + 2}'] = table_td[2].text
+                    ws_schema[f'C{i + 2}'] = table_td[1].text
+                    ws_schema[f'I{i + 2}'] = table_td[5].text
+                    ws_schema[f'AR{i + 2}'] = table_td[6].text
+                    ws_schema[f'AS{i + 2}'] = table_td[6].text
+                    ws_schema[f'AY{i + 2}'] = table_td[8].text
+                    ws_schema[f'AG{i + 2}'] = table_td[0].text
+                    break
         except:
-            print('error', ws[f'B{i + 2}'].value)
+            continue
+    wb_schema.save(f'{BASE_DIR}/from_schema.xlsx')
+    wb_schema.close()
+    sm = EmailMessage
+    subject = 'Schema'
+    body = 'Выборка отправлена на почту.'
+    from_email = 'freemail_2019@mail.ru'
+    to_email = request.user.email
+    msg = sm(subject, body, from_email, [to_email])
+    msg.attach_file(f'{BASE_DIR}/from_schema.xlsx')
+    msg.send()
 
     return redirect('/')

@@ -392,9 +392,6 @@ def equipment_list(request):
                                                                          'tags', ).all().order_by(
                                  'name'))
         s = set(eq_filter.qs)
-        for i in s:
-            print(i)
-        print(type(s))
         error_user = False
         error_staff = False
         try:
