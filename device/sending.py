@@ -57,10 +57,6 @@ def sample_send(request, data):
             ws[f'E{i + 2}'] = eq.tags.last().name
         except:
             ws[f'E{i + 2}'] = '-'
-        try:
-            ws[f'J{i + 2}'] = str(eq.descriptions.last().at_date)
-        except:
-            ws[f'J{i + 2}'] = '-'
         ws[f'F{i + 2}'] = eq.name.name
         ws[f'G{i + 2}'] = eq.model.name
         ws[f'H{i + 2}'] = eq.year.name
@@ -78,25 +74,30 @@ def sample_send(request, data):
             # except:
             #     ws[f'J{i + 2}'] = 'регистрационного номера нет'
             try:
-                ws[f'K{i + 2}'] = '..'.join([from_si.scale.min_scale, from_si.scale.max_scale])
+                ws[f'K{i + 2}'] = from_si.scale.max_scale
             except:
-                ws[f'K{i + 2}'] = 'шкалы нет'
+                ws[f'K{i + 2}'] = '-'
             try:
-                ws[f'L{i + 2}'] = from_si.unit.name
+                ws[f'L{i + 2}'] = from_si.interval.name
             except:
-                ws[f'L{i + 2}'] = 'нет единиц измерения'
+                ws[f'L{i + 2}'] = 'interval'
             try:
-                ws[f'M{i + 2}'] = from_si.interval.name
+                ws[f'M{i + 2}'] = from_si.unit.name
             except:
-                ws[f'M{i + 2}'] = 'интервалы нет'
+                ws[f'M{i + 2}'] = 'ед.изм'
+            try:
+                ws[f'J{i + 2}'] = from_si.scale.min_scale
+            except:
+                ws[f'J{i + 2}'] = '-'
+
             # try:
             #     ws[f'N{i + 2}'] = from_si.certificate
             # except:
             #     ws[f'N{i + 2}'] = 'сертификата нет'
             try:
-                ws[f'O{i + 2}'] = from_si.next_verification
+                ws[f'N{i + 2}'] = from_si.next_verification
             except:
-                ws[f'O{i + 2}'] = 'предыдущая проверка нет'
+                ws[f'N{i + 2}'] = 'предыдущая проверка нет'
     wb.save(f'{BASE_DIR}/from sending.xlsx')
     wb.close()
     # sm = EmailMessage
