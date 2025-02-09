@@ -34,7 +34,8 @@ def get_sample(table_tr):
 def data_from_parser(request):
     # /home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages
     options = webdriver.ChromeOptions()
-    options.add_argument(r"--user-data-dir=/home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages")
+    # options.add_argument(r"--user-data-dir=/home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages")
+    options.add_argument(r"--user-data-dir=/home/user/gpu/env/lib/python3.10/site-packages")
     driver = webdriver.Chrome(options=options)
     driver.get("https://fgis.gost.ru/fundmetrology/cm/results?rows=100&activeYear=%D0%92%D1%81%D0%B5")
     data_ = driver.find_element(By.CLASS_NAME, 'modal-footer')
