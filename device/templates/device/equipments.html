@@ -47,6 +47,7 @@
         {% endif %}
         <td class="theader">Дата следующей поверки</td>
         <td class="theader">Комментарий</td>
+        <td class="theader">Примечание</td>
     </tr>
     {%for equipment in equipments%}
     <tr>
@@ -66,6 +67,7 @@
         <td class="table-td">{{equipment.descriptions.last.user}}</td>
         {%endif%}
         <td class="table-td">{{equipment.si.last.next_verification|date:"d-m-Y"}}</td>
+        <td class="table-td">{{equipment.descriptions.last.name}}</td>
         <td class="table-td">{{equipment.comment}}</td>
     </tr>
     {%endfor%}
