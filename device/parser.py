@@ -10,8 +10,6 @@ from openpyxl import load_workbook
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
-
-from device.models import Equipment, Si
 from equipment.settings import BASE_DIR
 
 
@@ -34,7 +32,10 @@ def get_sample(table_tr):
 
 
 def data_from_parser(request):
-    driver = webdriver.Chrome()
+    # /home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages
+    options = webdriver.ChromeOptions()
+    options.add_argument(r"--user-data-dir=/home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages")
+    driver = webdriver.Chrome(options=options)
     driver.get("https://fgis.gost.ru/fundmetrology/cm/results?rows=100&activeYear=%D0%92%D1%81%D0%B5")
     data_ = driver.find_element(By.CLASS_NAME, 'modal-footer')
     button = data_.find_element(By.TAG_NAME, 'button')
@@ -48,9 +49,8 @@ def data_from_parser(request):
     count = 0
     try:
         for i, eq in enumerate(ws):
-            count += 1
-            if count == 8:
-                break
+            # if count == 101:
+            #     break
             button = driver.find_elements(By.CLASS_NAME, 'btn')
             button[1].send_keys(Keys.ENTER)
             sleep(1)
@@ -80,7 +80,6 @@ def data_from_parser(request):
                     table_td = row.find_elements(By.TAG_NAME, 'td')
                     if table_td[5].text != ws[f'B{i + 2}'].value:
                         continue
-                    print(table_td[5].text, ws[f'B{i + 2}'].value)
                     ws_schema[f'J{i + 2}'] = ws[f'H{i + 2}'].value
                     ws_schema[f'AP{i + 2}'] = ws[f'L{i + 2}'].value
                     ws_schema[f'AK{i + 2}'] = ws[f'L{i + 2}'].value
@@ -98,7 +97,10 @@ def data_from_parser(request):
                     ws_schema[f'AY{i + 2}'] = table_td[8].text
                     ws_schema[f'AG{i + 2}'] = table_td[0].text
                     break
-            print(f'Проверено {i} из 1194. Осталось {1194 - i} {(i * 100) / 1197}%')
+            print(f'Проверено {i} из 1194. Осталось {1094 - i} {(i * 100) / 1094}%')
+            count += 1
+            wb_schema.save(f'{BASE_DIR}/from_schema.xlsx')
+            wb_bag.save(f'{BASE_DIR}/from_bag.xlsx')
     finally:
         wb_schema.save(f'{BASE_DIR}/from_schema.xlsx')
         wb_schema.close()
@@ -112,5 +114,16 @@ def data_from_parser(request):
         msg = sm(subject, body, from_email, [to_email])
         msg.attach_file(f'{BASE_DIR}/from_schema.xlsx')
         msg.send()
-
+    wb_schema.save(f'{BASE_DIR}/from_schema.xlsx')
+    wb_schema.close()
+    wb_bag.save(f'{BASE_DIR}/from_bag.xlsx')
+    wb_bag.close()
+    sm = EmailMessage
+    subject = 'Schema'
+    body = 'Выборка отправлена на почту.'
+    from_email = 'freemail_2019@mail.ru'
+    to_email = request.user.email
+    msg = sm(subject, body, from_email, [to_email])
+    msg.attach_file(f'{BASE_DIR}/from_schema.xlsx')
+    msg.send()
     return redirect('/')
