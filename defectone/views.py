@@ -37,7 +37,7 @@ def send_act(request, pk):
     #     return redirect(reverse_lazy('defectone:defect_list'))
     wb = load_workbook(f'{BASE_DIR}/files/defect_files/act1.xlsx')
     ws = wb['act']
-    ws['E9'] = de.defect_act
+    ws['B9'] = de.defect_act
     ws['J5'] = de.approve.name
     ws['B5'] = de.gp
     ws['H2'] = de.approve.job_title
@@ -51,8 +51,8 @@ def send_act(request, pk):
     ws['D30'] = de.causes
     ws['D32'] = de.fix
     ws['D34'] = de.operating_time
-    ws['A36'] = de.contractor.job_title
-    ws['J37'] = de.contractor.name
+    ws['A39'] = de.kait.job_title
+    ws['J38'] = de.kait.name
     ws['A40'] = de.kait.job_title
     ws['J41'] = de.kait.name
     ws['A43'] = de.worker.job_title
