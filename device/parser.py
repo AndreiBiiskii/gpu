@@ -12,6 +12,10 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from equipment.settings import BASE_DIR
 
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 
 def get_sample(table_tr):
     low_date = datetime.strptime('01-01-2000', '%d-%m-%Y').date()
@@ -33,10 +37,21 @@ def get_sample(table_tr):
 
 def data_from_parser(request):
     # /home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages
-    options = webdriver.ChromeOptions()
+    # options = webdriver.ChromeOptions()
     # options.add_argument(r"--user-data-dir=/home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages")
-    options.add_argument(r"--user-data-dir=/home/user/gpu/env/lib/python3.10/site-packages")
-    driver = webdriver.Chrome(options=options)
+    # options.add_argument(r"--user-data-dir=/home/user/gpu/env/lib/python3.10/site-packages")
+
+    chrome_options = Options()
+    # chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--no-sandbox")
+    # chrome_options.add_argument("--disable-gpu")
+
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        options=chrome_options
+    )
+
+    # driver = webdriver.Chrome()
     driver.get("https://fgis.gost.ru/fundmetrology/cm/results?rows=100&activeYear=%D0%92%D1%81%D0%B5")
     data_ = driver.find_element(By.CLASS_NAME, 'modal-footer')
     button = data_.find_element(By.TAG_NAME, 'button')
@@ -47,11 +62,11 @@ def data_from_parser(request):
     ws = wb['l1']
     wb_schema = load_workbook(f'{BASE_DIR}/schema.xlsm')
     ws_schema = wb_schema['Лист1']
+    # print(ws_schema.columns)
     count = 0
+    bag_count = 0
     try:
         for i, eq in enumerate(ws):
-            # if count == 101:
-            #     break
             button = driver.find_elements(By.CLASS_NAME, 'btn')
             button[1].send_keys(Keys.ENTER)
             sleep(1)
@@ -72,8 +87,9 @@ def data_from_parser(request):
             table_div = driver.find_element(By.CLASS_NAME, 'sticky-spinner-wrap')
             table_tr = table_div.find_elements(By.TAG_NAME, 'tr')
             if len(table_tr) == 1:
-                ws_bag[f'A{i + 1}'] = ws[f'B{i + 2}'].value
-                ws_bag[f'B{i + 1}'] = ws[f'F{i + 2}'].value
+                ws_bag[f'A{bag_count + 1}'] = ws[f'B{i + 2}'].value
+                ws_bag[f'B{bag_count + 1}'] = ws[f'F{i + 2}'].value
+                bag_count += 1
             if len(table_tr) > 1:
                 for con, row in enumerate(table_tr):
                     if con == 0:
@@ -98,10 +114,11 @@ def data_from_parser(request):
                     ws_schema[f'AY{i + 2}'] = table_td[8].text
                     ws_schema[f'AG{i + 2}'] = table_td[0].text
                     break
-            print(f'Проверено {i} из 1194. Осталось {1094 - i} {(i * 100) / 1094}%')
+            print(f'Проверено: {i} из {ws.max_row - 1}. Осталось: {ws.max_row - i - 1}/ Процент выполнения: {(i * 100) / (ws.max_row - 1)}%')
+
             count += 1
             wb_schema.save(f'{BASE_DIR}/from_schema.xlsx')
-            wb_bag.save(f'{BASE_DIR}/from_bag.xlsx')
+
     finally:
         wb_schema.save(f'{BASE_DIR}/from_schema.xlsx')
         wb_schema.close()
@@ -115,6 +132,8 @@ def data_from_parser(request):
         msg = sm(subject, body, from_email, [to_email])
         msg.attach_file(f'{BASE_DIR}/from_schema.xlsx')
         msg.send()
+        msg.attach_file(f'{BASE_DIR}/from_bag.xlsx')
+        msg.send()
     wb_schema.save(f'{BASE_DIR}/from_schema.xlsx')
     wb_schema.close()
     wb_bag.save(f'{BASE_DIR}/from_bag.xlsx')
@@ -126,5 +145,7 @@ def data_from_parser(request):
     to_email = request.user.email
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(f'{BASE_DIR}/from_schema.xlsx')
+    msg.send()
+    msg.attach_file(f'{BASE_DIR}/from_bag.xlsx')
     msg.send()
     return redirect('/')
