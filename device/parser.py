@@ -41,8 +41,8 @@ def data_from_parser(request):
     # options = webdriver.ChromeOptions()
 
     chrome_options = Options()
-    chrome_options.add_argument(r"-user-data-dir=/home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages")
-    # chrome_options.add_argument(r"--user-data-dir=/home/user/gpu/env/lib/python3.10/site-packages")
+    # chrome_options.add_argument(r"-user-data-dir=/home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages")
+    chrome_options.add_argument(r"-user-data-dir=/home/user/gpu/env/lib/python3.10/site-packages")
     # chrome_options.add_argument("--headless")
     # chrome_options.add_argument("--no-sandbox")
     # chrome_options.add_argument("--disable-gpu")
