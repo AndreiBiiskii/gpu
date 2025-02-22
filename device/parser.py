@@ -40,9 +40,9 @@ def data_from_parser(request):
     # /home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages
     # options = webdriver.ChromeOptions()
 
-    # chrome_options = Options()
+    chrome_options = Options()
     # chrome_options.add_argument(r"--user-data-dir=/home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages")
-    # chrome_options.add_argument(r"--user-data-dir=/home/user/gpu/env/lib/python3.10/site-packages")
+    chrome_options.add_argument(r"--user-data-dir=/home/user/gpu/env/lib/python3.10/site-packages")
     # chrome_options.add_argument("--headless")
     # chrome_options.add_argument("--no-sandbox")
     # chrome_options.add_argument("--disable-gpu")
@@ -51,7 +51,7 @@ def data_from_parser(request):
     #     service=Service(ChromeDriverManager().install()),
     #     options=chrome_options
     # )
-
+    # Version 133.0.6943.126 (Official Build) (64-bit)
     driver = webdriver.Chrome()
     driver.get("https://fgis.gost.ru/fundmetrology/cm/results?rows=100&activeYear=%D0%92%D1%81%D0%B5")
     data_ = driver.find_element(By.CLASS_NAME, 'modal-footer')
