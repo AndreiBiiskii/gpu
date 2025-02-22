@@ -47,12 +47,12 @@ def data_from_parser(request):
     # chrome_options.add_argument("--no-sandbox")
     # chrome_options.add_argument("--disable-gpu")
 
-    # driver = webdriver.Chrome(
-    #     service=Service(ChromeDriverManager().install()),
-    #     options=chrome_options
-    # )
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        options=chrome_options
+    )
     # Version 133.0.6943.126 (Official Build) (64-bit)
-    driver = webdriver.Chrome()
+    # driver = webdriver.Chrome()
     driver.get("https://fgis.gost.ru/fundmetrology/cm/results?rows=100&activeYear=%D0%92%D1%81%D0%B5")
     data_ = driver.find_element(By.CLASS_NAME, 'modal-footer')
     button = data_.find_element(By.TAG_NAME, 'button')
