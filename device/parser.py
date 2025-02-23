@@ -31,7 +31,7 @@ def get_sample(table_tr):
 
 
 def data_from_parser(request):
-    service = Service('home/gpu/env/lib/python3.10/site-packages')
+    service = Service('/home/user/gpu/env/lib/python3.10/site-packages')
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
