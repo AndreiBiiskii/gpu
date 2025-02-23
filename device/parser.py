@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from equipment.settings import BASE_DIR
+import chromedriver_binary
 
 
 def get_sample(table_tr):
