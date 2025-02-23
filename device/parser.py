@@ -8,9 +8,7 @@ from selenium.webdriver.common.by import By
 from equipment.settings import BASE_DIR
 
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
-
+from selenium.webdriver.chrome.service import Service
 
 def get_sample(table_tr):
     low_date = datetime.strptime('01-01-2000', '%d-%m-%Y').date()
@@ -30,8 +28,19 @@ def get_sample(table_tr):
     return sample_data
 
 
+
+
 def data_from_parser(request):
-    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+    service = Service('home/gpu/env/lib/python3.10/site-packages')
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+
+    driver = webdriver.Chrome(service=service, options=options)
+
+    # /gpu/env/lib/python3.10/site-packages
+
     driver.get("https://fgis.gost.ru/fundmetrology/cm/results?rows=100&activeYear=%D0%92%D1%81%D0%B5")
     data_ = driver.find_element(By.CLASS_NAME, 'modal-footer')
     button = data_.find_element(By.TAG_NAME, 'button')
