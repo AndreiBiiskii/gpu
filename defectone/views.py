@@ -51,12 +51,12 @@ def send_act(request, pk):
     ws['D30'] = de.causes
     ws['D32'] = de.fix
     ws['D34'] = de.operating_time
-    ws['A39'] = de.kait.job_title
+    ws['A38'] = de.kait.job_title
     ws['J38'] = de.kait.name
     ws['A40'] = de.kait.job_title
     ws['J41'] = de.kait.name
-    ws['A43'] = de.worker.job_title
-    ws['J44'] = de.worker.name
+    ws['A43'] = de.contractor.job_title
+    ws['J44'] = de.contractor.name
     wb.save(f'{BASE_DIR}/files/defect_files/{de.defect_act}.xlsx')
     wb.close()
     sm = EmailMessage
