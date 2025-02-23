@@ -34,7 +34,7 @@ from device.models import Equipment, GP, Si, EquipmentModel, Manufacturer, Statu
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, Scale, \
     MyExam, PprDate, PprPlan
 # MyExam
-# from device.parser import data_from_parser
+from device.parser import data_from_parser
 from device.sending import sample_send
 from device.variables import year
 from equipment.settings import BASE_DIR
