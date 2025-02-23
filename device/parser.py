@@ -31,16 +31,7 @@ def get_sample(table_tr):
 
 
 def data_from_parser(request):
-    service = Service('/home/user/gpu/env/lib/python3.10/site-packages')
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-
-    driver = webdriver.Chrome(service=service, options=options)
-
-    # /gpu/env/lib/python3.10/site-packages
-
+    driver = webdriver.Chrome()
     driver.get("https://fgis.gost.ru/fundmetrology/cm/results?rows=100&activeYear=%D0%92%D1%81%D0%B5")
     data_ = driver.find_element(By.CLASS_NAME, 'modal-footer')
     button = data_.find_element(By.TAG_NAME, 'button')
