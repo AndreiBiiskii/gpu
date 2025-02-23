@@ -1,21 +1,12 @@
-import csv
-import re
 from datetime import datetime
 from time import sleep
-
 from django.core.mail import EmailMessage
-from django.db.models import Q
 from django.shortcuts import redirect
 from openpyxl import load_workbook
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from equipment.settings import BASE_DIR
-
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
 
 
 def get_sample(table_tr):
@@ -37,19 +28,7 @@ def get_sample(table_tr):
 
 
 def data_from_parser(request):
-    # /home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages
-    # options = webdriver.ChromeOptions()
-
-    chrome_options = Options()
-    # chrome_options.add_argument(r"-user-data-dir=/home/andrei/Desktop/pro/.venv/lib/python3.10/site-packages")
-    chrome_options.add_argument(r"--user-data-dir=/home/user/gpu/env/lib/python3.10/site-packages/Prof1")
-    # chrome_options.add_argument("--headless")
-    # chrome_options.add_argument("--no-sandbox")
-    # chrome_options.add_argument("--disable-gpu")
-
-    driver = webdriver.Chrome(options=chrome_options)
-    # Version 133.0.6943.126 (Official Build) (64-bit)
-    # driver = webdriver.Chrome()
+    driver = webdriver.Chrpome()
     driver.get("https://fgis.gost.ru/fundmetrology/cm/results?rows=100&activeYear=%D0%92%D1%81%D0%B5")
     data_ = driver.find_element(By.CLASS_NAME, 'modal-footer')
     button = data_.find_element(By.TAG_NAME, 'button')
