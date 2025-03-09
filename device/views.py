@@ -899,7 +899,7 @@ def my_exams(request):
     try:
         object = MyExam.objects.get(user=request.user)
     except:
-        pass
+        object = {}
     objects = MyExam.objects.all()
     try:
         initial_dict = {
@@ -916,7 +916,7 @@ def my_exams(request):
     else:
         form = MyExamsForm(initial=initial_dict)
     now_date = datetime.date.today() - relativedelta(months=10)
-    # print(datetime.date.today(), object.exams_ot-relativedelta(months=2), now_date)
+    print(now_date, object.exams_ot)
     context = {
         'form': form,
         'objects': objects,

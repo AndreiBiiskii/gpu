@@ -27,35 +27,14 @@
         <td class="theader">
             <b> Имя </b>
         </td>
-        {% endif %}
         <td class="theader">
             <b> Охрана труда</b>
         </td>
         <td class="theader">
             <b>Эл. безопасность</b>
         </td>
+        {% endif %}
     </tr>
-    {% if not request.user.is_staff %}
-    {% for obj in object %}
-    <tr>
-        {% if obj.exams_ot < now_date %}
-        <td class="error">
-            {% else %}
-        <td>
-            {% endif %}
-            {{obj.exams_ot}}
-        </td>
-         {% if obj.exams_eb < now_date %}
-        <td class="error">
-            {% else %}
-        <td>
-            {% endif %}
-            {{obj.exams_eb}}
-        </td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-
     {% if request.user.is_staff %}
     {% for obj in objects %}
     <tr>
@@ -68,7 +47,6 @@
         <td>
             {% endif %}
             {{obj.exams_ot}}
-
         </td>
         <{% if obj.exams_eb < now_date %}
         <td class="error">
@@ -80,7 +58,6 @@
     </tr>
     {% endfor %}
     {% endif %}
-
 </table>
 {% if request.method == 'POST' %}
 <div class="success">Данные обновлены</div>
