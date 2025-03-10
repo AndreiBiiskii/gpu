@@ -40,7 +40,7 @@ class DefectAddForm(ModelForm):
             'defect', 'name', 'model', 'manufacture', 'manufacture_new', 'serial_number', 'defect_act', 'project',
             'short_description', 'causes',
             'gp',
-            'location', 'tag', 'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'contractor', 'kait',
+            'location', 'tag', 'status', 'fix', 'operating_time', 'invest_letter', 'approve', 'kait', 'contractor',
             'worker',)
         widgets = {
 

@@ -25,8 +25,8 @@ class Defect(models.Model):
     approve = models.ForeignKey('Approve', on_delete=models.DO_NOTHING, related_name='approve',
                                 verbose_name='Утверждающий', blank=True, null=True)
     contractor = models.ForeignKey('Contractor', on_delete=models.DO_NOTHING, related_name='contractor',
-                                   verbose_name='Подрядчик', )
-    kait = models.ForeignKey('Kait', on_delete=models.DO_NOTHING, related_name='kait', verbose_name='Мастер по КАиТ',
+                                   verbose_name='Мастер по КАиТ', )
+    kait = models.ForeignKey('Kait', on_delete=models.DO_NOTHING, related_name='kait', verbose_name='Ст. мастер по КАиТ',
                              blank=True, null=True)
     worker = models.ForeignKey('Worker', on_delete=models.DO_NOTHING, related_name='worker', verbose_name='Мастер цеха',
                                blank=True, null=True)
