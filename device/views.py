@@ -916,7 +916,6 @@ def my_exams(request):
     else:
         form = MyExamsForm(initial=initial_dict)
     now_date = datetime.date.today() - relativedelta(months=10)
-    print(now_date, object.exams_ot)
     context = {
         'form': form,
         'objects': objects,
