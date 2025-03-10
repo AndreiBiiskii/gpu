@@ -22,19 +22,7 @@
 </form>
 {{request.user.username}}
 <table>
-    <tr>
-        {% if request.user.is_staff %}
-        <td class="theader">
-            <b> Имя </b>
-        </td>
-        <td class="theader">
-            <b> Охрана труда</b>
-        </td>
-        <td class="theader">
-            <b>Эл. безопасность</b>
-        </td>
-        {% endif %}
-    </tr>
+
     {% if request.user.is_staff %}
     {% for obj in objects %}
     <tr>
@@ -48,7 +36,7 @@
             {% endif %}
             {{obj.exams_ot}}
         </td>
-        <{% if obj.exams_eb < now_date %}
+        {% if obj.exams_eb < now_date %}
         <td class="error">
             {% else %}
         <td>
