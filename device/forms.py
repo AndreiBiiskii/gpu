@@ -144,7 +144,7 @@ class AddDeviceForm(forms.Form):
     name_new = forms.CharField(label='Добавить наименование:', widget=forms.TextInput(attrs={'class': 'type2'}),
                                required=False)
     description = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), label='Комментарий:')
-    comment = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), label='Примечание:')
+    comment = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), required=False, label='Примечание:')
     position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                       label='Поз. по ГП', required=False)
     position_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
@@ -163,11 +163,11 @@ class AddDeviceForm(forms.Form):
     #                                     required=False)
     # reg_number_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
     #                                  label='Добавить регистрационный номер:', max_length=255, required=False)
-    previous_verification = forms.DateField(label='Дата предыдущей поверки:', widget=forms.TextInput(attrs=
-    {
-        'type': 'date',
-        'class': 'type2',
-    }))
+    # previous_verification = forms.DateField(label='Дата предыдущей поверки:', required=False, widget=forms.TextInput(attrs=
+    # {
+    #     'type': 'date',
+    #     'class': 'owner',
+    # }))
     # certificate = forms.CharField(widget=forms.TextInput(attrs={"class": "type2"}), label='Сертификат:')
     interval = forms.ChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Межповерочный интервал:',
                                  choices=CHOICES_INTERVAL)
@@ -241,7 +241,10 @@ class AddDeviceForm(forms.Form):
         min_scale = self.cleaned_data.pop('min_scale')
         max_scale = self.cleaned_data.pop('max_scale')
         position = self.cleaned_data.pop('position')
-        previous_verification = self.cleaned_data.pop('previous_verification')
+        # if self.cleaned_data['previous_verification']:
+        #     previous_verification = self.cleaned_data.pop('previous_verification')
+        # else:
+        previous_verification = datetime.date.fromisoformat('1990-01-01')
         # certificate = self.cleaned_data.pop('certificate')
         # EquipmentType.objects.get_or_create(name=self.cleaned_data['type'])
         Manufacturer.objects.get_or_create(name=self.cleaned_data['manufacturer'])

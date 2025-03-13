@@ -30,15 +30,12 @@ def get_sample(table_tr):
     return sample_data
 
 
-
-
 def data_from_parser(request):
     # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
-    options = webdriver.ChromeOptions()
-    options.add_argument('--user-data-dir=/home/user/gpu/env/lib/python3.10/site-packages/Prof1')
-    driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
 
+    # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+    driver = webdriver.Firefox()
     driver.get("https://fgis.gost.ru/fundmetrology/cm/results?rows=100&activeYear=%D0%92%D1%81%D0%B5")
     data_ = driver.find_element(By.CLASS_NAME, 'modal-footer')
     button = data_.find_element(By.TAG_NAME, 'button')

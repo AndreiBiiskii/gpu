@@ -165,7 +165,7 @@ class Si(models.Model):
     equipment = models.ForeignKey(Equipment, blank=True, null=True, on_delete=models.CASCADE,
                                   related_name='si',
                                   verbose_name='Средство измерения')
-    previous_verification = models.DateField(verbose_name='Дата предыдущей поверки')
+    previous_verification = models.DateField(verbose_name='Дата предыдущей поверки', )
     next_verification = models.DateField(verbose_name='Дата следующей поверки')
     # certificate = models.CharField(max_length=255, verbose_name='Свидетельство о поверке', default='еще нет')
     interval = models.ForeignKey(VerificationInterval, on_delete=models.DO_NOTHING, related_name='interval', blank=True,
