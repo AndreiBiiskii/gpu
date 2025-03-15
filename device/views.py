@@ -214,30 +214,30 @@ def EquipmentUpdate(request, pk):
         'si_or': False,
     }
     if request.method == 'POST':
-        if request.POST['description'] != equipment.descriptions.last().name:
-            Tag.objects.create(equipment=equipment, name=request.POST['tag'])
-            if len(request.POST['location']) > 255:
-                data['error'] = 'Местоположение не может содержать более 255 символов'
-                return render(request, 'device/equipment_update.html', context=data)
-            try:
-                if request.POST['defect_or']:
-                    equipment.defect_or = True
-                    equipment.save()
-            except:
-                pass
-            if request.POST.get('position_new'):
-                poz = request.POST.get('position_new')
-                GP.objects.get_or_create(name=poz)
-            else:
-                poz = request.POST['position']
-            Location.objects.create(equipment=equipment, name=request.POST['location'])
-            Position.objects.create(equipment=equipment, name=poz.upper())
-            Description.objects.create(equipment=equipment, user=request.user, name=request.POST['description'])
-            status = StatusAdd.objects.get(name=request.POST['status'])
-            Status.objects.create(equipment=equipment, name=status)
-            return redirect('search')
+        # if request.POST['description'] != equipment.descriptions.last().name:
+        Tag.objects.create(equipment=equipment, name=request.POST['tag'])
+        if len(request.POST['location']) > 255:
+            data['error'] = 'Местоположение не может содержать более 255 символов'
+            return render(request, 'device/equipment_update.html', context=data)
+        try:
+            if request.POST['defect_or']:
+                equipment.defect_or = True
+                equipment.save()
+        except:
+            pass
+        if request.POST.get('position_new'):
+            poz = request.POST.get('position_new')
+            GP.objects.get_or_create(name=poz)
         else:
-            data['error'] = 'Комментарий не был изменен'
+            poz = request.POST['position']
+        Location.objects.create(equipment=equipment, name=request.POST['location'])
+        Position.objects.create(equipment=equipment, name=poz.upper())
+        Description.objects.create(equipment=equipment, user=request.user, name=request.POST['description'])
+        status = StatusAdd.objects.get(name=request.POST['status'])
+        Status.objects.create(equipment=equipment, name=status)
+        return redirect('search')
+    # else:
+    #     data['error'] = 'Комментарий не был изменен'
 
     return render(request, 'device/equipment_update.html', context=data)
 
@@ -507,6 +507,7 @@ def DeviceUpdate(request, pk):
     if not request.user.is_authenticated:
         return redirect('login')
     equipment = get_object_or_404(Equipment, pk=pk)
+    manufacturers = Manufacturer.objects.all()
     si = Si.objects.get(equipment=equipment)
     status = StatusAdd.objects.all()
     last_status = equipment.status.last()
@@ -521,6 +522,7 @@ def DeviceUpdate(request, pk):
     unit = si.unit.name
     data = {
         'equipment': equipment,
+        'manufacturers': manufacturers,
         'menu': menu,
         'status': status,
         'last_status': last_status,
@@ -536,54 +538,55 @@ def DeviceUpdate(request, pk):
         'unit': unit,
     }
     if request.method == 'POST':
-        if request.POST['description'] != equipment.descriptions.last().name:
-            t = Tag(equipment=equipment, name=request.POST['tag'])
-            if len(request.POST['location']) > 255:
-                data['error'] = 'Местоположение не может содержать более 255 символов'
-                return render(request, 'device/equipment_update.html', context=data)
-            l = Location(equipment=equipment, name=request.POST['location'])
-            if request.POST.get('position_new'):
-                poz = request.POST.get('position_new')
-                GP.objects.get_or_create(name=poz)
-            else:
-                poz = request.POST['position']
-            equipment.comment = request.POST['comment']
-            try:
-                request.POST['defect_or']
-                equipment.defect_or = True
-                equipment.save()
-            except:
-                equipment.defect_or = False
-                equipment.save()
-            p = Position(equipment=equipment, name=poz.upper())
-            d = Description(equipment=equipment, user=request.user, name=request.POST['description'])
-            status = StatusAdd.objects.get(name=request.POST['status'])
-            s = Status(equipment=equipment, name=status)
-            si.unit = Unit.objects.get(name=request.POST['unit'])
-            Scale.objects.get_or_create(min_scale=request.POST['min_scale'], max_scale=request.POST['max_scale'])
-            scale = Scale.objects.get(min_scale=request.POST['min_scale'], max_scale=request.POST['max_scale'])
-            si.scale = scale
-            si.scale.max_scale = '5'
-            t.save()
-            l.save()
-            p.save()
-            d.save()
-            s.save()
-            if not request.POST['previous_verification']:
-                request.POST['previous_verification'] = '1990-01-01'
-            si.previous_verification = request.POST['previous_verification']
-            si.next_verification = (
-                                       datetime.datetime.strptime(request.POST['previous_verification'],
-                                                                  '%Y-%m-%d').date()) + relativedelta(
-                months=+int(si.interval.name))
-            # try:
-            #     si.certificate = request.POST['certificate']
-            # except:
-            #     si.certificate = '999999999'
-            si.save()
-            return redirect('search')
+        # if request.POST['description'] != equipment.descriptions.last().name:
+        t = Tag(equipment=equipment, name=request.POST['tag'])
+        if len(request.POST['location']) > 255:
+            data['error'] = 'Местоположение не может содержать более 255 символов'
+            return render(request, 'device/equipment_update.html', context=data)
+        l = Location(equipment=equipment, name=request.POST['location'])
+        if request.POST.get('position_new'):
+            poz = request.POST.get('position_new')
+            GP.objects.get_or_create(name=poz)
         else:
-            data['error'] = 'Комментарий не был изменен'
+            poz = request.POST['position']
+        equipment.comment = request.POST['comment']
+        equipment.manufacturer = Manufacturer.objects.get(name=request.POST['manufacturer'])
+        try:
+            request.POST['defect_or']
+            equipment.defect_or = True
+            equipment.save()
+        except:
+            equipment.defect_or = False
+            equipment.save()
+        p = Position(equipment=equipment, name=poz.upper())
+        d = Description(equipment=equipment, user=request.user, name=request.POST['description'])
+        status = StatusAdd.objects.get(name=request.POST['status'])
+        s = Status(equipment=equipment, name=status)
+        si.unit = Unit.objects.get(name=request.POST['unit'])
+        Scale.objects.get_or_create(min_scale=request.POST['min_scale'], max_scale=request.POST['max_scale'])
+        scale = Scale.objects.get(min_scale=request.POST['min_scale'], max_scale=request.POST['max_scale'])
+        si.scale = scale
+        si.scale.max_scale = '5'
+        t.save()
+        l.save()
+        p.save()
+        d.save()
+        s.save()
+        if not request.POST['previous_verification']:
+            request.POST['previous_verification'] = '1990-01-01'
+        si.previous_verification = request.POST['previous_verification']
+        si.next_verification = (
+                                   datetime.datetime.strptime(request.POST['previous_verification'],
+                                                              '%Y-%m-%d').date()) + relativedelta(
+            months=+int(si.interval.name))
+        # try:
+        #     si.certificate = request.POST['certificate']
+        # except:
+        #     si.certificate = '999999999'
+        si.save()
+        return redirect('search')
+        # else:
+        #     data['error'] = 'Комментарий не был изменен'
     return render(request, 'device/equipment_update.html', context=data)
 
 
@@ -1023,7 +1026,7 @@ class PprDateList(ListView):
 
 
 class PprDateUpdate(UpdateView):
-    permission_classes = [IsAdminUser,]
+    permission_classes = [IsAdminUser, ]
     model = PprDate
     fields = '__all__'
     template_name = 'device/ppr_date_create.html'

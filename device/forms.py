@@ -70,8 +70,8 @@ class AddEquipmentForm(forms.Form):
             raise forms.ValidationError(message='Не указан статус.')
         # if (self.cleaned_data['type'] is None) & (self.cleaned_data['type_new'] == ''):
         #     raise forms.ValidationError(message='Не указан тип оборудования.')
-        if len(self.cleaned_data['description']) < 5:
-            raise forms.ValidationError(message='Добавьте описание.')
+        # if len(self.cleaned_data['description']) < 5:
+        #     raise forms.ValidationError(message='Добавьте описание.')
         # if self.cleaned_data['type_new']:
         #     self.cleaned_data['type'] = self.cleaned_data['type_new']
         if self.cleaned_data['manufacturer_new']:

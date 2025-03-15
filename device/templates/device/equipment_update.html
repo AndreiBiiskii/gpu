@@ -13,6 +13,18 @@
 
     <table>
         <tr>
+            <td><b><cite>Производитель:</cite> </b></td>
+            <td>
+                <select name="manufacturer" class="select">
+                    {%for manufacturer in manufacturers%}
+                    <option>{{manufacturer.name}}</option>
+                    <br>
+                    {%endfor%}
+                    <option selected>{{equipment.manufacturer.name}}</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
             <td><b><cite>Позиция по ГП:</cite> </b></td>
             <td>
                 <select name="position" class="select">
@@ -22,6 +34,7 @@
                     {%endfor%}
                     <option selected>{{equipment.positions.last.name}}</option>
                 </select>
+            </td>
         </tr>
         <tr>
             {%if request.user.is_staff%}
