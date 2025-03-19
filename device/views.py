@@ -416,6 +416,11 @@ def equipment_list(request):
 
         }
         sample_send(request, s)
+        # man = Manufacturer.objects.get(name='ГазоАналит')
+        # for i in eq_filter.qs:
+        #     if 'СГОЭС' in i.model.name:
+        #         i.manufacturer = man
+        #         i.save()
         return render(request, 'device/equipments.html', context=data)
     if request.method == 'POST' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,

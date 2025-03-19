@@ -32,6 +32,7 @@ class AddEquipmentForm(forms.Form):
     name_new = forms.CharField(label='Добавить наименование:', widget=forms.TextInput(attrs={'class': 'type2'}),
                                required=False)
     description = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), label='Комментарий:')
+    comment = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), required=False, label='Примечание:')
     position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
                                       label='Поз. по ГП', required=False)
     position_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
@@ -110,6 +111,7 @@ class AddEquipmentForm(forms.Form):
                                              model=EquipmentModel.objects.get(name=self.cleaned_data['model']),
                                              year=Year.objects.get(name=self.cleaned_data['year'].name),
                                              si_or=False,
+                                             comment=self.cleaned_data['comment']
                                              )
         status = StatusAdd.objects.get(name=self.cleaned_data['status'])
         Status.objects.create(equipment=equipment, name=status)
