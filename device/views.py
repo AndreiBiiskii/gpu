@@ -32,7 +32,7 @@ from urllib3 import request
 from device.forms import AddEquipmentForm, AddDeviceForm, DraftForm, LoginUserForm, MyExamsForm, PprForm
 from device.models import Equipment, GP, Si, EquipmentModel, Manufacturer, Status, Position, \
     EquipmentName, Location, Tag, StatusAdd, Description, Year, Draft, VerificationInterval, Unit, Scale, \
-    MyExam, PprDate, PprPlan
+    MyExam, PprDate, PprPlan, Manual, Category
 # MyExam
 # from device.parser import data_from_parser
 from device.sending import sample_send
@@ -1092,4 +1092,15 @@ class PprUpdate(UpdateView):
         instance.save()
         return redirect('ppr_date_list')
 
+
 # <a href="{% url 'ppr_list' %}" > ППР </a>
+
+class ManualsView(ListView):
+    model = Category
+    context_object_name = 'categories'
+    template_name = 'device/manuals.html'
+    extra_context = {
+        'menu': menu,
+    }
+
+# <!--<a href="{% url  'manuals' %}"> Руководства </a>-->

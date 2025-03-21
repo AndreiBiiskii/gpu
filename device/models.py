@@ -314,3 +314,33 @@ class PprDate(models.Model):
     class Meta:
         verbose_name_plural = 'Даты проведения ППР'
         ordering = ['-at_date']
+
+
+class Manual(models.Model):
+    category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категория', related_name='categories')
+    name = models.CharField(max_length=255, verbose_name='Наименование')
+    file_full = models.FileField(upload_to='manuals/', verbose_name='Полное руководство')
+    file_short = models.FileField(upload_to='manuals/', verbose_name='Подключение')
+    file_short2 = models.FileField(upload_to='manuals/', verbose_name='Настройка')
+    at_date = models.DateField(auto_now_add=True)
+    description = models.TextField(verbose_name='Описание', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('manual_update', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name_plural = 'Руководства'
+        ordering = ['-name']
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Категория')
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('category_update', kwargs={'pk': self.pk})

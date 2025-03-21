@@ -39,6 +39,7 @@ urlpatterns = [
     # path('ppr_delete/<int:pk>', PprDelete.as_view(), name='ppr_delete'),
     # path('im/', IM, name='im'),
     # path('si_loading/<int:i>', si_loading, name='si_loading'),
+    path('manuals/', ManualsView.as_view(), name='manuals'),
     path('manufacturers/', ListCategory.as_view(model=Manufacturer, extra_context={
         'title': 'Список производителей',
         'menu': menu,
