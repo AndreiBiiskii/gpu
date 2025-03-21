@@ -101,15 +101,15 @@ def sample_send(request, data):
                 ws[f'N{i + 2}'] = 'предыдущая проверка нет'
     wb.save(f'{BASE_DIR}/from sending.xlsx')
     wb.close()
-    sm = EmailMessage
-    subject = 'Samole'
-    body = 'Выборка отправлена на почту.'
-    from_email = 'freemail_2019@mail.ru'
-    to_email = request.user.email
-    msg = sm(subject, body, from_email, [to_email])
-    msg.attach_file(f'{BASE_DIR}/from sending.xlsx')
-    msg.send()
-    os.remove(f'{BASE_DIR}/from sending.xlsx')
+    # sm = EmailMessage
+    # subject = 'Samole'
+    # body = 'Выборка отправлена на почту.'
+    # from_email = 'freemail_2019@mail.ru'
+    # to_email = request.user.email
+    # msg = sm(subject, body, from_email, [to_email])
+    # msg.attach_file(f'{BASE_DIR}/from sending.xlsx')
+    # msg.send()
+
 
     return redirect(reverse_lazy('search'))
 
