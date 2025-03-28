@@ -1,0 +1,18 @@
+{% extends 'device/base.html' %}
+
+{% block content %}
+{%for cat in categories%}
+{{ cat}}
+<ul>
+    {%for manual in cat.categories.all%}
+    <li>{{manual}}</li>
+    <ul>
+        <li><a href="{{ manual.file_full.url }}"> Полное руководство</a></li>
+        <li><a href="{{ manual.file_short.url }}"> Подключение</a></li>
+        <li><a href="{{ manual.file_short2.url }}"> Настройка</a></li>
+    </ul>
+    {%endfor%}
+</ul>
+{%endfor%}
+{%endblock%}
+
