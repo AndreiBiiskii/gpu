@@ -555,7 +555,8 @@ def DeviceUpdate(request, pk):
         else:
             poz = request.POST['position']
         equipment.comment = request.POST['comment']
-        equipment.manufacturer = Manufacturer.objects.get(name=request.POST['manufacturer'])
+        if request.user.is_staff:
+            equipment.manufacturer = Manufacturer.objects.get(name=request.POST['manufacturer'])
         try:
             request.POST['defect_or']
             equipment.defect_or = True
@@ -571,7 +572,7 @@ def DeviceUpdate(request, pk):
         Scale.objects.get_or_create(min_scale=request.POST['min_scale'], max_scale=request.POST['max_scale'])
         scale = Scale.objects.get(min_scale=request.POST['min_scale'], max_scale=request.POST['max_scale'])
         si.scale = scale
-        si.scale.max_scale = '5'
+        si.scale.max_scale = '10'
         t.save()
         l.save()
         p.save()
@@ -1053,7 +1054,7 @@ def get_ppr_list(request, pk):
 
 
 def ppr_create(request, pk):
-    if not request.user.is_staff:
+    if not request.user.is_authenticated:
         redirect('login')
     ppr_date = PprDate.objects.get(pk=pk)
     ppr_plan = PprPlan.objects.filter(ppr=ppr_date)
@@ -1076,9 +1077,9 @@ def ppr_create(request, pk):
 
 #
 class PprUpdate(UpdateView):
+    permission_classes = [IsAuthenticated]
     model = PprPlan
     fields = ['ppr', 'name', 'description', 'required_materials']
-    permission_classes = [IsAdminUser, ]
     template_name = 'device/ppr_add.html'
     success_url = reverse_lazy('ppr_list')
 

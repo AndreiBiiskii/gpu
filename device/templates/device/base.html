@@ -31,7 +31,10 @@
     <a class="a" href="{% url 'users:login' %}">Войти</a>
     {%endif%}
 </div>
-
+{% if not user.is_staff %}
+<h2><a href="{% url 'ppr_date_list' %}" > ППР </a></h2>
+<h2><a href="{% url 'search' %}">найти</a></h2>
+{% endif %}
 {% if user.is_staff %}
 <div class="navbar">
     <header>

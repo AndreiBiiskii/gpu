@@ -4,14 +4,13 @@
 
 <form action="" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-
-
     <b>Серийный номер: </b><cite>{{equipment.serial_number}}</cite> <br/>
     <b>Наименование:</b><cite>{{equipment.name}}</cite><br/>
     <b>Модель: </b><cite>{{equipment.model}}</cite> <br/>
     <h3 class="error">{{error}}</h3>
 
     <table>
+        {% if request.user.is_staff%}
         <tr>
             <td><b><cite>Производитель:</cite> </b></td>
             <td>
@@ -24,6 +23,7 @@
                 </select>
             </td>
         </tr>
+        {%endif%}
         <tr>
             <td><b><cite>Позиция по ГП:</cite> </b></td>
             <td>
