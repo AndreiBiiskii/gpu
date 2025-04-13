@@ -421,3 +421,7 @@ class PprForm(forms.Form):
 #     class Meta():
 #         model = PprDate
 #         fields = ['name', 'description', 'required_materials', 'date_start']
+
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField(label="Файл")

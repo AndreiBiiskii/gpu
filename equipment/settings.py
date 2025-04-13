@@ -147,3 +147,4 @@ EMAIL_HOST_USER = 'freemail_2019@mail.ru'
 EMAIL_HOST_PASSWORD = 'dwAAdanBBumBtdrznvHA'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+

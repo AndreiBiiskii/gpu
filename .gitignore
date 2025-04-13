@@ -21,6 +21,7 @@ settings_local.py
 .DS_Store
 bag.csv
 Дефектные акты УКПГ-2 в.4.xlsx
+files/defect_files/act1.xlsx
 
 media/
 defectone/migrations/

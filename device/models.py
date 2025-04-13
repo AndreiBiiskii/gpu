@@ -133,6 +133,10 @@ class Tag(models.Model):
         ordering = ['id']
 
 
+class Files(models.Model):
+    file = models.FileField(blank=True, null=True, upload_to='files')
+
+
 class Equipment(models.Model):
     serial_number = models.CharField(max_length=255, verbose_name='Серийный номер')
     model = models.ForeignKey(EquipmentModel, on_delete=models.DO_NOTHING, related_name='model', blank=True, null=True)
@@ -317,7 +321,8 @@ class PprDate(models.Model):
 
 
 class Manual(models.Model):
-    category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категория', related_name='categories')
+    category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категория',
+                                 related_name='categories')
     name = models.CharField(max_length=255, verbose_name='Наименование')
     file_full = models.FileField(upload_to='manuals/', verbose_name='Полное руководство')
     file_short = models.FileField(upload_to='manuals/', verbose_name='Подключение')

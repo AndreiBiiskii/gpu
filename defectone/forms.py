@@ -67,3 +67,4 @@ class DefectAddForm(ModelForm):
         #     'model': 'Укажите модель.',
         #     'serial_number': 'Укажите серийный номер.',
         #     'defect_act': 'Укажите номер дефектного акта.'}
+

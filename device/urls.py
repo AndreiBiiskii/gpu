@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
-from .parser import data_from_parser
+from .parser import data_from_parser, save_file
 from .sending import sending, send_all
 from .views import *
 
@@ -12,7 +12,10 @@ urlpatterns = [
     path('send_all/<int:start>/<int:end>', send_all, name='send_all'),
     path('send/<slug:title>', sending, name='send'),
     path('my_exams', my_exams, name='my_exams'),
-    path('data_from_parser/', data_from_parser, name='data_from_parser'),
+    # path('data_from_parser/', data_from_parser, name='data_from_parser'),
+    path('data_from_parser/', save_file, name='data_from_parser'),
+
+
     path('users/', include(('users.urls', 'users'), namespace='users')),
     path('defects/', include(('defectone.urls', 'defectone'), namespace='defectone')),
     path('draft', DraftCreate.as_view(), name='draft'),
