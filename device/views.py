@@ -41,6 +41,7 @@ from equipment.settings import BASE_DIR
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.core.files import File
+
 menu = [
     {'title': 'Модели', 'url_name': 'models'},
     {'title': 'Производители', 'url_name': 'manufacturers'},
@@ -55,7 +56,6 @@ menu = [
     {'title': 'Подрядчики', 'url_name': 'defectone:contractors'},
     {'title': 'Дефекты', 'url_name': 'defectone:defect_list'}
 ]
-
 
 
 def si_loading(request, i):
