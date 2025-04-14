@@ -1000,6 +1000,7 @@ def send_bid(request, pk):
     ws['C15'] = f'{de.model}, {de.year} г.в., S/N {de.serial_number} '
     ws['C17'] = f'{de.descriptions.all().last()}'
     ws['C20'] = f'{request.user.first_name}'
+
     wb.save(
         f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
     wb.close()
@@ -1011,7 +1012,7 @@ def send_bid(request, pk):
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(
         f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
-    # msg.send()
+    msg.send()
     return redirect(reverse_lazy('search'))
 
 
