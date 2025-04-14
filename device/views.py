@@ -4,7 +4,7 @@ import os
 from csv import DictReader
 from select import error
 from venv import create
-
+from datetime import datetime as dt
 import django_filters
 from dateutil.relativedelta import relativedelta
 from django.core.mail import EmailMessage
@@ -993,11 +993,13 @@ def send_bid(request, pk):
     poz = GP.objects.get(name=de.positions.all().last())
     wb = load_workbook(f'{BASE_DIR}/files/bid_files/bid.xlsx')
     ws = wb['z']
-    ws['C9'] = request.user.last_name
-    ws['C11'] = f'{de.name.name}, {poz.construction}, (поз.{poz.name})'
-    ws['C14'] = f'{de.descriptions.all().last()}'
-    ws['C12'] = f'{de.name.name} {de.model}, зав.№{de.serial_number} - 1 шт., ({de.year} г.в.)'
-    ws['B17'] = f'Заказчик:__________{request.user.first_name}'
+    rez = str(datetime.date.today())
+    ws['C9'] = f'{rez[8:]}-{rez[5:7]}-{rez[0:4]}'
+    ws['C12'] = '36264, ' + request.user.last_name  # почта рабочая
+    ws['C14'] = f'{de.name.name}'
+    ws['C15'] = f'{de.model}, {de.year} г.в., S/N {de.serial_number} '
+    ws['C17'] = f'{de.descriptions.all().last()}'
+    ws['C20'] = f'{request.user.first_name}'
     wb.save(
         f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
     wb.close()
@@ -1009,7 +1011,7 @@ def send_bid(request, pk):
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(
         f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
-    msg.send()
+    # msg.send()
     return redirect(reverse_lazy('search'))
 
 

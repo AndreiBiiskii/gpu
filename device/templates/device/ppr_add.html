@@ -1,6 +1,7 @@
 {% extends 'device/base.html' %}
 
 {% block content%}
+<h2><a href="{% url 'search' %}">найти</a></h2>
  <cite> <h2> Добавить работу на ППР: {{ppr_date}}</h2></cite>
 <form method="post">
     {% csrf_token %}

@@ -2,6 +2,7 @@
 
 {% block content%}
 {%if request.user.is_staff%}
+<h2><a href="{% url 'search' %}">найти</a></h2>
 <a href="{% url 'ppr_date_add' %}" class="button-style2">Добавить периоды проведения ППР </a>
 {%endif%}
 <table>

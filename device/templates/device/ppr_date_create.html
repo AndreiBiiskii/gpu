@@ -1,6 +1,7 @@
 {% extends 'device/base.html' %}
 
 {% block content%}
+<h2><a href="{% url 'search' %}">найти</a></h2>
 <form action="" method="POST">
     {% csrf_token %}
   <table>
@@ -8,4 +9,5 @@
     </table>
     <button type="submit" class="search_btn"> Добавить </button>
 </form>
+
 {% endblock %}

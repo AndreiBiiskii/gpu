@@ -1,6 +1,7 @@
 {% extends 'device/base.html' %}
 
 {% block content%}
+<h2><a href="{% url 'search' %}">найти</a></h2>
 <a href="{% url 'ppr_date_list' %}" class="button-style2"> Периоды проведения ППР </a><br><br>
 <a href="{% url 'ppr_add' ppr_date.pk %}"  class="button-style2"> Добавить работу на ППР: {{ ppr_date }} </a>
 <table>
