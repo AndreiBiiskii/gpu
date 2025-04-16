@@ -996,13 +996,13 @@ def send_bid(request, pk):
     rez = str(datetime.date.today())
     ws['C9'] = f'{rez[8:]}-{rez[5:7]}-{rez[0:4]}'
     ws['C12'] = '36264, ' + request.user.last_name  # почта рабочая
-    ws['C14'] = f'{de.name.name}'
+    ws['C14'] = f'{de.name.name}, {poz} ({poz.construction})'
     ws['C15'] = f'{de.model}, {de.year} г.в., S/N {de.serial_number} '
     ws['C17'] = f'{de.descriptions.all().last()}'
     ws['C20'] = f'{request.user.first_name}'
 
     wb.save(
-        f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
+        f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {rez[8:]}-{rez[5:7]}-{rez[0:4]}.xlsx')
     wb.close()
     sm = EmailMessage
     subject = 'bid'
