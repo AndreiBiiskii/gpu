@@ -1011,7 +1011,7 @@ def send_bid(request, pk):
     to_email = request.user.email
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(
-        f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {datetime.date.today()}.xlsx')
+        f'{BASE_DIR}/files/bid_files/Заявка в рем. цех {de.name.name} {de.serial_number} от {rez[8:]}-{rez[5:7]}-{rez[0:4]}.xlsx')
     msg.send()
     return redirect(reverse_lazy('search'))
 
