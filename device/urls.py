@@ -17,7 +17,7 @@ urlpatterns = [
 
 
     path('users/', include(('users.urls', 'users'), namespace='users')),
-    path('defects/', include(('defectone.urls', 'defectone'), namespace='defectone')),
+    # path('defects/', include(('defectone.urls', 'defectone'), namespace='defectone')),
     path('draft', DraftCreate.as_view(), name='draft'),
     path('draft_list/', DraftList.as_view(), name='draft_list'),
     path('draft_detail/<int:pk>', DraftDetail.as_view(), name='draft_detail'),
