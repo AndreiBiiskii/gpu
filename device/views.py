@@ -987,8 +987,8 @@ def changes(request):
 def send_bid(request, pk):
     if not request.user.is_staff:
         redirect('login')
-    if not request.user.email:
-        return redirect(reverse_lazy('defectone:add_email'))
+    # if not request.user.email:
+    #     return redirect(reverse_lazy('defectone:add_email'))
     de = Equipment.objects.get(pk=pk)
     poz = GP.objects.get(name=de.positions.all().last())
     wb = load_workbook(f'{BASE_DIR}/files/bid_files/bid.xlsx')
