@@ -22,8 +22,8 @@ def sending(request, title):
     subject = 'sample'
     body = 'sample'
     from_email = 'freemail_2019@mail.ru'
-    if not request.user.email:
-        return redirect(reverse_lazy('defectone:add_email'))
+    # if not request.user.email:
+    #     return redirect(reverse_lazy('defectone:add_email'))
     to_email = request.user.email
     msg = sm(subject, body, from_email, [to_email])
     msg.attach_file(f'{BASE_DIR}/from sending.xlsx')
@@ -35,8 +35,8 @@ def sending(request, title):
 def sample_send(request, data):
     if not request.user.is_staff:
         redirect('login')
-    if not request.user.email:
-        return redirect(reverse_lazy('defectone:add_email'))
+    # if not request.user.email:
+    #     return redirect(reverse_lazy('defectone:add_email'))
     # eq = Equipment.objects.filter(Q(serial_number=de.serial_number) & Q(model__name=de.model)).first()
     # if not eq:
     #     return redirect(reverse_lazy('defectone:defect_list'))
