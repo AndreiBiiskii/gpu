@@ -387,14 +387,18 @@ class MyFilterUser(django_filters.FilterSet):
 
 
 def equipment_list(request):
+    s = []
     if not request.user.is_authenticated:
         redirect('/')
     if request.method == 'POST' and request.user.is_staff:
         eq_filter = MyFilter(request.POST,
                              queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
                                                                          'tags', ).all().order_by(
-                                 'name'))
-        s = set(eq_filter.qs)
+                                 '-at_date'))
+        for i in eq_filter.qs:
+            if i not in s:
+                s.append(i)
+
         error_user = False
         error_staff = False
         try:
