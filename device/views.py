@@ -275,6 +275,10 @@ class MyFilter(django_filters.FilterSet):
     max_scale = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
                                           field_name='si__scale__max_scale',
                                           lookup_expr='exact', label='Максимум')
+    unit = django_filters.ModelChoiceFilter(widget=forms.Select(attrs={'class': 'select'}),
+                                            queryset=Unit.objects.all(),
+                                            field_name='si__unit__name',
+                                            lookup_expr='exact', label='Ед. измерения:', )
     start_date = django_filters.DateFilter(
         widget=forms.TextInput(attrs=
         {
@@ -361,7 +365,7 @@ class MyFilter(django_filters.FilterSet):
     class Meta:
         model = Equipment
         fields = ['serial_number', 'name', 'model', 'position', 'locations', 'tag', 'status', 'si_or',
-                  'manufacturer', 'min_scale', 'max_scale', 'defect_or', ]
+                  'manufacturer', 'min_scale', 'max_scale', 'unit', 'defect_or', ]
 
 
 class MyFilterUser(django_filters.FilterSet):
@@ -437,7 +441,6 @@ def equipment_list(request):
         #
         # unit_all = Unit.objects.get(name=str1)
         # print(unit_all)
-
 
         return render(request, 'device/equipments.html', context=data)
     if request.method == 'POST' and not request.user.is_staff:
