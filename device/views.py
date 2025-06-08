@@ -269,7 +269,12 @@ class MyFilter(django_filters.FilterSet):
                                     lookup_expr='icontains', label='Тэг:', )
     name = django_filters.CharFilter(field_name='name__name', lookup_expr='icontains', label='Наименование:',
                                      widget=forms.TextInput(attrs={'class': 'type2'}))
-
+    min_scale = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
+                                          field_name='si__scale__min_scale',
+                                          lookup_expr='exact', label='Минимум')
+    max_scale = django_filters.CharFilter(widget=forms.TextInput(attrs={'class': 'type2'}),
+                                          field_name='si__scale__max_scale',
+                                          lookup_expr='exact', label='Максимум')
     start_date = django_filters.DateFilter(
         widget=forms.TextInput(attrs=
         {
@@ -356,7 +361,7 @@ class MyFilter(django_filters.FilterSet):
     class Meta:
         model = Equipment
         fields = ['serial_number', 'name', 'model', 'position', 'locations', 'tag', 'status', 'si_or',
-                  'manufacturer', 'defect_or', ]
+                  'manufacturer', 'min_scale', 'max_scale', 'defect_or', ]
 
 
 class MyFilterUser(django_filters.FilterSet):
@@ -422,12 +427,18 @@ def equipment_list(request):
             'forms': eq_filter,
 
         }
-        sample_send(request, s)
+        # sample_send(request, s)
         # man = Manufacturer.objects.get(name='ГазоАналит')
         # for i in eq_filter.qs:
         #     if 'СГОЭС' in i.model.name:
         #         i.manufacturer = man
         #         i.save()
+        # str1 = '(0...100) Па'.split(' ')[1]
+        #
+        # unit_all = Unit.objects.get(name=str1)
+        # print(unit_all)
+
+
         return render(request, 'device/equipments.html', context=data)
     if request.method == 'POST' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,

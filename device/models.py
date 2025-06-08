@@ -265,6 +265,7 @@ class Scale(models.Model):
     max_scale = models.CharField(max_length=255, verbose_name='Максимум шкалы')
 
 
+
 class Unit(models.Model):
     name = models.CharField(max_length=255, verbose_name='Единицы измерения')
 
