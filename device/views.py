@@ -431,17 +431,33 @@ def equipment_list(request):
             'forms': eq_filter,
 
         }
-        # sample_send(request, s)
+        sample_send(request, s)
+
         # man = Manufacturer.objects.get(name='ГазоАналит')
         # for i in eq_filter.qs:
         #     if 'СГОЭС' in i.model.name:
         #         i.manufacturer = man
         #         i.save()
-        # str1 = '(0...100) Па'.split(' ')[1]
-        #
-        # unit_all = Unit.objects.get(name=str1)
-        # print(unit_all)
 
+        # wb = load_workbook(f'{BASE_DIR}/rec.xlsx')
+        # ws = wb['Sheet2']
+        # count = 0
+        # print('Start')
+        # for row in ws:
+        #     scale = row[3].value.split(' ')
+        #     try:
+        #         eq = Equipment.objects.get(serial_number=row[2].value)  #
+        #     except:
+        #         count += 1
+        #         print('Serial number not found', row[2].value, 'Count', count)
+        #         continue
+        #     Scale.objects.get_or_create(min_scale=scale[0], max_scale=scale[1])
+        #     Unit.objects.get_or_create(name=scale[2])
+        #     for i in eq.si.all():
+        #         i.scale = Scale.objects.get(min_scale=scale[0], max_scale=scale[1])
+        #         i.unit = Unit.objects.get(name=scale[2])
+        #         i.save()
+        # print('End')
         return render(request, 'device/equipments.html', context=data)
     if request.method == 'POST' and not request.user.is_staff:
         eq_filter = MyFilterUser(request.POST,
