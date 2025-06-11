@@ -2,6 +2,7 @@ import csv
 import datetime
 import os
 from csv import DictReader
+from pprint import pprint
 from select import error
 from venv import create
 from datetime import datetime as dt
@@ -535,7 +536,8 @@ def equipment_detail(request, pk):
             'at_date': at_date[i],
             'number': number + 1,
         })
-        data_eq.reverse()
+        sorted(data_eq, key=lambda s: at_date[0])
+    data_eq.reverse()
     data = {
         'equipment': equipment,
         'title': 'Информация об оборудовании',
