@@ -405,10 +405,11 @@ def equipment_list(request):
                              queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
                                                                          'tags', ).all().order_by(
                                  '-at_date'))
+        # print(request.POST['status'])
         for i in eq_filter.qs:
-            if i not in s:
+            if (i not in s) & (
+            (int(StatusAdd.objects.get(name=i.status.last().name).id) == int(request.POST['status']))):
                 s.append(i)
-
         error_user = False
         error_staff = False
         try:
