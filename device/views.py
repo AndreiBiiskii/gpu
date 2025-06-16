@@ -407,9 +407,13 @@ def equipment_list(request):
                                  '-at_date'))
         # print(request.POST['status'])
         for i in eq_filter.qs:
-            if (i not in s) & (
-            (str(StatusAdd.objects.get(name=i.status.last().name).id) == str(request.POST['status']))):
-                s.append(i)
+            if request.POST['status']:
+                if (i not in s) & (
+                        (str(StatusAdd.objects.get(name=i.status.last().name).id) == str(request.POST['status']))):
+                    s.append(i)
+            else:
+                if i not in s:
+                    s.append(i)
         error_user = False
         error_staff = False
         try:
