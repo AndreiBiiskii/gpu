@@ -405,7 +405,6 @@ def equipment_list(request):
                              queryset=Equipment.objects.prefetch_related('si', 'status', 'descriptions',
                                                                          'tags', ).all().order_by(
                                  '-at_date'))
-        # print(request.POST['status'])
         for i in eq_filter.qs:
             if request.POST['status']:
                 if (i not in s) & (
@@ -427,6 +426,11 @@ def equipment_list(request):
                     error_staff = True
         except:
             pass
+        req = []
+        for r in request.POST:
+            if (request.POST[r] != '') & ('csrfmi' not in r):
+                req.append(r+':'+request.POST[r])
+        print(req)
         data = {
             'error_user': error_user,
             'error_staff': error_staff,
@@ -435,6 +439,7 @@ def equipment_list(request):
             'equipments': s,
             'count': len(s),
             'forms': eq_filter,
+            'req': req,
 
         }
         sample_send(request, s)
