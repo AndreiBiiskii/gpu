@@ -5,6 +5,7 @@
 <div class="owner_top">
     <br>
     <br>
+    <a class="button-style2" href="{% url 'search' %}">Сбросить фильтр</a>
     {{messages.error}}
     <form action="{% url 'search' %}" method="POST">
         {% csrf_token %}
@@ -24,6 +25,11 @@
         {%endif%}
         <hr>
     </form>
+    <div class="button-style3"> Фильтр-->>
+        {% for i in req %}
+        {{i}}/
+        {% endfor %}
+    </div>
     <h1 class="error">{{error}}</h1>
     <b><a href="{% url 'draft' %}" class="button-style3"> Добавить новую запись</a></b>
 
@@ -35,7 +41,7 @@
         <td class="theader">Серийный номер</td>
         <td class="theader">Наименование</td>
         <td class="theader">Модель</td>
-        <td class="theader">Год выпуска</td>
+        <td calss="theader">Статус</td>
         <td class="theader">Шкала</td>
         <td class="theader">Ед. измерения</td>
         <td class="theader">Поз. по ГП</td>
@@ -56,7 +62,7 @@
         <td class="table-td"><a class="a-serial-number" href="{{ equipment.get_absolute_url }}">{{equipment.name}}</a>
         </td>
         <td class="table-td">{{equipment.model}}</td>
-        <td class="table-td">{{equipment.year}}</td>
+        <td class="table-td">{{equipment.status.last.name}}</td>
         <td>{{equipment.si.last.scale.min_scale}}..{{equipment.si.last.scale.max_scale}}</td>
         <td>{{equipment.si.last.unit}}</td>
         <td class="table-td">{{equipment.positions.last.name}}</td>
