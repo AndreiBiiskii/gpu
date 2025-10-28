@@ -724,7 +724,7 @@ class UpdateGp(UpdateView):
     model = GP
     permission_classes = [IsAdminUser, ]
     template_name = 'device/gp_add.html'
-    fields = '__all__'
+    fields = ['construction', 'ordering']
     success_url = '/'
     extra_context = {
         'menu': menu,

@@ -22,6 +22,9 @@
         <td>
             <b>Действие</b>
         </td>
+        <td>
+            <b>Порядок</b>
+        </td>
     </tr>
     </thead>
     {% for object in objects %}
@@ -33,7 +36,10 @@
             {{ object.construction }}
         </td>
         <td>
-            <a href="{% url 'delete_gp' object.pk %}">Delete</a>
+            <a href="{% url 'update_gp' object.pk %}">Update</a>||
+        </td>
+        <td>
+            {{ object.ordering }}
         </td>
     </tr>
     {%endfor%}
