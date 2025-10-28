@@ -228,8 +228,8 @@ class GP(models.Model):
     def __str__(self):
         return self.name
 
-    # class Meta:
-    #     ordering = ['-o', ]
+    class Meta:
+        ordering = ['-name', ]
 
 
 # class RegNumber(models.Model):
