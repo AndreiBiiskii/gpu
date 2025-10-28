@@ -429,7 +429,7 @@ def equipment_list(request):
         req = []
         for r in request.POST:
             if (request.POST[r] != '') & ('csrfmi' not in r):
-                req.append(r+':'+request.POST[r])
+                req.append(r + ':' + request.POST[r])
         print(req)
         data = {
             'error_user': error_user,
