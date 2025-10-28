@@ -25,6 +25,6 @@ files/defect_files/act1.xlsx
 
 media/
 defectone/migrations/
-device/migrations/
+
 defect/migrations/
 static/
