@@ -224,12 +224,13 @@ class Draft(models.Model):
 class GP(models.Model):
     name = models.CharField(max_length=255, blank=False, verbose_name='Позиция по ГП', unique=True)
     construction = models.CharField(max_length=255, blank=True, verbose_name='Наименование здания, сооружения')
+    ordering = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ['-name', ]
+        ordering = ['ordering', ]
 
 
 # class RegNumber(models.Model):
@@ -263,7 +264,6 @@ class Year(models.Model):
 class Scale(models.Model):
     min_scale = models.CharField(max_length=255, verbose_name='Минимум шкалы')
     max_scale = models.CharField(max_length=255, verbose_name='Максимум шкалы')
-
 
 
 class Unit(models.Model):

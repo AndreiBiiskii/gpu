@@ -1,6 +1,7 @@
 {% extends 'device/base.html' %}
 
 {% block content%}
+{{fields}}
 <form action="" method="POST">
     {% csrf_token %}
     {{ form.as_p }}

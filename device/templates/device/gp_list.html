@@ -36,7 +36,10 @@
             {{ object.construction }}
         </td>
         <td>
-            <a href="{% url 'update_gp' object.pk %}">Update</a>||
+            <a href="{% url 'update_gp' object.pk %}">Update</a>
+        </td>
+        <td>
+            {{ object.ordering }}
         </td>
     </tr>
     {%endfor%}
