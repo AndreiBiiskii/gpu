@@ -230,7 +230,7 @@ class GP(models.Model):
         return self.name
 
     class Meta:
-        ordering = ['-ordering', ]
+        ordering = ['ordering', ]
 
 
 # class RegNumber(models.Model):
