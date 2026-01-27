@@ -12,6 +12,7 @@ from django_select2.forms import Select2Widget, HeavySelect2Widget
 
 pillow_heif.register_heif_opener()
 
+
 class AddEquipmentForm(forms.Form):
     serial_number = forms.CharField(label='Серийный номер', max_length=255,
                                     widget=forms.TextInput(attrs={'class': 'type2'}))
