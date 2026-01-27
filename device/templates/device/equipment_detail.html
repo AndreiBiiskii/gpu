@@ -71,8 +71,4 @@
 <a href="{% url 'equipment_update' equipment.pk %}" class="button-style2">Изменить</a>
 {% endif %}
 <a href="{% url 'search' %}" class="button-style2">К поиску</a> <br><br>
-{% if request.user.is_staff%}
-<a class="button-style3" href="{% url 'send_bid' equipment.pk %}"><b>Заявка в Рем. цех</b> </a>
-{%endif%}
-
 {% endblock %}

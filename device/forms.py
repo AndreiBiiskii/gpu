@@ -1,14 +1,16 @@
-from IPython.utils.coloransi import value
+from time import process_time_ns
+
+import pillow_heif
+from PIL import Image
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Q
-from django.forms import ModelForm
-from urllib3 import request
-
 from device.variables import *
 from dateutil.relativedelta import relativedelta
 from django import forms
 from .models import *
+from django_select2.forms import Select2Widget, HeavySelect2Widget
 
+pillow_heif.register_heif_opener()
 
 class AddEquipmentForm(forms.Form):
     serial_number = forms.CharField(label='Серийный номер', max_length=255,
@@ -22,8 +24,9 @@ class AddEquipmentForm(forms.Form):
     #                               queryset=EquipmentType.objects.all(), required=False)
     # type_new = forms.CharField(label='Добавить тип:', max_length=255, widget=forms.TextInput(attrs={'class': 'type2'}),
     #                            required=False)
-    manufacturer = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), label='Производитель:',
-                                          queryset=Manufacturer.objects.all(), required=False)
+    manufacturer = forms.ModelChoiceField(queryset=Manufacturer.objects.all(),
+                                          widget=Select2Widget(attrs={'class': 'select'}), label='Производитель:',
+                                          required=False)
     manufacturer_new = forms.CharField(label='Добавить производителя:',
                                        widget=forms.TextInput(attrs={'class': 'type2'}),
                                        required=False)
@@ -33,8 +36,11 @@ class AddEquipmentForm(forms.Form):
                                required=False)
     description = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), label='Комментарий:')
     comment = forms.CharField(widget=forms.Textarea(attrs={'class': 'type2'}), required=False, label='Примечание:')
-    position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
-                                      label='Поз. по ГП', required=False)
+
+    # position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}), queryset=GP.objects.all(),
+    #                              label='Поз. по ГП', required=False)
+
+    position = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'type2'}), queryset=GP.objects.all())
     position_new = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}),
                                    label='Добавить позицию по ГП:', max_length=20, required=False)
     location = forms.CharField(widget=forms.TextInput(attrs={'class': 'type2'}), max_length=255, required=False,
@@ -322,7 +328,7 @@ class DraftForm(forms.ModelForm):
     status_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                           queryset=StatusAdd.objects.all(),
                                           label='Статус')
-    images = forms.ImageField(widget=forms.FileInput(attrs={'class': 'select'}))
+    images = forms.FileField()
 
     # def clean(self):
     #     cleaned_data = super(DraftForm, self).clean()
@@ -336,10 +342,17 @@ class DraftForm(forms.ModelForm):
     #     raise forms.ValidationError(message='Не указана позиция по ГП')
 
     class Meta(object):
+        print()
         model = Draft
         fields = ['serial_number_draft', 'model_draft', 'name_draft', 'manufacturer_draft', 'poz_draft',
                   'location_draft', 'description_draft', 'tag_draft', 'year_draft', 'status_draft', 'min_scale_draft',
                   'max_scale_draft', 'unit_draft', 'images']
+
+    def clean(self):
+        image = Image.open(self.cleaned_data['images'])
+        image.save(self.cleaned_data['images'], "JPEG")
+        print(f"Файл {image} успешно конвертирован в {self.cleaned_data['images']}")
+        return self.cleaned_data
 
 
 class DraftFormDevice(forms.Form):
@@ -401,6 +414,7 @@ class PprForm(forms.Form):
                                user=user
                                )
         return self.cleaned_data
+
 
 #
 # class PprUpdateForm(forms.ModelForm):

@@ -1,5 +1,4 @@
 from django.urls import path
-
 from device.views import LoginUser, logout_user, ChangePassword
 
 urlpatterns = [

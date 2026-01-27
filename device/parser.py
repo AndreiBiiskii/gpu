@@ -12,7 +12,7 @@ from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
 from device.forms import UploadFileForm
-from device.models import Files
+from device.models import Files, GP
 from equipment.settings import BASE_DIR
 
 from selenium import webdriver
@@ -28,7 +28,6 @@ from selenium.webdriver.chrome.service import Service as ChromiumService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.os_manager import ChromeType
 from selenium.webdriver.chrome.options import Options
-import wget
 
 from django.core.files import File
 from django.core.management.base import BaseCommand
@@ -39,6 +38,7 @@ def save_file(file_name):
     Files.objects.create(file=f'{BASE_DIR}/from sending.xlsx')
 
     return redirect('/')
+
 
 def get_sample(table_tr):
     low_date = datetime.strptime('01-01-2000', '%d-%m-%Y').date()
@@ -59,6 +59,20 @@ def get_sample(table_tr):
 
 
 def data_from_parser(request):
+    print('start')
+    wb_poz = load_workbook(f'{BASE_DIR}/gp_new.xlsx')
+    ws_poz = wb_poz['1']
+    count = 0
+    for j in GP.objects.all():
+        if 'ГП' in j.name:
+            rez = f'{j.name[:2]}.{j.name[2:].lower().rstrip().lstrip()}'
+            for i in ws_poz:
+                if rez == i[0].value.split()[0]:
+                    j.name = i[0].value.split()[0]
+                    j.construction = i[0].value.replace(i[0].value.split()[0], '')
+                    j.save()
+
+
     # chrome_options = Options()
     # chrome_options.add_argument("--headless")
     # chrome_options.add_argument("--no-sandbox")

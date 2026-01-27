@@ -178,7 +178,7 @@ def IM(request):
 
 def equipment_add(request):
     if not request.user.is_staff:
-        redirect('login')
+        redirect('login/')
     if request.method == 'POST':
         form = AddEquipmentForm(request.POST)
         if form.is_valid():

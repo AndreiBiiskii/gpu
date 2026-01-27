@@ -34,6 +34,9 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 # Application definition
 
 INSTALLED_APPS = [
+    'dal',
+    'dal_select2',
+    'django_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -139,7 +142,6 @@ LOGIN_REDIRECT_URL = '/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 2525
@@ -148,3 +150,5 @@ EMAIL_HOST_PASSWORD = 'dwAAdanBBumBtdrznvHA'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
+
+CACHE_PREFIX= 'select2_'
