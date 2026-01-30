@@ -35,7 +35,7 @@
 #
 #
 # def save_file(file_name):
-#     Files.objects.create(file=f'{BASE_DIR}/from sending.xlsx')
+#     Files.objects.create(file=f'{BASE_DIR}/from_sending.xlsx')
 #
 #     return redirect('/')
 #
@@ -85,7 +85,7 @@
 #     # button.send_keys(Keys.ENTER)
 #     # wb_bag = load_workbook(f'{BASE_DIR}/bag.xlsx')
 #     # ws_bag = wb_bag['bag']
-#     # wb = load_workbook(f'{BASE_DIR}/from sending.xlsx')
+#     # wb = load_workbook(f'{BASE_DIR}/from_sending.xlsx')
 #     # ws = wb['l1']
 #     # wb_schema = load_workbook(f'{BASE_DIR}/schema.xlsm')
 #     # ws_schema = wb_schema['Лист1']

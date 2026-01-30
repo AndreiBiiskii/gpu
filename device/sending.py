@@ -26,9 +26,9 @@ def sending(request, title):
     #     return redirect(reverse_lazy('defectone:add_email'))
     to_email = request.user.email
     msg = sm(subject, body, from_email, [to_email])
-    msg.attach_file(f'{BASE_DIR}/from sending.xlsx')
+    msg.attach_file(f'{BASE_DIR}/from_sending.xlsx')
     msg.send()
-    os.remove(f'{BASE_DIR}/from sending.xlsx')
+    os.remove(f'{BASE_DIR}/from_sending.xlsx')
     return redirect(reverse_lazy('search'))
 
 
@@ -107,7 +107,7 @@ def sample_send(request, data):
     # from_email = 'freemail_2019@mail.ru'
     # to_email = request.user.email
     # msg = sm(subject, body, from_email, [to_email])
-    # msg.attach_file(f'{BASE_DIR}/from sending.xlsx')
+    # msg.attach_file(f'{BASE_DIR}/from_sending.xlsx')
     # msg.send()
 
 
