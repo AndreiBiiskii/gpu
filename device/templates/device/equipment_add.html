@@ -8,7 +8,6 @@
     {{eq.id}}
     {% if draft %}
     <a href="{% url 'draft_delete' draft.pk %}">Удалить</a>
-    <img class='image' src="{{draft.images.url}}">
     {%endif%}
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
