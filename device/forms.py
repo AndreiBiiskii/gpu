@@ -329,7 +329,7 @@ class DraftForm(forms.ModelForm):
     status_draft = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'select'}),
                                           queryset=StatusAdd.objects.all(),
                                           label='Статус')
-    images = forms.FileField()
+    # images = forms.FileField()
 
     # def clean(self):
     #     cleaned_data = super(DraftForm, self).clean()
@@ -347,13 +347,13 @@ class DraftForm(forms.ModelForm):
         model = Draft
         fields = ['serial_number_draft', 'model_draft', 'name_draft', 'manufacturer_draft', 'poz_draft',
                   'location_draft', 'description_draft', 'tag_draft', 'year_draft', 'status_draft', 'min_scale_draft',
-                  'max_scale_draft', 'unit_draft', 'images']
+                  'max_scale_draft', 'unit_draft']
 
-    def clean(self):
-        image = Image.open(self.cleaned_data['images'])
-        image.save(self.cleaned_data['images'], "JPEG")
-        print(f"Файл {image} успешно конвертирован в {self.cleaned_data['images']}")
-        return self.cleaned_data
+    # def clean(self):
+    #     image = Image.open(self.cleaned_data['images'])
+    #     image.save(self.cleaned_data['images'], "JPEG")
+    #     print(f"Файл {image} успешно конвертирован в {self.cleaned_data['images']}")
+    #     return self.cleaned_data
 
 
 class DraftFormDevice(forms.Form):
