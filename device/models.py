@@ -207,7 +207,7 @@ class Draft(models.Model):
     description_draft = models.TextField(blank=False, null=False, verbose_name='Описание')
     status_draft = models.ForeignKey(StatusAdd, on_delete=models.CASCADE, blank=False, null=False,
                                      verbose_name='Статус')
-    images = models.ImageField(blank=False, null=False, verbose_name='Фото', upload_to='images')
+    images = models.ImageField(blank=True, null=True, verbose_name='Фото', upload_to='images')
     user_draft = models.ForeignKey(User, on_delete=models.CASCADE)
     min_scale_draft = models.CharField(max_length=255, verbose_name='Минимум шкалы')
     max_scale_draft = models.CharField(max_length=255, verbose_name='Максимум шкалы')
