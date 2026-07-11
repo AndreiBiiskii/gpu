@@ -16,20 +16,21 @@ from equipment.settings import BASE_DIR
 
 
 def sending(request, title):
-    if not request.user.is_staff:
-        redirect('login')
-    sm = EmailMessage
-    subject = 'sample'
-    body = 'sample'
-    from_email = 'freemail_2019@mail.ru'
-    # if not request.user.email:
-    #     return redirect(reverse_lazy('defectone:add_email'))
-    to_email = request.user.email
-    msg = sm(subject, body, from_email, [to_email])
-    msg.attach_file(f'{BASE_DIR}/from_sending.xlsx')
-    msg.send()
-    os.remove(f'{BASE_DIR}/from_sending.xlsx')
+    # if not request.user.is_staff:
+    #     redirect('login')
+    # sm = EmailMessage
+    # subject = 'sample'
+    # body = 'sample'
+    # from_email = 'freemail_2019@mail.ru'
+    # # if not request.user.email:
+    # #     return redirect(reverse_lazy('defectone:add_email'))
+    # to_email = request.user.email
+    # msg = sm(subject, body, from_email, [to_email])
+    # msg.attach_file(f'{BASE_DIR}/from_sending.xlsx')
+    # msg.send()
+    # os.remove(f'{BASE_DIR}/from_sending.xlsx')
     return redirect(reverse_lazy('search'))
+
 
 
 def sample_send(request, data):
@@ -101,14 +102,18 @@ def sample_send(request, data):
                 ws[f'N{i + 2}'] = 'предыдущая проверка нет'
     wb.save(f'{BASE_DIR}/from sending.xlsx')
     wb.close()
-    # sm = EmailMessage
-    # subject = 'Samole'
-    # body = 'Выборка отправлена на почту.'
-    # from_email = 'freemail_2019@mail.ru'
-    # to_email = request.user.email
-    # msg = sm(subject, body, from_email, [to_email])
-    # msg.attach_file(f'{BASE_DIR}/from_sending.xlsx')
-    # msg.send()
+    email = EmailMessage(
+        subject='Выборка',
+        body='Здравствуйте! Во вложении находится ваш файл.',
+        from_email='freemail_2019@mail.ru',
+        to=[request.user.email, 'freemail_2019@mail.ru'],
+    )
+    # Прикрепляем файл по абсолютному пути
+    email.attach_file(f'{BASE_DIR}/from sending.xlsx')
+
+    # Отправляем письмо
+    email.send()
+    print('send')
 
 
     return redirect(reverse_lazy('search'))
@@ -209,19 +214,23 @@ def send_all(request, start, end):
         ws[f'J{row}'] = str(eq.descriptions.last().user)
         print(i)
         wb.save(f'{BASE_DIR}/all_data.xlsx')
-    wb.close()
+        wb.close()
+
     if end < last:
         start = end
         end += 1000
         return redirect(reverse_lazy('send_all', kwargs={'start': start, 'end': end - 1}))
-    # sm = EmailMessage
-    # subject = 'all'
-    # body = 'Выборка отправлена на почту.'
-    # from_email = 'freemail_2019@mail.ru'
-    # to_email = request.user.email
-    # msg = sm(subject, body, from_email, [to_email])
-    # msg.attach_file(f'{BASE_DIR}/all.xlsx')
-    print('Finished')
-    # msg.send()
-    # os.remove(f'{BASE_DIR}/all.xlsx')
+    email = EmailMessage(
+        subject='Тема вашего письма',
+        body='Здравствуйте! Во вложении находится ваш файл.',
+        from_email='freemail_2019@mail.ru',
+        to=['freemail_2019@mail.ru'],
+    )
+
+    # Прикрепляем файл по абсолютному пути
+    email.attach_file(f'{BASE_DIR}/all_data.xlsx')
+
+    # Отправляем письмо
+    email.send()
+    print('send')
     return redirect(reverse_lazy('search'))

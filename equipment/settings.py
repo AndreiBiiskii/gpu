@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['95.163.220.164',]
+ALLOWED_HOSTS = ['95.163.220.164', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
@@ -142,8 +142,7 @@ MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_PORT = 2525
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'freemail_2019@mail.ru'
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
+EMAIL_USE_SSL = True
