@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['194.58.126.123',]
+ALLOWED_HOSTS = ['95.163.220.164',]
 # Application definition
 
 INSTALLED_APPS = [
