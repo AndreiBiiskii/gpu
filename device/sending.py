@@ -177,12 +177,8 @@ def send_all(request, start, end):
         redirect('login')
     last = Equipment.objects.all().count()
     get_all = Equipment.objects.filter(si_or=True)[start:end]
-    if start == 0:
-        wb = load_workbook(f'{BASE_DIR}/all_data.xlsx')
-        ws = wb['Sheet1']
-    else:
-        wb = load_workbook(f'{BASE_DIR}/all.xlsx')
-        ws = wb['Sheet1']
+    wb = load_workbook(f'{BASE_DIR}/all.xlsx')
+    ws = wb['Sheet1']
     for i, eq in enumerate(get_all):
         row = i + start + 2
         try:
@@ -206,34 +202,26 @@ def send_all(request, start, end):
             ws[f'H{row}'] = eq.descriptions.last().name
         except:
             ws[f'H{row}'] = '-'
-
         ws[f'E{row}'] = eq.model.name
         ws[f'F{row}'] = eq.name.name
         ws[f'G{row}'] = eq.serial_number
-        ws[f'I{row}'] = from_si.scale.min_scale
-        ws[f'J{row}'] = from_si.scale.max_scale
-        ws[f'K{row}'] = from_si.unit.name
-        try:
-            ws[f'L{row}'] = eq.comment
-        except:
-            ws[f'L{row}'] = '-'
-        ws[f'M{row}'] = from_si.interval.name
-        ws[f'N{row}'] = from_si.previous_verification
-        ws[f'O{row}'] = from_si.next_verification
-        ws[f'P{row}'] = from_si.result
-    wb.save(f'{BASE_DIR}/all.xlsx')
+        ws[f'I{row}'] = str(eq.descriptions.last().at_date)
+        ws[f'J{row}'] = str(eq.descriptions.last().user)
+        print(i)
+        wb.save(f'{BASE_DIR}/all_data.xlsx')
     wb.close()
     if end < last:
         start = end
         end += 1000
-        return redirect(reverse_lazy('send_all', kwargs={'start': start, 'end': end}))
-    sm = EmailMessage
-    subject = 'all'
-    body = 'Выборка отправлена на почту.'
-    from_email = 'freemail_2019@mail.ru'
-    to_email = request.user.email
-    msg = sm(subject, body, from_email, [to_email])
-    msg.attach_file(f'{BASE_DIR}/all.xlsx')
-    msg.send()
-    os.remove(f'{BASE_DIR}/all.xlsx')
+        return redirect(reverse_lazy('send_all', kwargs={'start': start, 'end': end - 1}))
+    # sm = EmailMessage
+    # subject = 'all'
+    # body = 'Выборка отправлена на почту.'
+    # from_email = 'freemail_2019@mail.ru'
+    # to_email = request.user.email
+    # msg = sm(subject, body, from_email, [to_email])
+    # msg.attach_file(f'{BASE_DIR}/all.xlsx')
+    print('Finished')
+    # msg.send()
+    # os.remove(f'{BASE_DIR}/all.xlsx')
     return redirect(reverse_lazy('search'))
