@@ -442,7 +442,7 @@ def equipment_list(request):
             'req': req,
 
         }
-        # sample_send(request, s)
+        sample_send(request, s)
 
         # man = Manufacturer.objects.get(name='ГазоАналит')
         # for i in eq_filter.qs:
