@@ -210,11 +210,17 @@ def send_all(request, start, end):
         ws[f'E{row}'] = eq.model.name
         ws[f'F{row}'] = eq.name.name
         ws[f'G{row}'] = eq.serial_number
-        ws[f'I{row}'] = str(eq.descriptions.last().at_date)
-        ws[f'J{row}'] = str(eq.descriptions.last().user)
+        try:
+            ws[f'I{row}'] = str(eq.descriptions.last().at_date)
+        except:
+            ws[f'I{row}'] = 'no date'
+        try:
+            ws[f'J{row}'] = str(eq.descriptions.last().user)
+        except:
+            ws[f'J{row}'] = 'no user'
         print(i)
-        wb.save(f'{BASE_DIR}/all_data.xlsx')
-        wb.close()
+    wb.save(f'{BASE_DIR}/all_data.xlsx')
+    wb.close()
 
     if end < last:
         start = end
