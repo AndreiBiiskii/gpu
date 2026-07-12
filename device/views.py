@@ -430,7 +430,7 @@ def equipment_list(request):
         for r in request.POST:
             if (request.POST[r] != '') & ('csrfmi' not in r):
                 req.append(r + ':' + request.POST[r])
-        print(req)
+        # print(req)
         data = {
             'error_user': error_user,
             'error_staff': error_staff,
@@ -442,7 +442,7 @@ def equipment_list(request):
             'req': req,
 
         }
-        sample_send(request, s)
+        # sample_send(request, s)
 
         # man = Manufacturer.objects.get(name='ГазоАналит')
         # for i in eq_filter.qs:
