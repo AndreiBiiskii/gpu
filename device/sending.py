@@ -16,19 +16,19 @@ from equipment.settings import BASE_DIR
 
 
 def sending(request, title):
-    # if not request.user.is_staff:
-    #     redirect('login')
-    # sm = EmailMessage
-    # subject = 'sample'
-    # body = 'sample'
-    # from_email = 'freemail_2019@mail.ru'
-    # # if not request.user.email:
-    # #     return redirect(reverse_lazy('defectone:add_email'))
-    # to_email = request.user.email
-    # msg = sm(subject, body, from_email, [to_email])
-    # msg.attach_file(f'{BASE_DIR}/from_sending.xlsx')
-    # msg.send()
-    # os.remove(f'{BASE_DIR}/from_sending.xlsx')
+    if not request.user.is_staff:
+        redirect('login')
+    sm = EmailMessage
+    subject = 'sample'
+    body = 'sample'
+    from_email = 'freemail_2019@mail.ru'
+    # if not request.user.email:
+    #     return redirect(reverse_lazy('defectone:add_email'))
+    to_email = request.user.email
+    msg = sm(subject, body, from_email, [to_email])
+    msg.attach_file(f'{BASE_DIR}/from_sending.xlsx')
+    msg.send()
+    os.remove(f'{BASE_DIR}/from_sending.xlsx')
     return redirect(reverse_lazy('search'))
 
 
